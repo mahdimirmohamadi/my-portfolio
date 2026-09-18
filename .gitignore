@@ -26,3 +26,4 @@ pnpm-debug.log*
 # impeccable scratch (decision page logs, review captures)
 .impeccable/questions/
 .impeccable/review/
+.impeccable/hook.cache.json
