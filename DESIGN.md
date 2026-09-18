@@ -108,8 +108,8 @@ spacing:
   2xl: "5rem"
   gutter-phone: "18px"
   gutter: "32px"
-  rail: "208px"
-  page-max: "1120px"
+  navbar: "60px"
+  page-max: "1200px"
   measure: "68ch"
 components:
   button-primary:
@@ -195,7 +195,7 @@ The world explicitly refuses: hard offset shadows, colour gradients, glow, eyebr
 A near-monochrome sage-and-ink wall with a warm bronze ground line and one saturated yellow-green bloom.
 
 ### Primary
-- **Bloom Lime** (lime): the single accent. Fill for the three hero buds, the primary Email button, the "you are here" dot in the rail and dock, the email address underline in the close, bud-label hover, text selection and the blog reading-progress bar. Never a surface, never text on plaster (it fails contrast there).
+- **Bloom Lime** (lime): the single accent. Fill for the three hero buds and the Experience timeline buds, the one primary button of a block ("My experience" in the hero, "Call me!" in the close), the "you are here" dot in the navbar and dock, the bud that walks the AI workflow loop, the hovered resume choice, bud-label hover, text selection and the blog reading-progress bar. Never a surface, never text on plaster (it fails contrast there).
 - **Stem Lime** (lime-ink): the readable form of the accent on plaster. Links, focus ring, caret, terminal prompt, list markers, hover underlines. In night mode it becomes Bloom Lime itself.
 - **Seed Ink** (on-lime): text and icons on a lime fill.
 
@@ -215,7 +215,9 @@ A near-monochrome sage-and-ink wall with a warm bronze ground line and one satur
 - **Ink Rule** (rule-strong): ledger rows, print frames, the photo frame, ghost-button border.
 
 ### Named Rules
-**The One Bloom Rule.** Lime marks only what is alive or current: the buds, the email action, the current nav item, and transient state (selection, reading progress, hover on a bud label). If a second thing on screen wants lime, it gets ink instead.
+**The One Bloom Rule.** Lime marks only what is alive or current: the buds, the one primary action per block, the current nav item, and transient state (selection, reading progress, hover on a bud label or resume choice). If a second thing on screen wants lime, it gets ink instead.
+
+**The Brand-on-Hover Exception.** Tool marks sit in ink until touched: hovering a skill lights its logo, border and a 12% tint in the tool's own brand colour (simple-icons hex; near-black brands fall back to ink at night). The AI tools row and the AI workflow nodes show their real colours at rest because they are the subject there. These third-party colours are the only blues and purples on the site, and they never become UI chrome.
 
 **The Plaster, Not Cream Rule.** The ground is cool sage (hue 128). No warm cream, no pure white, no pure black; night plaster keeps the same hue at L 0.205.
 
@@ -247,11 +249,11 @@ A near-monochrome sage-and-ink wall with a warm bronze ground line and one satur
 
 ## Layout
 
-Desktop (1040px+) has a fixed 208px rail on the inline-start edge, separated by a 1px hairline; main content sits beside it in a centred column (max 1120px, gutters 32px, 18px under 768px). Below 1040px the rail collapses to a sticky top bar (brand + switches) and a floating five-item dock at the bottom; the footer reserves 80px for it.
+A sticky 60px navbar spans the top, closed by a 1px ink rule; content sits in a centred column (max 1200px, gutters 32px, 18px under 768px). At 900px+ the navbar carries the section links; below that they move to a floating five-item dock at the bottom (the footer reserves 80px for it) and the navbar keeps the brand, the call button and the switches.
 
-The hero alcove is a two-column grid at 900px+ (1.15fr copy / 0.85fr arrangement, min-height ~100svh capped at 860px) closed by a full-bleed 22px shelf. On phones the arrangement moves above the words (the person leads) at up to 340px wide.
+The hero alcove is a two-column grid at 900px+ (1.15fr copy / 0.85fr arrangement, min-height ~100svh capped at 860px) closed by a full-bleed 22px shelf. On phones the arrangement moves above the words (the person leads) at up to 380px wide. The photo takes 58% of the arrangement's width.
 
-Sections are separated by 5rem (space-2xl) of wall. Inside them, content is ruled rows: the Work ledger (5.5rem, then 8rem date-leaf margin), skills as label/list rows (7.5rem label column), Elsewhere as a two-column ruled list. Projects: the lead print spans full width with its note beside it (container query at 760px); the next two sit in a 1fr 1fr pair; the rest are single index lines. Spacing follows the 0.25 / 0.5 / 0.75 / 1 / 1.5 / 2.25 / 3.5 / 5rem scale.
+Sections are separated by 5rem (space-2xl) of wall. Inside them, content is ruled rows or the branch: the Experience timeline (a bronze stem on the inline-start edge, story and "what I built there" recess side by side at 960px+), skills as label/chip rows (8rem label column; the list is LTR in both languages), Elsewhere as a two-column ruled list. Projects with screenshots pair up 1fr 1fr; with an odd count the lead print spans the full row with its note beside it (container query at 760px); projects without a screenshot are single index lines. Section leads run the full content width. Spacing follows the 0.25 / 0.5 / 0.75 / 1 / 1.5 / 2.25 / 3.5 / 5rem scale.
 
 **The Ledger Rule.** Lists of work, skills, tools and links are rows divided by 1px rules, not boxes. A row earns its height with content, not padding.
 
@@ -265,19 +267,20 @@ The only non-flat effect is the **map-label halo**: bud labels carry a text-shad
 
 ## Shapes
 
-Near-square. Buttons, switches, print frames and inline code use 4-6px; tags and bud labels 3px; the shelf-rule 2px. Circles are reserved for the bud family (hero buds, the nav "here" dot, the hollow commit nodes in lists). Rules are 1px hairlines for structure, 1.5px (`--bw`) for button borders and bud-dot outlines. The photo is a hanging scroll: a 7px rounded rod over a 3:4 frame with no top border. Arrows are drawn 16px strokes (1.6 width, round caps) and mirror in RTL.
+Near-square. Buttons, switches, print frames and inline code use 4-6px; tags and bud labels 3px; the shelf-rule 2px. Circles are reserved for the bud family (hero buds, timeline buds and nodes, the AI workflow nodes, the nav "here" dot, the hollow commit nodes in lists). Rules are 1px hairlines for structure, 1.5px (`--bw`) for button borders and bud-dot outlines. The photo is a hanging scroll: a 7px rounded rod over a 3:4 frame with no top border. Arrows are drawn 16px strokes (1.6 width, round caps) and mirror in RTL.
 
 ## Components
 
 ### Buttons
 Plain rectangles; lime is spent only on the action that matters.
 - **Shape:** gently squared (4px), 1.5px ink border, min-height 48px.
-- **Primary:** lime fill, seed-ink text, Geist 600 at 0.98rem, trailing arrow. Used for Email only (hero and close). At night the border becomes lime.
-- **Ghost:** transparent with an ink-rule border; hover recesses to plaster-deep. Used for secondary actions such as "Copy address".
+- **Primary:** lime fill, seed-ink text, Geist 600 at 0.98rem, a trailing arrow or a leading icon. One per block: "My experience" in the hero, "Call me!" in the close. At night the border becomes lime.
+- **Ghost:** transparent with an ink-rule border; hover recesses to plaster-deep. The partner action: "My blog", "Email me".
+- **Resume ticket:** a larger (60px) ghost with a dashed ink border, download icon and an `EN · FA` mono meta; hover turns the border solid. It opens the resume picker, never downloads directly (without JS it downloads the page's language).
 - **Hover / Press:** the arrow leans 4px forward (mirrored by `--dir`); press scales to 0.97 in 90ms. No colour shift on the primary.
 
 ### Arrow links
-Ink text, weight 600, a hairline underline that turns lime-ink on hover while the arrow leans forward. The standard secondary action ("Read my notes", "Read more", "All projects"). External links use the diagonal "out" arrow in faint ink.
+Ink text, weight 600, a hairline underline that turns lime-ink on hover while the arrow leans forward. The standard tertiary action ("Read more", "All projects"). External links use the diagonal "out" arrow in faint ink.
 
 ### Tags
 Thin 1px hairline, 3px corners, Geist Mono 0.75rem in ink-soft, 26px tall (36px when a link or a terminal chip). Hover on a linked tag moves the border to lime-ink. Persian tags switch to Vazirmatn. Oxblood outline only for "draft".
@@ -286,18 +289,24 @@ Thin 1px hairline, 3px corners, Geist Mono 0.75rem in ink-soft, 26px tall (36px 
 A recess, not a window: plaster-lift, 1px hairline, 6px corners, a quiet mono caption line on top (the terminal's `zsh · mahdi@tehran`, `80×24`). No title-bar chrome, no traffic lights.
 
 ### Navigation
-- **Rail (desktop):** Young Serif brand with a small bud glyph, role line in faint ink, vertical nav in ink-soft at 0.95rem. Each item has a 7px hollow hairline dot; the current item goes ink, weight 600, and its dot fills lime with an ink outline at 1.45 scale. A "Now" note sits under a hairline. Language and Day/Night switches (40px, 4px, hairline) pin to the bottom.
-- **Mobile:** sticky top bar plus a floating dock (plaster-lift, ink-rule frame, 6px, 56px items); the current item gets the same lime bud dot.
+- **Navbar:** Nix's head is the mark: it peeks up out of the bar, its cut edge sitting on the bottom rule (hover lifts it 3px). Young Serif name beside it (hidden under 420px). Section links in ink-soft at 0.95rem; the current one goes ink 600 with a 7px lime bud under the word. At the inline-end: the call button (phone icon, and the number itself from 1180px), then the language switch (globe + short code) and the day/night switch (moon or sun, showing the state it switches to), all 40px, 4px corners, hairline.
+- **Mobile:** the same bar without the links, plus a floating dock (plaster-lift, ink-rule frame, 6px, 56px items); the current item gets the same lime bud dot.
 
 ### The Alcove (signature)
-Copy on the open wall (inline-start), the arrangement on the other side: photo scroll hung off-centre, the SVG branch (7 / 4.5 / 3.5 stroke widths, bronze) rising from a bronze bowl, hollow commit nodes on the stem, three lime buds (r 10, 2px ink stroke), and halo map-labels linking to what they mark, with a small mono date. Nix stands on the shelf waving toward the copy (mirrored per direction, tilts on hover); a vertical mono coordinate caption runs down the far edge on desktop. The branch mirrors in RTL with `scale: var(--dir) 1`. The portrait has a 1-bit dither toggle revealed by a 700ms clip-path wipe.
+Copy on the open wall (inline-start), the arrangement on the other side: photo scroll hung off-centre, the SVG branch (7 / 4.5 / 3.5 stroke widths, bronze) rising from a bronze bowl, hollow commit nodes on the stem, three lime buds (r 10, 2px ink stroke), and halo map-labels linking to what they mark, with a small mono date. Nix stands on the shelf waving toward the copy (mirrored per direction, tilts on hover). The bowl's foot sits on the shelf. The branch mirrors in RTL with `scale: var(--dir) 1`. The photo is shown as it is: no caption, no filters. Under the two buttons, phone and email are set as a plain labelled pair (icon, faint label, 600-weight value with a hairline underline), never behind a click.
 
 ### Nix (mascot)
 
-A raster character: four poses (waving, sleeping, panicked, typing) cut with real alpha from the owner's generated sheet by `scripts/nix.mjs` and served as WebP through `src/components/art/Nix.astro` (`mood="happy" | "sleep" | "panic" | "type"`). One pose per place, each with a job: waving on the hero shelf and beside "Say hi.", typing next to the terminal, napping in the footer and on empty/unbuilt pages, panicking on the 404, waving as the avatar of MDX `<Nix>` asides. Always decorative (empty alt) unless it carries meaning. By day he sits directly on the plaster; by night a 1px `--rule-strong` cut line (four stacked 0-blur drop-shadows) keeps his black outline from dissolving into the dark. His own colours (cream body, amber horns, coral tail and blush, lime face) are part of the character, not the page palette, and never leak into UI.
+A raster character: four poses (waving, sleeping, panicked, typing) cut with real alpha from the owner's generated sheet by `scripts/nix.mjs` and served as WebP through `src/components/art/Nix.astro` (`mood="happy" | "sleep" | "panic" | "type"`). His head, cropped by `scripts/icons.mjs`, is the site's mark: the navbar logo and the favicon/apple-touch badge (a plaster tile with an ink edge he peeks into). One pose per place, each with a job: waving on the hero shelf, beside "Get in touch", on top of the resume picker (with a speech bubble) and at the end of every blog post; the last node ("Ship it") of the AI workflow; typing next to the terminal; napping beside "Before that? I was studying", in the footer and on empty/unbuilt pages; panicking on the 404; waving as the avatar of MDX `<Nix>` asides and on the social card. Always decorative (empty alt) unless it carries meaning. By day he sits directly on the plaster; by night a 1px `--rule-strong` cut line (four stacked 0-blur drop-shadows) keeps his black outline from dissolving into the dark. His own colours (cream body, amber horns, coral tail and blush, lime face) are part of the character, not the page palette, and never leak into UI.
 
-### Work Ledger
-One ruled row per employer (ink-rule, 1px). A calendar leaf in the margin: faint "since", month in 600, the year in Young Serif 1.9rem, and a small outlined "now" tag. Shipped items are listed with hollow bronze commit nodes, carrying the branch into the list.
+### Experience timeline
+The hero's branch carried down the page: a 3px bronze stem on the inline-start edge. Each current employer is a 24px lime bud on the stem; school is a hollow bronze node under the funny line "Before that? I was studying, obviously!" with a napping Nix. Each job: company in Young Serif (step-3) with an out-arrow, a date pill ("Oct 2025 – now" / "از مهر ۱۴۰۴ تا الان") beside place and mode, the role in 600, a one-sentence summary at step-1. "What I built there" sits in a plaster-lift recess (1px hairline, 6px) whose items carry hollow bronze commit nodes.
+
+### AI workflow loop
+Five circular nodes (72px, plaster-lift, ink frame) joined by bronze stems: I plan (my photo), an agent drafts (Claude Code + Cursor marks), I review (my photo), tests and CI (the Actions mark), ship (Nix). A dashed bronze U runs under draft and review, "not right? again", with an arrowhead back into the agent. Horizontal at 900px+, a vertical stem on phones (where the loop becomes an inline dashed tag). Motion: when it scrolls into view, the nodes enter with a 260ms stagger and each stem draws toward the next (line drawing, scale from the inline-start); then a lime bud and an ink ring walk the loop in eight 1.1s beats, taking the retry lap once. It pauses off-screen; reduced motion shows the static diagram.
+
+### Resume picker
+A native `<dialog>` (plaster-lift, ink rule, 6px) opened by any `[data-resume]`. Nix stands on its top edge with a speech bubble ("Pick one. I'll fetch it!"), then the question and two 64px choices (file icon, language, PDF meta, download icon) that fill lime on hover. It rises 14px and fades in (220-320ms ease-out, `@starting-style`), Nix hops in a beat later (scale and a small turn, ease-out), and it closes on Esc, the close button, the backdrop or a choice.
 
 ### Framed Prints
 Projects with a screenshot are a single print (16:10, ink-rule frame, 4px, top-anchored crop) beside a note: serif title, ink-soft summary (48ch), faint stack line, arrow links. Hover scales only the image, 1.025 over 700ms. Projects without a screenshot become one ruled index line.
@@ -314,13 +323,15 @@ A 10px bronze bar with a 2px lighter rim, 2px corners. Closes a passage (end of 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** keep lime to buds, the email action and the current nav item (plus transient selection and progress); use lime-ink for any lime text or link on plaster.
+- **Do** keep lime to buds, the one primary action per block and the current nav item (plus transient selection and progress); use lime-ink for any lime text or link on plaster.
+- **Do** put the phone number wherever the email is: navbar, hero, the close, the footer, the terminal's `contact`.
 - **Do** separate content with 1px rules (rule for structure, rule-strong for ledgers and frames) and let the plaster breathe between sections (5rem).
 - **Do** close a passage with the shelf-rule, and let the hero stand on the full-bleed shelf.
 - **Do** use Young Serif 400 for headings and Geist for everything readable; switch both to Vazirmatn (800 for headings) in RTL.
 - **Do** use logical properties and multiply every directional translate or scale by `var(--dir)`; mirror arrows in RTL.
 - **Do** give motion a reduced-motion and `html[data-lite]` path that shows the final state.
-- **Do** show tools by their real simple-icons marks in currentColor, or by name alone when no mark exists.
+- **Do** show tools by their real marks: simple-icons in currentColor (brand colour on hover), official site icons for Antigravity and Hermes Agent, or the name alone when no mark exists.
+- **Do** write like the person talks: first person, conversational, a little funny. Persian copy is colloquial (محاوره), not formal.
 
 ### Don't:
 - **Don't** add box-shadows, hard offset shadows, glow or colour gradients; the world is flat plaster.
@@ -328,5 +339,5 @@ A 10px bronze bar with a 2px lighter rim, 2px corners. Closes a passage (end of 
 - **Don't** build card grids; use ruled ledgers, framed prints and index lines.
 - **Don't** draw imitation logos or placeholder marks.
 - **Don't** set headings, nav or buttons in monospace to look technical.
-- **Don't** fill surfaces with lime or use it for decoration; don't introduce blue or purple.
-- **Don't** add a second authored animation next to the growing branch.
+- **Don't** fill surfaces with lime or use it for decoration; don't introduce blue or purple outside third-party brand marks.
+- **Don't** give a section more than one authored animation (the growing branch in the hero, the loop in the AI section); everything else is feedback-sized.

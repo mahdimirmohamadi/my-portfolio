@@ -22,6 +22,7 @@ const data = {
   blog: lp(lang, '/blog'),
   other: lang === 'fa' ? '/' : '/fa/',
   email: person.email,
+  phone: { tel: person.phone.tel, display: person.phone.display.en },
   links: person.links,
   resume: person.resume,
   facts: facts.map((f) => [f.k, f.v.en]),
@@ -38,7 +39,7 @@ const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo 
     <div class="term__log" role="log" aria-live="polite" data-term-log>
       <p><span class="ps1">$</span> neofetch --short</p>
       <p class="t-out"><b class="t-lime">mahdi</b>@<b class="t-lime">workstation</b></p>
-      <p class="t-out">front-end engineer · linux · ai-assisted</p>
+      <p class="t-out">ai-native software engineer · linux</p>
       <p class="t-out t-dim">type <b class="t-amber">help</b> or tap a command below</p>
     </div>
     <form class="term__prompt" data-term-form autocomplete="off">

@@ -1,8 +1,13 @@
 ---
-/** Skills: grouped tool lists with their marks. Compact, scannable, no fake percentages. */
+/**
+ * Skills: grouped tool lists with their marks. Compact, scannable, no fake percentages.
+ * Tool names are English, so the list reads left to right in both languages. Hovering a tool
+ * lights it in its own brand colour.
+ */
 import type { Lang } from '../../i18n/ui';
 import { useT } from '../../i18n/utils';
 import { stack } from '../../data/profile';
+import { logoOf } from '../../data/logos';
 import SectionHead from '../ui/SectionHead.astro';
 import Logo from '../ui/Logo.astro';
 
@@ -15,19 +20,24 @@ const t = useT(lang);
 
 <section class="section wrap" id="skills" aria-labelledby="skills-title">
   <SectionHead title={t('skills.title')} lead={t('skills.lead')} id="skills-title" />
-  <dl class="skills">
+  <dl class="skills" dir="ltr">
     {
       stack.map((g) => (
         <div class="group">
-          <dt>{g.label[lang]}</dt>
+          <dt dir="auto" lang={lang === 'fa' ? 'fa' : undefined}>
+            {g.label[lang]}
+          </dt>
           <dd>
             <ul role="list">
-              {g.items.map((name) => (
-                <li class="tool">
-                  <Logo name={name} size={16} />
-                  {name}
-                </li>
-              ))}
+              {g.items.map((name) => {
+                const logo = logoOf(name);
+                return (
+                  <li class:list={['tool', { 'tool--dark': logo?.dark }]} style={logo ? `--brand:${logo.hex}` : undefined}>
+                    <Logo name={name} size={16} />
+                    {name}
+                  </li>
+                );
+              })}
             </ul>
           </dd>
         </div>
@@ -40,6 +50,7 @@ const t = useT(lang);
   .skills {
     display: grid;
     border-block-start: 1px solid var(--rule);
+    text-align: left;
   }
   @media (min-width: 960px) {
     .skills {
@@ -58,33 +69,60 @@ const t = useT(lang);
   }
   @media (min-width: 560px) {
     .group {
-      grid-template-columns: 7.5rem 1fr;
+      grid-template-columns: 8rem 1fr;
       align-items: baseline;
       gap: var(--space-s);
     }
   }
   dt {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--ink-faint);
+    text-align: left;
+  }
+  dt[lang='fa'] {
+    font-family: var(--font-fa);
   }
   ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem 1.1rem;
+    gap: 0.4rem;
     list-style: none;
     padding: 0;
   }
   .tool {
+    --brand: var(--ink);
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    font-size: 0.95rem;
+    min-height: 34px;
+    padding-inline: 0.6rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
     color: var(--ink);
     white-space: nowrap;
-    direction: ltr;
+    transition:
+      border-color var(--dur-hover) var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out),
+      color var(--dur-hover) var(--ease-out);
   }
   .tool :global(.logo) {
     color: var(--ink-soft);
+    transition: color var(--dur-hover) var(--ease-out);
+  }
+  /* near-black brands (Next.js, GitHub, Cursor…) would vanish at night: they light in ink */
+  :global(:root[data-theme='dark']) .tool--dark {
+    --brand: var(--ink);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .tool:hover {
+      border-color: var(--brand);
+      background: color-mix(in oklch, var(--brand) 12%, var(--plaster-lift));
+    }
+    .tool:hover :global(.logo) {
+      color: var(--brand);
+    }
   }
 </style>

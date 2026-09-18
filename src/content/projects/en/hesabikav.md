@@ -2,7 +2,7 @@
 title: Hesabikav
 summary: An interactive landing page for a financial-analysis startup that explains the product clearly and helps win B2B clients and investors.
 stack: [Next.js, Tailwind CSS, Shadcn UI, Aceternity UI, CSS Animations]
-order: 5
+order: 6
 glyph: '$'
 kind: Fintech
 ---

@@ -1,10 +1,10 @@
 ---
-/** The close: a plain invitation, the address set large, then everywhere else. */
+/** The close: phone and email set large and equal, the call first; then everywhere else. */
 import type { Lang } from '../../i18n/ui';
 import { useT } from '../../i18n/utils';
 import { person } from '../../data/profile';
 import Logo from '../ui/Logo.astro';
-import Arrow from '../ui/Arrow.astro';
+import Icon from '../ui/Icon.astro';
 import Nix from '../art/Nix.astro';
 
 interface Props {
@@ -19,20 +19,30 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
   <span class="shelf-rule close__shelf" aria-hidden="true"></span>
   <div class="close__head">
     <h2 class="close__title" id="contact-title">{t('contact.title')}</h2>
-    <Nix size={96} class="close__nix" />
+    <Nix size={104} class="close__nix" />
   </div>
   <p class="close__lead">{t('contact.lead')}</p>
-  <p class="close__mail">
-    <a href={`mailto:${person.email}`}>{person.email}</a>
-  </p>
+
+  <dl class="lines">
+    <div>
+      <dt>{t('contact.phone.label')}</dt>
+      <dd><a href={`tel:${person.phone.tel}`} dir="ltr">{person.phone.display[lang]}</a></dd>
+    </div>
+    <div>
+      <dt>{t('contact.email.label')}</dt>
+      <dd><a href={`mailto:${person.email}`} dir="ltr">{person.email}</a></dd>
+    </div>
+  </dl>
+
   <div class="close__actions">
-    <a class="btn" href={`mailto:${person.email}`}>
-      {t('hero.cta')}
-      <Arrow />
+    <a class="btn" href={`tel:${person.phone.tel}`}>
+      <Icon name="phone" size={20} />
+      {t('contact.call')}
     </a>
-    <button type="button" class="btn btn--ghost" data-copy={person.email} data-copied={t('contact.copied')}>
-      <span data-copy-label>{t('contact.copy')}</span>
-    </button>
+    <a class="btn btn--ghost" href={`mailto:${person.email}`}>
+      <Icon name="mail" size={20} />
+      {t('contact.email')}
+    </a>
   </div>
 
   <div class="elsewhere">
@@ -50,15 +60,10 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
         ))
       }
       <li>
-        <a href={person.resume.en} download>
-          <span>{t('contact.resume.en')}</span>
-          <span class="elsewhere__handle">PDF</span>
-        </a>
-      </li>
-      <li>
-        <a href={person.resume.fa} download>
-          <span>{t('contact.resume.fa')}</span>
-          <span class="elsewhere__handle">PDF</span>
+        <a href={person.resume[lang]} download data-resume>
+          <Icon name="download" size={18} />
+          <span>{t('hero.resume')}</span>
+          <span class="elsewhere__handle">EN · FA</span>
         </a>
       </li>
     </ul>
@@ -78,43 +83,76 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
     font-size: var(--step-5);
   }
   .close__head :global(.close__nix) {
-    width: clamp(64px, 12vw, 96px);
+    width: clamp(68px, 12vw, 104px);
     margin-block-end: 0.2em;
   }
   .close__lead {
     margin-block-start: var(--space-s);
-    max-width: 52ch;
     color: var(--ink-soft);
     font-size: var(--step-1);
   }
-  .close__mail {
+
+  /* phone and email, equal weight: the two things this page exists for */
+  .lines {
+    display: grid;
     margin-block-start: var(--space-l);
+    border-block-start: 1px solid var(--rule-strong);
+  }
+  .lines > div {
+    display: grid;
+    gap: 0.1rem var(--space-m);
+    padding-block: var(--space-s);
+    border-block-end: 1px solid var(--rule-strong);
+  }
+  @media (min-width: 700px) {
+    .lines > div {
+      grid-template-columns: 7rem 1fr;
+      align-items: baseline;
+    }
+  }
+  .lines dt {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+  }
+  .lines dd {
     font-family: var(--font-body);
     font-weight: 600;
     font-size: clamp(1.2rem, 0.75rem + 2.3vw, 2.3rem);
     letter-spacing: -0.02em;
     line-height: 1.2;
     overflow-wrap: anywhere;
-    direction: ltr;
-    text-align: start;
-    unicode-bidi: plaintext;
+    font-variant-numeric: tabular-nums;
   }
-  .close__mail a {
+  .lines dd a {
+    display: inline-block;
     color: var(--ink);
     text-decoration: underline;
-    text-decoration-color: var(--lime);
-    text-decoration-thickness: 0.12em;
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 0.08em;
     text-underline-offset: 0.18em;
+    unicode-bidi: isolate;
     transition: text-decoration-color var(--dur-hover) var(--ease-out);
   }
-  .close__mail a:hover {
+  .lines dd a:hover {
     text-decoration-color: var(--lime-ink);
   }
+  :global(:root[dir='rtl']) .lines dd a[href^='tel'] {
+    font-family: var(--font-fa);
+    letter-spacing: 0;
+  }
+
   .close__actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-s);
     margin-block-start: var(--space-l);
+  }
+  .close__actions .btn {
+    min-height: 54px;
+    font-size: 1.05rem;
+  }
+  :global(:root[dir='rtl']) .close__actions .btn :global(svg.icon) {
+    scale: 1 1;
   }
 
   .elsewhere {
@@ -154,7 +192,7 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
     font-weight: 600;
     transition: color var(--dur-hover) var(--ease-out);
   }
-  .elsewhere a :global(.logo) {
+  .elsewhere a :global(:is(.logo, .icon)) {
     color: var(--ink-soft);
   }
   .elsewhere__handle {

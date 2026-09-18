@@ -9,6 +9,7 @@ type Data = {
   blog: string;
   other: string;
   email: string;
+  phone: { tel: string; display: string };
   links: { id: string; label: string; href: string; handle: string }[];
   resume: { en: string; fa: string };
   facts: [string, string][];
@@ -53,7 +54,7 @@ function init(root: HTMLElement) {
         line('tip: ↑/↓ history · tab completes · ctrl+l clears', 't-dim');
       },
     },
-    whoami: { help: 'who is this', run: () => line('mahdi — front-end engineer @ Armani English & InnoLearn, Tehran') },
+    whoami: { help: 'who is this', run: () => line('mahdi — AI-native software engineer @ InnoLearn & Armani English, Tehran') },
     neofetch: {
       help: 'system info',
       run: () => {
@@ -111,6 +112,7 @@ function init(root: HTMLElement) {
     contact: {
       help: 'how to reach me',
       run: () => {
+        line(`${b(pad('phone', 10), 'amber')}${a('tel:' + data.phone.tel, data.phone.display)}`);
         line(`${b(pad('mail', 10), 'amber')}${a('mailto:' + data.email, data.email)}`);
         data.links.forEach((l) => line(`${b(pad(l.id, 10), 'amber')}${a(l.href, l.handle, true)}`));
         line(`${b(pad('resume', 10), 'amber')}${a(data.resume.en, 'en.pdf')}  ${a(data.resume.fa, 'fa.pdf')}`);

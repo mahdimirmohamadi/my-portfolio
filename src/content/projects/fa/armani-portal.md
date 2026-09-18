@@ -3,7 +3,7 @@ title: پورتال آموزشی آرمانی
 summary: پورتال جامع کاربران با آزمون realtime، تصحیح هوشمند با AI، برنامه‌ریز مطالعاتی، کلاب‌های درسی و وبینار زنده.
 url: https://my.armanienglish.com
 stack: [React, TypeScript, Chakra UI, Shadcn UI, SWR, Jotai, Formik, Yup, Framer Motion]
-order: 3
+order: 4
 glyph: '>_'
 kind: آموزشی · هوش مصنوعی
 ---

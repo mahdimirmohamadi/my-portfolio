@@ -1,18 +1,17 @@
 ---
 /**
- * The alcove. One sentence and the email on the open wall; on the other side the
- * hanging scroll (Mahdi's photo) and the arrangement: his career drawn as a single
- * git branch rising from a bronze bowl, three lime buds for what's live now.
- * The branch leans toward the copy, so the empty wall points at the email.
+ * The alcove. Who I am and how to reach me on the open wall (phone and email are the point);
+ * on the other side the hanging scroll (Mahdi's photo) and the arrangement: his career drawn
+ * as a single git branch rising from a bronze bowl, three lime buds for what's live now.
  */
 import { Image } from 'astro:assets';
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
 import { person } from '../../data/profile';
 import Arrow from '../ui/Arrow.astro';
+import Icon from '../ui/Icon.astro';
 import Nix from '../art/Nix.astro';
 import original from '../../assets/photo/mahdi-original.png';
-import dither from '../../assets/photo/mahdi-dither.png';
 
 interface Props {
   lang: Lang;
@@ -25,7 +24,7 @@ const fa = lang === 'fa';
 const buds = [
   { x: 44, y: 200, label: 'InnoLearn', meta: fa ? '۱۴۰۴' : '2025', href: '#work-innolearn', above: true },
   { x: 360, y: 410, label: 'Armani English', meta: fa ? '۱۴۰۱' : '2022', href: '#work-armani' },
-  { x: 164, y: 280, label: t('hero.bud.notes'), meta: '', href: lp(lang, '/blog'), above: true },
+  { x: 128, y: 292, label: t('hero.bud.notes'), meta: '', href: lp(lang, '/blog'), above: true },
 ];
 // commit nodes sit on the main stem (points on its curve)
 const commits = [
@@ -42,44 +41,53 @@ const commits = [
       <h1 class="copy__title" id="hero-title">{t('hero.title')}</h1>
       <p class="copy__lead">{t('hero.lead')}</p>
       <div class="copy__actions">
-        <a class="btn" href={`mailto:${person.email}`}>
-          {t('hero.cta')}
+        <a class="btn" href="#work">
+          {t('hero.work')}
           <Arrow />
         </a>
-        <a class="arrow-link" href={lp(lang, '/blog')}>
-          {t('hero.notes')}
-          <Arrow />
+        <a class="btn btn--ghost" href={lp(lang, '/blog')}>
+          {t('hero.blog')}
         </a>
       </div>
-      <a class="copy__resume" href={person.resume[lang]} download>{t('hero.resume')}</a>
+      <ul class="reach" role="list" aria-label={t('hero.reach')}>
+        <li>
+          <a href={`tel:${person.phone.tel}`}>
+            <Icon name="phone" size={20} />
+            <span class="reach__label">{t('contact.phone.label')}</span>
+            <span class="reach__val" dir="ltr">{person.phone.display[lang]}</span>
+          </a>
+        </li>
+        <li>
+          <a href={`mailto:${person.email}`}>
+            <Icon name="mail" size={20} />
+            <span class="reach__label">{t('contact.email.label')}</span>
+            <span class="reach__val" dir="ltr">{person.email}</span>
+          </a>
+        </li>
+      </ul>
+      <a class="resume-btn" href={person.resume[lang]} download data-resume>
+        <Icon name="download" size={22} />
+        <span>{t('hero.resume')}</span>
+        <span class="resume-btn__meta">EN · FA</span>
+      </a>
     </div>
 
     <div class="arrangement">
-      <figure class="scroll portrait" data-portrait>
+      <figure class="scroll">
         <span class="scroll__rod" aria-hidden="true"></span>
         <div class="scroll__frame">
-          <Image class="portrait__real" src={original} widths={[240, 420]} sizes="210px" format="webp" quality={80} alt={t('whoami.photo.real.alt')} loading="eager" fetchpriority="high" />
-          <div class="portrait__bits" aria-hidden="true">
-            <div class="portrait__dither" data-src={`url(${dither.src})`}></div>
-          </div>
-          <span class="portrait__scan" aria-hidden="true"></span>
+          <Image class="portrait__real" src={original} widths={[300, 580]} sizes="(min-width: 900px) 290px, 48vw" format="webp" quality={80} alt={t('whoami.photo.real.alt')} loading="eager" fetchpriority="high" />
         </div>
-        <figcaption class="scroll__caption">
-          <span>{t('hero.photo.caption')}</span>
-          <button type="button" class="scroll__toggle" data-portrait-toggle data-label-on={t('whoami.color')} data-label-off={t('whoami.dither')} aria-pressed="false">
-            {t('whoami.dither')}
-          </button>
-        </figcaption>
       </figure>
 
       <svg class="branch" viewBox="0 0 420 560" role="img" aria-label={t('hero.branch.label')}>
         <g fill="none" stroke-linecap="round">
-          <path class="stem stem--a" pathLength="1" d="M210 512C204 478 228 456 222 430 216 402 190 384 160 356 124 322 76 306 56 268 44 244 40 222 44 200" />
+          <path class="stem stem--a" pathLength="1" d="M210 526L210 512C204 478 228 456 222 430 216 402 190 384 160 356 124 322 76 306 56 268 44 244 40 222 44 200" />
           <path class="stem stem--b" pathLength="1" d="M222 430C262 428 300 426 330 418 346 414 354 412 360 410" />
-          <path class="stem stem--c" pathLength="1" d="M160 356C168 332 156 304 164 280" />
+          <path class="stem stem--c" pathLength="1" d="M160 356C150 336 132 320 128 292" />
         </g>
         {commits.map(([cx, cy]) => <circle class="commit" cx={cx} cy={cy} r="5.5" />)}
-        <g>
+        <g transform="translate(0 12)">
           <path class="bowl__body" d="M136 506c6 26 30 36 74 36s68-10 74-36Z" />
           <ellipse class="bowl__rim" cx="210" cy="506" rx="74" ry="8" />
           <path class="bowl__lip" d="M142 505c20 5 116 5 136 0" />
@@ -103,15 +111,10 @@ const commits = [
 
       <div class="shelf-nix"><Nix size={92} eager /></div>
     </div>
-
-    <p class="coords" aria-hidden="true">{t('hero.coords')}</p>
   </div>
   <div class="shelf" aria-hidden="true"></div>
 </section>
 
-<script>
-  import '../../scripts/portrait';
-</script>
 
 <style>
   .alcove {
@@ -140,7 +143,7 @@ const commits = [
       grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
       align-items: end;
       gap: var(--space-xl);
-      min-height: min(calc(100svh - 22px), 860px);
+      min-height: min(calc(100svh - 82px), 860px);
       padding-block-start: var(--space-xl);
     }
   }
@@ -153,15 +156,15 @@ const commits = [
   .copy__title {
     font-size: clamp(2.25rem, 1.6rem + 2.1vw, 3.4rem);
     line-height: 1.04;
-    max-width: 13ch;
+    max-width: 15ch;
   }
   :global(:root[dir='rtl']) .copy__title {
     font-size: clamp(2rem, 1.4rem + 2.2vw, 3.2rem);
-    max-width: 16ch;
+    max-width: 17ch;
   }
   .copy__lead {
     margin-block-start: var(--space-m);
-    max-width: 56ch;
+    max-width: 60ch;
     font-size: var(--step-0);
     color: var(--ink-soft);
   }
@@ -172,27 +175,97 @@ const commits = [
     gap: var(--space-s) var(--space-m);
     margin-block-start: var(--space-l);
   }
-  .copy__resume {
+
+  /* phone + email: set as plainly as a business card, never hidden behind a click */
+  .reach {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-l);
+    margin-block-start: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .reach a {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 48px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .reach a :global(.icon) {
+    color: var(--ink-soft);
+  }
+  .reach__label {
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+  .reach__val {
+    font-weight: 600;
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+    unicode-bidi: isolate;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color var(--dur-hover) var(--ease-out);
+  }
+  .reach a:hover .reach__val {
+    text-decoration-color: var(--lime-ink);
+  }
+  @media (max-width: 480px) {
+    .reach__val {
+      font-size: 0.98rem;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  /* the resume: a big, obvious ticket that opens the EN/FA picker */
+  .resume-btn {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    margin-block-start: 0.4rem;
-    font-size: 0.88rem;
-    color: var(--ink-faint);
-    text-decoration-color: var(--rule);
-  }
-  .copy__resume:hover {
+    gap: 0.75rem;
+    min-height: 60px;
+    margin-block-start: var(--space-s);
+    padding: 0.7rem 1.4rem;
+    border: var(--bw) dashed var(--rule-strong);
+    border-radius: var(--radius-sm);
     color: var(--ink);
+    font-size: 1.08rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background-color var(--dur-hover) var(--ease-out),
+      border-style var(--dur-hover) var(--ease-out),
+      scale var(--dur-press) var(--ease-out);
+  }
+  .resume-btn__meta {
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: var(--ink-faint);
+  }
+  .resume-btn :global(.icon) {
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .resume-btn:hover {
+      border-style: solid;
+      background: var(--plaster-deep);
+    }
+    .resume-btn:hover :global(.icon) {
+      translate: 0 2px;
+    }
+  }
+  .resume-btn:active {
+    scale: 0.98;
   }
 
   /* ── the arrangement ── */
-  :global(:root[dir='rtl']) .coords {
-    right: auto;
-    left: 4px;
-  }
   .arrangement {
     position: relative;
-    width: min(100%, 440px);
+    width: min(100%, 500px);
     aspect-ratio: 420 / 560;
     justify-self: center;
   }
@@ -200,7 +273,7 @@ const commits = [
   @media (max-width: 899px) {
     .arrangement {
       order: -1;
-      width: min(82vw, 340px);
+      width: min(88vw, 380px);
     }
     .shelf-nix :global(.nix) {
       width: 74px;
@@ -313,7 +386,7 @@ const commits = [
     position: absolute;
     inset-block-start: 0;
     inset-inline-end: 2%;
-    width: 50%;
+    width: 58%;
     margin: 0;
   }
   .scroll__rod {
@@ -338,58 +411,6 @@ const commits = [
     object-fit: cover;
     object-position: 32% 40%;
   }
-  .portrait__bits {
-    position: absolute;
-    inset: 0;
-    background: var(--plaster-deep);
-    clip-path: inset(0 0 100% 0);
-    transition: clip-path 700ms var(--ease-in-out);
-  }
-  .scroll:global(.is-bits) .portrait__bits {
-    clip-path: inset(0 0 0 0);
-  }
-  .portrait__dither {
-    position: absolute;
-    inset: 0;
-    background: var(--ink);
-    mask: var(--src) center / cover no-repeat;
-  }
-  .portrait__scan {
-    position: absolute;
-    inset-inline: 0;
-    inset-block-start: 0;
-    height: 2px;
-    background: var(--lime);
-    opacity: 0;
-    pointer-events: none;
-  }
-  .scroll__caption {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-    margin-block-start: 0.3rem;
-    font-size: 0.78rem;
-    color: var(--ink-faint);
-  }
-  .scroll__toggle {
-    min-height: 32px;
-    padding-inline: 0.5rem;
-    border: 1px solid var(--rule);
-    border-radius: 3px;
-    font-family: var(--ff-mono);
-    font-size: 0.72rem;
-    color: var(--ink-soft);
-    transition: border-color var(--dur-hover) var(--ease-out);
-  }
-  :global(:root[dir='rtl']) .scroll__toggle {
-    font-family: var(--font-fa);
-  }
-  .scroll__toggle:hover {
-    border-color: var(--rule-strong);
-    color: var(--ink);
-  }
-
   .shelf-nix {
     position: absolute;
     inset-block-end: 0;
@@ -405,27 +426,6 @@ const commits = [
     .shelf-nix:hover :global(.nix) {
       rotate: -6deg;
     }
-  }
-
-  .coords {
-    display: none;
-  }
-  @media (min-width: 900px) {
-    /* vertical text: physical offsets, since block/inline axes rotate with it */
-    .coords {
-      display: block;
-      position: absolute;
-      top: var(--space-xl);
-      right: 4px;
-      writing-mode: vertical-rl;
-      font-family: var(--ff-mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.02em;
-      color: var(--ink-faint);
-    }
-  }
-  :global(:root[dir='rtl']) .coords {
-    font-family: var(--font-fa);
   }
 
   /* the shelf the arrangement stands on */

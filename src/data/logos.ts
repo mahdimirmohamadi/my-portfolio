@@ -1,5 +1,10 @@
-// Tool name → brand mark (simple-icons, inlined at build time, drawn in currentColor).
+// Tool name → brand mark. simple-icons marks are inlined at build time and drawn in currentColor
+// (their brand colour shows on hover). Antigravity and Hermes Agent have no simple-icons entry,
+// so their official site icons are used as images (sources in each PNG's metadata).
 // Tools without a published mark are shown by name alone; no imitation marks.
+import type { ImageMetadata } from 'astro';
+import antigravity from '../assets/logos/antigravity.png';
+import hermesAgent from '../assets/logos/hermes-agent.png';
 import {
   siTypescript,
   siJavascript,
@@ -34,7 +39,7 @@ import {
   siTelegram,
 } from 'simple-icons';
 
-type Icon = { path: string; title: string };
+type Icon = { path: string; title: string; hex: string };
 
 const marks: Record<string, Icon> = {
   TypeScript: siTypescript,
@@ -70,10 +75,31 @@ const marks: Record<string, Icon> = {
   Telegram: siTelegram,
 };
 
-export type Logo = { kind: 'svg'; path: string } | null;
+const images: Record<string, { src: ImageMetadata; hex: string }> = {
+  Antigravity: { src: antigravity, hex: '#3b82f6' },
+  'Hermes Agent': { src: hermesAgent, hex: '#8a8a8a' },
+};
 
-/** A tool's published mark, or null: tools without one are shown by name alone. */
+export type Logo =
+  | { kind: 'svg'; path: string; hex: string; dark: boolean }
+  | { kind: 'img'; src: ImageMetadata; hex: string; dark: boolean }
+  | null;
+
+/** relative luminance of a #rrggbb colour (0 black … 1 white) */
+function luminance(hex: string) {
+  const [r, g, b] = [0, 2, 4].map((i) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/** A tool's published mark, or null: tools without one are shown by name alone.
+ *  `dark` marks near-black brand colours, which fall back to ink at night. */
 export function logoOf(name: string): Logo {
+  const img = images[name];
+  if (img) return { kind: 'img', src: img.src, hex: img.hex, dark: false };
   const m = marks[name];
-  return m ? { kind: 'svg', path: m.path } : null;
+  if (!m) return null;
+  return { kind: 'svg', path: m.path, hex: `#${m.hex}`, dark: luminance(m.hex) < 0.05 };
 }

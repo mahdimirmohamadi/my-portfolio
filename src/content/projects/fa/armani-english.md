@@ -3,7 +3,7 @@ title: وب‌سایت اصلی آرمانی
 summary: وب‌سایت معرفی و فروش محصولات آموزشی آرمانی با صفحات متعدد، بر پایهٔ جدیدترین نسخهٔ فریم‌ورک‌ها؛ با بهبود چشمگیر سئو.
 url: https://armanienglish.com
 stack: [Next.js, TypeScript, Tailwind CSS, Zustand, React Query, React Hook Form, Zod]
-order: 1
+order: 3
 glyph: '</>'
 kind: فروشگاهی · سئو
 ---

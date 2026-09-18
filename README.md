@@ -1,6 +1,6 @@
 # Ma: mahdimirmo.ir
 
-Mahdi MirMohamadi's portfolio as one quiet alcove: his photo hangs like a scroll, his career grows from a bowl as a git branch with three live buds, and Nix sits on the shelf. Below it: work as a dated ledger, projects as real screenshots, how he uses AI, skills with logos, a live terminal, notes (the blog) and a big "Say hi." English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
+Mahdi MirMohamadi's portfolio as one quiet alcove: his photo hangs like a scroll, his career grows from a bowl as a git branch with three live buds, and Nix (the mascot, also the logo and favicon) sits on the shelf. Below it: experience as a timeline on the same branch, projects as real screenshots, an animated loop of how AI changed his workflow, skills with logos, a live terminal, the blog and "Get in touch" with the phone number and email set large. A resume picker (EN or FA) opens from any "Download my resume". English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
 
 The design system is written down in [DESIGN.md](DESIGN.md); product intent in [PRODUCT.md](PRODUCT.md).
 
@@ -14,8 +14,9 @@ The design system is written down in [DESIGN.md](DESIGN.md); product intent in [
 | `pnpm build` | Static site in `dist/` |
 | `pnpm preview` | Serve `dist/` locally |
 | `pnpm check` | Type-check (needs TypeScript 6.x) |
-| `pnpm dither` | Re-dither the portrait from `src/assets/photo/mahdi-original.png` |
-| `pnpm og` | Rebuild the social card |
+| `pnpm nix` | Re-cut Nix's poses from `src/assets/nix/nix-sheet.jpg`, then rebuild the logo and favicons |
+| `pnpm icons` | Rebuild only the logo (`nix-head.png`) and favicons from the waving pose |
+| `pnpm og` | Rebuild the social card (needs `pnpm preview` running; see the script's header) |
 
 ## Writing a blog post
 
@@ -30,36 +31,31 @@ The design system is written down in [DESIGN.md](DESIGN.md); product intent in [
    <Nix>Nix says hi.</Nix>
    ```
 
-4. Build. The post appears on `/blog`, its tag pages and the RSS feed. Copy `src/content/blog/en/_template-new-post.md` to start.
+4. Build. The post appears on `/blog` and its tag pages. Copy `src/content/blog/en/_template-new-post.md` to start.
 
 ## Where things live
 
 ```
 src/
-  data/profile.ts          resume data: neofetch facts, jobs (git log), AI, skill groups
-  content/blog/{en,fa}/    posts          content/projects/{en,fa}/  project READMEs
-  i18n/                    UI strings (EN + FA), locale paths, Persian digits & Jalali dates
-  layouts/BaseLayout.astro head, fonts, theme pre-paint, router, top panel, dock, status line
+  data/profile.ts          resume data: phone + email, neofetch facts, jobs, education, AI tools, skill groups
+  data/logos.ts            tool name → mark (simple-icons + brand colour; official icons for Antigravity, Hermes Agent)
+  content/blog/{en,fa}/    posts          content/projects/{en,fa}/  project write-ups
+  i18n/                    UI strings (EN + FA, conversational), locale paths, Persian digits & Jalali dates
+  layouts/BaseLayout.astro head, fonts, theme pre-paint, router, navbar, dock, resume picker
   components/
-    chrome/                TopPanel (workspaces, CPU, Tehran clock), Dock (phones), StatusLine
-    home/                  Hero, Terminal, Whoami, GitLog, AiLoop, Projects, Skills, BlogTeaser, Contact
-    art/Nix.astro          the mascot (moods: happy, panic, sleep)
-    ui/ mdx/ blog/
+    chrome/                Navbar, Dock (phones), Footer, ResumeDialog
+    home/                  Hero, Work (timeline), Projects, AiNote (workflow loop), Skills, Shell/Terminal, BlogTeaser, Contact
+    art/Nix.astro          the mascot (moods: happy, sleep, panic, type)
+    ui/                    Icon, Logo, Arrow, SectionHead, Window
   scripts/
     terminal.ts            the shell: commands, history, tab completion
-    chrome.ts              theme circle-reveal, clock, scroll-spy, Nix's eyes, idle pausing, copy
-    fx/                    click sparks
-    portrait.ts session.ts portrait wipe, streaming AI session
-scripts/                   build-time: dither.mjs, og.mjs
+    chrome.ts              theme circle-reveal, scroll-spy, idle pausing, resume picker
+scripts/                   build-time: nix.mjs (cut the poses), icons.mjs (logo + favicons), og.mjs (social card)
 ```
 
 ## Design rules
 
-- **Palette:** warm black, phosphor lime `#C6F432`, amber and coral, plus a daylight theme. No blue or purple. No gradients: the background is film grain plus faint CRT scanlines. Tool logos come from simple-icons, inlined at build time in currentColor.
-- **The cartoon edge:** 2px outlines, hard offset shadows (never blurred), tilted stickers, and Nix.
-- **Motion:** `transform`/`opacity` only. Frequent interactions stay under 250ms. `prefers-reduced-motion` and `html[data-lite]` (low-end or save-data devices) turn the effects off, and nothing ever stays hidden.
-- **Performance:** static HTML, about 12KB gzipped of JS on the home page, and no framework runtime. Hover states are border/colour changes (focus follows the mouse, like a tiling WM), not glows.
-- **RTL:** logical properties everywhere, and `--dir` mirrors shadows and transforms. Terminal and code blocks stay LTR.
+See [DESIGN.md](DESIGN.md). In short: sage plaster, pine-grey ink, a bronze shelf, one lime accent for what is alive (buds, the primary action of a block, the current nav item). No shadows, gradients, eyebrows or card grids. Tool marks show their brand colour on hover. Motion is transform/opacity, and `prefers-reduced-motion` or `html[data-lite]` shows the final state. Logical properties everywhere, with `--dir` mirroring transforms in RTL.
 
 ## Reserved: ~/lab (lofi radio + pomodoro)
 

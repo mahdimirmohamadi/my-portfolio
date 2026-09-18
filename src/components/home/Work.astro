@@ -1,48 +1,58 @@
 ---
-/** Work: each team as a dated session, the date set large like a calendar leaf. */
+/**
+ * Experience: the hero's branch carried down the page. One bronze stem, a lime bud for each
+ * team I'm still with, hollow commit nodes for school. What I built at each place sits in its
+ * own recess beside the story, so the eye can skim either column.
+ */
 import type { Lang } from '../../i18n/ui';
 import { useT } from '../../i18n/utils';
 import { jobs, education } from '../../data/profile';
 import SectionHead from '../ui/SectionHead.astro';
+import Arrow from '../ui/Arrow.astro';
+import Nix from '../art/Nix.astro';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useT(lang);
+const fa = lang === 'fa';
+const when = (j: (typeof jobs)[number]) =>
+  fa ? `${t('work.since')} ${j.since.month.fa} ${j.since.year.fa} ${t('work.now')}` : `${j.since.month.en} ${j.since.year.en} – ${t('work.now')}`;
 ---
 
 <section class="section wrap" id="work" aria-labelledby="work-title">
-  <SectionHead title={t('work.title')} lead={t('work.lead')} id="work-title" />
-  <ol class="sessions" role="list">
+  <SectionHead title={t('work.title')} id="work-title" />
+  <ol class="stem" role="list">
     {
       jobs.map((j) => (
-        <li class="session" id={`work-${j.id}`}>
-          <p class="leaf">
-            <span class="leaf__since">{t('work.since')}</span>
-            <time datetime={j.since.iso}>
-              <span class="leaf__month">{j.since.month[lang]}</span>
-              <span class="leaf__year">{j.since.year[lang]}</span>
-            </time>
-            <span class="leaf__now">{t('work.now')}</span>
-          </p>
-          <div class="session__body">
-            <div class="session__head">
-            <h3 class="session__company">
+        <li class="job" id={`work-${j.id}`}>
+          <span class="node node--bud" aria-hidden="true" />
+          <div class="job__story">
+            <h3 class="job__company">
               {j.url ? (
                 <a href={j.url} target="_blank" rel="noopener">
                   {j.company}
+                  <Arrow kind="out" size={16} />
                 </a>
               ) : (
                 j.company
               )}
             </h3>
-            <p class="session__meta">
-              {j.role[lang]} · {j.place[lang]}, {j.mode[lang]}
+            <p class="job__meta">
+              <time class="job__when" datetime={j.since.iso}>
+                {when(j)}
+              </time>
+              <span>
+                {j.place[lang]} · {j.mode[lang]}
+              </span>
             </p>
-            <p class="session__summary">{j.summary[lang]}</p>
-            </div>
-            <ul class="shipped" role="list">
+            <p class="job__role">{j.role[lang]}</p>
+            <p class="job__summary">{j.summary[lang]}</p>
+          </div>
+          <div class="built">
+            <h4 class="built__title">{t('work.shipped')}</h4>
+            <ul role="list">
               {j.shipped[lang].map((s) => (
                 <li>{s}</li>
               ))}
@@ -51,164 +61,200 @@ const t = useT(lang);
         </li>
       ))
     }
+    <li class="school">
+      <span class="node" aria-hidden="true"></span>
+      <div class="school__head">
+        <h3 class="school__title">{t('work.edu')}</h3>
+        <Nix mood="sleep" size={64} class="school__nix" />
+      </div>
+      <ul class="school__list" role="list">
+        {
+          education.map((e) => (
+            <li>
+              <b>{e.title[lang]}</b>
+              <span>{e.place[lang]}</span>
+              <span class="caption">{e.years[lang]}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </li>
   </ol>
-  <div class="edu">
-    <h3 class="edu__title">{t('work.edu')}</h3>
-    <ul role="list">
-      {
-        education.map((e) => (
-          <li>
-            <b>{e.title[lang]}</b>, {e.place[lang]} <span class="caption">{e.years[lang]}</span>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-  <span class="shelf-rule work__shelf" aria-hidden="true"></span>
 </section>
 
 <style>
-  /* a ledger: one ruled row per team, the date leaf in the margin */
-  .sessions {
-    list-style: none;
-    padding: 0;
-    border-block-end: 1px solid var(--rule-strong);
-  }
-  .session {
+  .stem {
+    --stem-x: 11px;
+    position: relative;
     display: grid;
-    grid-template-columns: 5.5rem minmax(0, 1fr);
-    border-block-start: 1px solid var(--rule-strong);
-    scroll-margin-block-start: 24px;
+    gap: var(--space-xl);
+    padding: 0;
+    padding-inline-start: 2.6rem;
+    list-style: none;
+  }
+  /* the stem itself: from the first bud down to school */
+  .stem::before {
+    content: '';
+    position: absolute;
+    inset-block: 14px 1.2rem;
+    inset-inline-start: calc(var(--stem-x) - 1.5px);
+    width: 3px;
+    background: var(--bronze-soft);
+  }
+  .node {
+    position: absolute;
+    inset-inline-start: calc(var(--stem-x) - 9px);
+    inset-block-start: 0.55rem;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--plaster);
+    border: 3px solid var(--bronze-soft);
+  }
+  .node--bud {
+    inset-inline-start: calc(var(--stem-x) - 12px);
+    inset-block-start: 0.4rem;
+    width: 24px;
+    height: 24px;
+    background: var(--lime);
+    border: 2px solid var(--ink);
+  }
+
+  .job,
+  .school {
+    position: relative;
+    margin-inline-start: -2.6rem;
+    padding-inline-start: 2.6rem;
+    scroll-margin-block-start: 80px;
+  }
+  .job {
+    display: grid;
+    gap: var(--space-m);
   }
   @media (min-width: 960px) {
-    .session {
-      grid-template-columns: 8rem minmax(0, 1fr);
-    }
-    .session__body {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-      column-gap: var(--space-xl);
+    .job {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-xl);
       align-items: start;
     }
-    .shipped {
-      margin-block-start: 0.35rem;
-    }
   }
-  /* the calendar leaf */
-  .leaf {
-    display: grid;
-    align-content: start;
-    justify-items: center;
-    gap: 0.1rem;
-    padding: var(--space-m) 0.5rem;
-    text-align: center;
+
+  .job__company {
+    font-size: var(--step-3);
+    line-height: 1.1;
   }
-  .leaf time {
-    display: grid;
-    justify-items: center;
+  .job__company a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    color: var(--ink);
+    text-decoration: none;
   }
-  .leaf__since,
-  .leaf__now {
-    font-size: 0.72rem;
+  .job__company a :global(svg) {
     color: var(--ink-faint);
+    transition: translate var(--dur-ui) var(--ease-out), color var(--dur-hover) var(--ease-out);
   }
-  .leaf__month {
+  :global(:root[dir='rtl']) .job__company a :global(svg) {
+    scale: -1 1;
+  }
+  .job__company a:hover :global(svg) {
+    color: var(--ink);
+    translate: calc(2px * var(--dir)) -2px;
+  }
+  .job__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.8rem;
+    margin-block-start: 0.6rem;
     font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .job__when {
+    padding: 0.15rem 0.6rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .job__role {
+    margin-block-start: var(--space-s);
+    font-weight: 600;
+  }
+  .job__summary {
+    margin-block-start: 0.35rem;
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 44ch;
+  }
+
+  /* what I built there: a recess in the wall, not a floating card */
+  .built {
+    padding: var(--space-m);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--plaster-lift);
+  }
+  .built__title {
+    font-size: 0.92rem;
     font-weight: 600;
     color: var(--ink-soft);
   }
-  .leaf__year {
-    font-family: var(--ff-display);
-    font-size: 1.9rem;
-    line-height: 1;
-    font-variant-numeric: tabular-nums;
-  }
-  :global(:root[dir='rtl']) .leaf__year {
-    font-weight: 800;
-    font-size: 1.6rem;
-  }
-  .leaf__now {
-    margin-block-start: 0.35rem;
-    padding: 0 0.4rem;
-    border: 1px solid var(--rule-strong);
-    border-radius: 3px;
-    color: var(--ink);
-    font-weight: 600;
-  }
-  .session__body {
-    padding-block: var(--space-m);
-  }
-  .session__company {
-    font-size: var(--step-2);
-  }
-  .session__company a {
-    color: var(--ink);
-    text-decoration-color: var(--rule);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
-  }
-  .session__company a:hover {
-    text-decoration-color: var(--lime-ink);
-  }
-  .session__meta {
-    margin-block-start: 0.3rem;
-    font-size: 0.88rem;
-    color: var(--ink-faint);
-  }
-  .session__summary {
-    margin-block-start: var(--space-s);
-    color: var(--ink);
-  }
-  .shipped {
+  .built ul {
     display: grid;
-    gap: 0.45rem;
-    margin-block-start: var(--space-s);
+    gap: 0.6rem;
+    margin-block-start: 0.8rem;
     padding: 0;
     list-style: none;
   }
-  .shipped li {
+  .built li {
     position: relative;
-    padding-inline-start: 1.1rem;
-    color: var(--ink-soft);
-    font-size: 0.95rem;
+    padding-inline-start: 1.3rem;
+    color: var(--ink);
+    font-size: 0.97rem;
+    line-height: 1.5;
   }
-  /* a small commit node, the branch motif carried into the list */
-  .shipped li::before {
+  /* each item a small commit on its own twig */
+  .built li::before {
     content: '';
     position: absolute;
     inset-inline-start: 0;
-    inset-block-start: 0.55em;
-    width: 7px;
-    height: 7px;
+    inset-block-start: 0.5em;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    border: 1.5px solid var(--bronze-soft);
+    border: 2px solid var(--bronze-soft);
   }
 
-  .edu {
+  .school__head {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-xs);
+  }
+  .school__title {
+    font-size: var(--step-2);
+  }
+  .school__head :global(.school__nix) {
+    width: 56px;
+    margin-block-end: -0.2rem;
+  }
+  .school__list {
     display: grid;
     gap: 0.5rem;
-    margin-block-start: var(--space-l);
-  }
-  @media (min-width: 760px) {
-    .edu {
-      grid-template-columns: 9rem 1fr;
-      align-items: baseline;
-    }
-  }
-  .work__shelf {
-    margin-block-start: var(--space-xl);
-  }
-  .edu__title {
-    font-size: var(--step-1);
-  }
-  .edu ul {
-    display: grid;
-    gap: 0.3rem;
-    list-style: none;
+    margin-block-start: var(--space-s);
     padding: 0;
+    list-style: none;
+  }
+  .school__list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2rem 0.6rem;
     color: var(--ink-soft);
   }
-  .edu b {
+  .school__list b {
     color: var(--ink);
     font-weight: 600;
   }

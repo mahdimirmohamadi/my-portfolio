@@ -3,7 +3,7 @@ title: Armani Learning Portal
 summary: Student portal with real-time exams, AI scoring, a smart study planner, study clubs and live webinars.
 url: https://my.armanienglish.com
 stack: [React, TypeScript, Chakra UI, Shadcn UI, SWR, Jotai, Formik, Yup, Framer Motion]
-order: 3
+order: 4
 glyph: '>_'
 kind: EdTech · AI
 ---

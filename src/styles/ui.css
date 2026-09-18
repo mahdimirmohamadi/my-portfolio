@@ -38,14 +38,15 @@
     display: grid;
     gap: 0.5rem;
     margin-block-end: var(--space-l);
-    max-width: 62ch;
   }
   .sec-head__title {
     font-size: var(--step-3);
   }
+  /* the lead runs the full width: it's one thought, so it gets one line where there's room */
   .sec-head__lead {
     color: var(--ink-soft);
     font-size: var(--step-0);
+    text-wrap: pretty;
   }
 
   /* ── Button: a plain rectangle; lime is only for the one thing that matters ── */

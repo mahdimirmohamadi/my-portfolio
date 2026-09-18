@@ -57,7 +57,8 @@ const lines = items.filter((p) => !shotOf(slugOf(p)));
     .prints {
       grid-template-columns: 1fr 1fr;
     }
-    .slot:first-child {
+    /* an odd count: the lead project takes the full row so the rest pair up */
+    .slot:first-child:nth-last-child(odd) {
       grid-column: 1 / -1;
     }
   }

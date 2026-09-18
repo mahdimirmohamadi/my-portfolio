@@ -1,5 +1,5 @@
 // Chrome that survives page turns: day/night switch (circle reveal), section scroll-spy,
-// idle pausing, copy-to-clipboard.
+// idle pausing, copy-to-clipboard, the resume picker.
 import { prefersLessMotion } from './util';
 
 const root = document.documentElement;
@@ -102,6 +102,27 @@ function initCopy() {
     });
   });
 }
+
+// ── resume picker: any [data-resume] opens the dialog (delegated once, survives page swaps) ──
+document.addEventListener('click', (ev) => {
+  const target = ev.target as Element | null;
+  const dialog = document.getElementById('resume-dialog') as HTMLDialogElement | null;
+  if (!target || !dialog) return;
+  const opener = target.closest('[data-resume]');
+  if (opener) {
+    ev.preventDefault();
+    dialog.showModal();
+    return;
+  }
+  // a chosen file downloads, then the dialog steps aside; so do the close button and the backdrop
+  if (target.closest('[data-resume-close]')) return dialog.close();
+  if (target === dialog) {
+    // the dialog's own padding also targets it: only a click outside its box is the backdrop
+    const r = dialog.getBoundingClientRect();
+    const e = ev as MouseEvent;
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close();
+  }
+});
 
 document.addEventListener('astro:page-load', () => {
   initTheme();

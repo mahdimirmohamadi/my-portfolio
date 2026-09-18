@@ -3,7 +3,7 @@ title: Armani English Website
 summary: A large, multi-page store for educational products, kept on the latest framework versions. SEO improved significantly.
 url: https://armanienglish.com
 stack: [Next.js, TypeScript, Tailwind CSS, Zustand, React Query, React Hook Form, Zod]
-order: 1
+order: 3
 glyph: '</>'
 kind: E-commerce · SEO
 ---

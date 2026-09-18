@@ -1,0 +1,240 @@
+---
+/**
+ * The top bar: Nix (the site's mark) peeking up from the bar's bottom rule, the name,
+ * the sections, then the phone number, language and day/night. On phones the sections
+ * move to the Dock; the call button stays up here, one tap away.
+ */
+import { Image } from 'astro:assets';
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { person } from '../../data/profile';
+import { workspaces } from './workspaces';
+import Icon from '../ui/Icon.astro';
+import nixHead from '../../assets/nix/nix-head.png';
+
+interface Props {
+  lang: Lang;
+  altHref: string;
+}
+const { lang, altHref } = Astro.props;
+const t = useT(lang);
+const home = lp(lang, '/');
+const path = Astro.url.pathname.replace(/\/$/, '');
+const isHome = path === '' || path === '/fa';
+const items = workspaces.filter((w) => w.hash !== 'top');
+const hrefOf = (w: (typeof workspaces)[number]) => (w.path && !isHome ? lp(lang, w.path) : w.hash ? `${home}#${w.hash}` : lp(lang, w.path));
+const activeOf = (w: (typeof workspaces)[number]) => !isHome && !!w.path && path.startsWith(lp(lang, w.path).replace(/\/$/, ''));
+const other = lang === 'fa' ? 'en' : 'fa';
+---
+
+<header class="bar">
+  <div class="bar__inner">
+    <a class="brand" href={home} aria-label={`${t('site.name')}, ${t('nav.home')}`}>
+      <Image class="brand__nix" src={nixHead} width={50} widths={[50, 100]} sizes="50px" format="webp" alt="" loading="eager" />
+      <span class="brand__name">{t('site.name')}</span>
+    </a>
+
+    <nav class="bar__nav" aria-label={t('nav.menu')}>
+      <ul role="list">
+        {
+          items.map((w) => (
+            <li>
+              <a href={hrefOf(w)} data-ws={w.hash ?? ''} aria-current={activeOf(w) ? 'page' : undefined}>
+                {t(w.key)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="bar__tools">
+      <a class="call" href={`tel:${person.phone.tel}`} aria-label={`${t('nav.call')}: ${person.phone.display[lang]}`}>
+        <Icon name="phone" size={18} />
+        <span class="call__num" dir="ltr">{person.phone.display[lang]}</span>
+      </a>
+      <a class="tool" href={altHref} hreflang={other} lang={other} aria-label={t('lang.switch.label')} title={t('lang.switch')}>
+        <Icon name="globe" size={18} />
+        <span class="tool__txt">{t('lang.short')}</span>
+      </a>
+      <button class="tool" type="button" data-theme-toggle aria-label={t('theme.toggle')} title={t('theme.toggle')}>
+        <Icon name="moon" size={18} class="tool__moon" />
+        <Icon name="sun" size={18} class="tool__sun" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .bar {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 40;
+    background: var(--plaster);
+    border-block-end: 1px solid var(--rule-strong);
+  }
+  .bar__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    min-height: 60px;
+    width: min(100% - 2 * var(--page-gutter), var(--page-max));
+    margin-inline: auto;
+  }
+
+  /* Nix rises out of the bar's bottom rule: the cut edge of the head sits on the line */
+  .brand {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+    gap: 0.6rem;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .brand :global(.brand__nix) {
+    align-self: flex-end;
+    width: 50px;
+    height: auto;
+    margin-block-end: -1px;
+    transform-origin: 50% 100%;
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .brand:hover :global(.brand__nix) {
+      translate: 0 -3px;
+    }
+  }
+  .brand__name {
+    font-family: var(--ff-display);
+    font-size: 1.1rem;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  :global(:root[dir='rtl']) .brand__name {
+    font-weight: 800;
+  }
+  @media (max-width: 420px) {
+    .brand__name {
+      display: none;
+    }
+  }
+
+  .bar__nav {
+    display: none;
+    margin-inline-start: auto;
+  }
+  @media (min-width: 900px) {
+    .bar__nav {
+      display: block;
+    }
+  }
+  .bar__nav ul {
+    display: flex;
+    gap: 0.2rem;
+    list-style: none;
+    padding: 0;
+  }
+  .bar__nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 0.65rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: color var(--dur-hover) var(--ease-out);
+  }
+  .bar__nav a:hover {
+    color: var(--ink);
+  }
+  /* "you are here": a small lime bud under the word */
+  .bar__nav a::after {
+    content: '';
+    position: absolute;
+    inset-block-end: 4px;
+    inset-inline-start: calc(50% - 3.5px);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--lime);
+    border: 1.5px solid var(--ink);
+    scale: 0;
+    transition: scale var(--dur-ui) var(--ease-out);
+  }
+  .bar__nav a:is(.is-active, [aria-current='page']) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .bar__nav a:is(.is-active, [aria-current='page'])::after {
+    scale: 1;
+  }
+
+  .bar__tools {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-inline-start: auto;
+  }
+  @media (min-width: 900px) {
+    .bar__tools {
+      margin-inline-start: var(--space-s);
+    }
+  }
+  .call,
+  .tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 40px;
+    min-width: 40px;
+    padding-inline: 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    font-size: 0.86rem;
+    text-decoration: none;
+    transition:
+      border-color var(--dur-hover) var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out);
+  }
+  .call:hover,
+  .tool:hover {
+    border-color: var(--rule-strong);
+    background: var(--plaster-deep);
+  }
+  .call {
+    border-color: var(--rule-strong);
+    font-weight: 600;
+  }
+  .call__num {
+    display: none;
+    font-variant-numeric: tabular-nums;
+    unicode-bidi: isolate;
+  }
+  @media (min-width: 1180px) {
+    .call__num {
+      display: inline;
+    }
+  }
+  .tool__txt {
+    font-weight: 600;
+  }
+  .tool[lang='fa'] {
+    font-family: var(--font-fa);
+  }
+  .tool[lang='en'] {
+    font-family: var(--font-body);
+  }
+  /* the button shows the state it switches to */
+  .tool :global(.tool__sun) {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .tool :global(.tool__sun) {
+    display: block;
+  }
+  :global(:root[data-theme='dark']) .tool :global(.tool__moon) {
+    display: none;
+  }
+</style>

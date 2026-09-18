@@ -84,8 +84,7 @@
     --space-2xl: 5rem;
     --page-gutter: 18px;
     --measure: 68ch;
-    --page-max: 1120px;
-    --rail: 0px;
+    --page-max: 1200px;
 
     /* motion */
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -125,11 +124,6 @@
   @media (min-width: 768px) {
     :root {
       --page-gutter: 32px;
-    }
-  }
-  @media (min-width: 1040px) {
-    :root {
-      --rail: 208px;
     }
   }
 }

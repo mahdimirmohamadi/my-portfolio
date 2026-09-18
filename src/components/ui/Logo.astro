@@ -1,25 +1,46 @@
 ---
-/** A tool's brand mark in currentColor, or nothing when it has none (the visible name carries the meaning). */
+/**
+ * A tool's brand mark, or nothing when it has none (the visible name carries the meaning).
+ * SVG marks draw in currentColor; `brand` paints them in the brand colour instead.
+ * Image marks (Antigravity, Hermes Agent) are their official icons.
+ */
+import { Image } from 'astro:assets';
 import { logoOf } from '../../data/logos';
 interface Props {
   name: string;
   size?: number;
   class?: string;
+  brand?: boolean;
 }
-const { name, size = 18, class: cls } = Astro.props;
+const { name, size = 18, class: cls, brand = false } = Astro.props;
 const logo = logoOf(name);
 ---
 
 {
-  logo && (
-    <svg class:list={['logo', cls]} viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+  logo?.kind === 'svg' && (
+    <svg class:list={['logo', cls, { 'logo--brand': brand, 'logo--dark': logo.dark }]} style={`--brand:${logo.hex}`} viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
       <path d={logo.path} fill="currentColor" />
     </svg>
+  )
+}
+{
+  logo?.kind === 'img' && (
+    <Image class:list={['logo', 'logo--img', cls]} src={logo.src} width={size} height={size} widths={[size, size * 2]} sizes={`${size}px`} format="webp" alt="" aria-hidden="true" loading="lazy" decoding="async" />
   )
 }
 
 <style>
   .logo {
     flex: none;
+  }
+  .logo--img {
+    border-radius: 22%;
+    object-fit: contain;
+  }
+  .logo--brand {
+    color: var(--brand);
+  }
+  :global(:root[data-theme='dark']) .logo--brand.logo--dark {
+    color: var(--ink);
   }
 </style>

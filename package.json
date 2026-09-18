@@ -11,15 +11,13 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "dither": "node scripts/dither.mjs",
     "og": "node scripts/og.mjs",
-    "art": "node scripts/dither.mjs && node scripts/og.mjs",
-    "nix": "node scripts/nix.mjs"
+    "nix": "node scripts/nix.mjs && node scripts/icons.mjs",
+    "icons": "node scripts/icons.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.1",
     "@astrojs/react": "^6.0.6",
-    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.3.3",
     "motion": "^13.4.0",

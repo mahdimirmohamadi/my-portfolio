@@ -110,10 +110,6 @@
     outline-offset: 3px;
     border-radius: var(--radius-sm);
   }
-  body > main,
-  body > footer {
-    margin-inline-start: var(--rail);
-  }
 
   code,
   kbd,

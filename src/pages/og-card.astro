@@ -4,6 +4,7 @@
 import '../styles/global.css';
 import { Font, Image } from 'astro:assets';
 import original from '../assets/photo/mahdi-original.png';
+import nix from '../assets/nix/nix-wave.png';
 ---
 
 <html lang="en">
@@ -19,7 +20,7 @@ import original from '../assets/photo/mahdi-original.png';
     <div class="card">
       <div class="text">
         <p class="name">Mahdi MirMohamadi</p>
-        <p class="role">Front-end engineer in Tehran. I make web apps fast, then faster.</p>
+        <p class="role">AI-native software engineer in Tehran. Real products, under real load.</p>
         <p class="url">mahdimirmo.ir</p>
       </div>
       <div class="art">
@@ -33,6 +34,7 @@ import original from '../assets/photo/mahdi-original.png';
         <circle cx="226" cy="160" r="11" fill="oklch(0.905 0.2 124)" stroke="oklch(0.25 0.014 112)" stroke-width="2" />
         <circle cx="160" cy="210" r="6" fill="oklch(0.936 0.013 128)" stroke="oklch(0.36 0.03 78)" stroke-width="2.5" />
       </svg>
+      <Image class="nix" src={nix} width={130} format="webp" quality={90} alt="" />
       <div class="shelf"></div>
     </div>
   </body>
@@ -110,6 +112,14 @@ import original from '../assets/photo/mahdi-original.png';
     bottom: 34px;
     width: 300px;
     height: 300px;
+  }
+  .nix {
+    position: absolute;
+    right: 70px;
+    bottom: 34px;
+    width: 130px;
+    height: auto;
+    transform: scaleX(-1);
   }
   .shelf {
     position: absolute;

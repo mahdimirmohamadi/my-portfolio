@@ -1,0 +1,243 @@
+---
+/**
+ * "Download my resume" opens this: Nix asks which language, two big choices.
+ * Any link or button with [data-resume] opens it (see scripts/chrome.ts). Without JS those
+ * links still download the resume in the page's language.
+ */
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { person } from '../../data/profile';
+import Nix from '../art/Nix.astro';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const choices = [
+  { lang: 'en', label: t('resume.en'), href: person.resume.en },
+  { lang: 'fa', label: t('resume.fa'), href: person.resume.fa },
+] as const;
+---
+
+<dialog class="resume" id="resume-dialog" aria-labelledby="resume-title">
+  <button class="resume__close" type="button" data-resume-close aria-label={t('resume.close')}>
+    <Icon name="x" size={20} />
+  </button>
+  <div class="resume__nix">
+    <Nix size={112} class="resume__nix-img" />
+    <p class="resume__bubble">{t('resume.nix')}</p>
+  </div>
+  <h2 class="resume__title" id="resume-title">{t('resume.title')}</h2>
+  <p class="resume__lead">{t('resume.lead')}</p>
+  <ul class="resume__choices" role="list">
+    {
+      choices.map((c) => (
+        <li>
+          <a class="choice" href={c.href} download data-resume-close>
+            <Icon name="file" size={26} />
+            <span class="choice__label">{c.label}</span>
+            <span class="choice__meta">PDF</span>
+            <Icon name="download" size={20} class="choice__dl" />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</dialog>
+
+<style>
+  .resume {
+    width: min(100% - 32px, 460px);
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+    padding: var(--space-l) var(--space-l) var(--space-m);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--plaster-lift);
+    color: var(--ink);
+    overflow: visible;
+  }
+  .resume::backdrop {
+    background: oklch(0.2 0.02 112 / 0.45);
+  }
+
+  .resume__close {
+    position: absolute;
+    inset-block-start: 10px;
+    inset-inline-end: 10px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    color: var(--ink-soft);
+  }
+  .resume__close:hover {
+    color: var(--ink);
+    background: var(--plaster-deep);
+  }
+
+  /* Nix stands on the top edge of the card and talks */
+  .resume__nix {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-xs);
+    margin-block: calc(-1 * var(--space-l) - 56px) var(--space-s);
+  }
+  .resume__nix :global(.resume__nix-img) {
+    width: 112px;
+    transform-origin: 50% 100%;
+    /* he waves away from his speech bubble in both directions */
+    transform: scaleX(var(--dir));
+  }
+  .resume__bubble {
+    position: relative;
+    margin-block-end: 2.6rem;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--plaster-lift);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .resume__bubble::before {
+    content: '';
+    position: absolute;
+    inset-block-end: 8px;
+    inset-inline-start: -6px;
+    width: 10px;
+    height: 10px;
+    background: inherit;
+    border: inherit;
+    border-width: 0 0 1px 1px;
+    rotate: calc(45deg * var(--dir));
+  }
+  :global(:root[dir='rtl']) .resume__bubble::before {
+    border-width: 0 1px 1px 0;
+  }
+
+  .resume__title {
+    font-size: var(--step-2);
+  }
+  .resume__lead {
+    margin-block-start: 0.3rem;
+    color: var(--ink-soft);
+  }
+  .resume__choices {
+    display: grid;
+    gap: var(--space-xs);
+    margin-block-start: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+  .choice {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-height: 64px;
+    padding-inline: var(--space-s);
+    border: var(--bw) solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      background-color var(--dur-hover) var(--ease-out),
+      scale var(--dur-press) var(--ease-out);
+  }
+  .choice__label {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .choice__meta {
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+  .choice :global(.choice__dl) {
+    margin-inline-start: auto;
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .choice:hover {
+      background: var(--lime);
+      color: var(--on-lime);
+      border-color: var(--ink);
+    }
+    .choice:hover .choice__meta {
+      color: inherit;
+    }
+    .choice:hover :global(.choice__dl) {
+      translate: 0 2px;
+    }
+  }
+  .choice:active {
+    scale: 0.98;
+  }
+
+  /* open: the card rises and settles; Nix hops in a beat later */
+  .resume[open] {
+    opacity: 1;
+    translate: 0 0;
+    transition:
+      opacity 220ms var(--ease-out),
+      translate 320ms var(--ease-out),
+      overlay 220ms allow-discrete,
+      display 220ms allow-discrete;
+  }
+  .resume {
+    opacity: 0;
+    translate: 0 14px;
+    transition:
+      opacity 160ms ease-in,
+      translate 160ms ease-in,
+      overlay 160ms allow-discrete,
+      display 160ms allow-discrete;
+  }
+  @starting-style {
+    .resume[open] {
+      opacity: 0;
+      translate: 0 14px;
+    }
+  }
+  .resume[open]::backdrop {
+    opacity: 1;
+    transition: opacity 220ms var(--ease-out), overlay 220ms allow-discrete, display 220ms allow-discrete;
+  }
+  .resume::backdrop {
+    opacity: 0;
+  }
+  @starting-style {
+    .resume[open]::backdrop {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .resume[open] :global(.resume__nix-img) {
+      animation: nix-hop 480ms var(--ease-out) 90ms both;
+    }
+    .resume[open] .resume__bubble {
+      animation: bubble-in 260ms var(--ease-out) 380ms both;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .resume,
+    .resume[open] {
+      translate: 0 0;
+    }
+  }
+  @keyframes nix-hop {
+    from {
+      scale: 0.4;
+      rotate: -10deg;
+      opacity: 0;
+    }
+  }
+  @keyframes bubble-in {
+    from {
+      opacity: 0;
+      scale: 0.9;
+    }
+  }
+</style>

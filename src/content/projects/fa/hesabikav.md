@@ -2,7 +2,7 @@
 title: حسابیکاو
 summary: لندینگ پیج تعاملی برای استارتاپ تحلیل مالی؛ معرفی شفاف و جذاب ارزش محصول برای جذب مشتریان B2B و سرمایه‌گذاران.
 stack: [Next.js, Tailwind CSS, Shadcn UI, Aceternity UI, CSS Animations]
-order: 5
+order: 6
 glyph: '$'
 kind: فین‌تک
 ---

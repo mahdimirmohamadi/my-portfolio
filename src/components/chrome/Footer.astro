@@ -19,9 +19,9 @@ const t = useT(lang);
       <p class="foot__made">{t('footer.made')}</p>
     </div>
     <ul class="foot__links" role="list">
+      <li><a href={`tel:${person.phone.tel}`} dir="ltr">{person.phone.display[lang]}</a></li>
+      <li><a href={`mailto:${person.email}`}>{t('contact.email.label')}</a></li>
       {person.links.map((l) => <li><a href={l.href} rel="me noopener" target="_blank">{l.label}</a></li>)}
-      <li><a href={`mailto:${person.email}`}>Email</a></li>
-      <li><a href={lang === 'fa' ? '/fa/rss.xml' : '/rss.xml'}>RSS</a></li>
       <li><a href={lp(lang, '/lab')}>{t('nav.lab')}</a></li>
     </ul>
   </div>
@@ -34,7 +34,7 @@ const t = useT(lang);
     /* room for the phone dock */
     padding-block-end: calc(80px + env(safe-area-inset-bottom));
   }
-  @media (min-width: 1040px) {
+  @media (min-width: 900px) {
     .foot {
       padding-block-end: 0;
     }

@@ -24,7 +24,8 @@ Consult these guides before working on related tasks:
 ## Project notes (Ma edition, on `main`)
 
 - Read `README.md`, `PRODUCT.md` and `DESIGN.md` first. The old workstation edition lives on `theme/workstation`; the manga edition was removed.
-- Lime is reserved for the buds, the email action and the current nav item. No shadows, gradients, eyebrows or card grids; see DESIGN.md.
+- Lime is reserved for the buds, the one primary action per block and the current nav item. No shadows, gradients, eyebrows or card grids; see DESIGN.md.
+- The phone number is as important as the email: keep it wherever the email appears.
 - Every page is `src/pages/[...lang]/…` → builds `/` (en) and `/fa/` (fa, RTL). Use `lp(lang, path)` and `useT(lang)`; add UI strings to both locales in `src/i18n/ui.ts`.
 - Vanilla CSS with tokens (`src/styles/tokens.css`), no Tailwind. Logical properties; mirror transforms with `var(--dir)`. Geist Mono has no Persian glyphs: Persian text needs `--font-fa`.
 - No blue/purple. Motion: transform/opacity only, respect `prefers-reduced-motion` and `html[data-lite]`.

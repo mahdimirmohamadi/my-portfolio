@@ -1,20 +1,20 @@
 ---
-title: InnoLearn & InnoMeet
-summary: An LMS and a live meeting platform in a single monorepo, with live streaming, quizzes, polls and a built-in image tool.
+title: InnoLearn
+summary: An LMS for a team in Melbourne, in a Turborepo monorepo it shares with InnoMeet. Courses, assignments, exams and the landing pages.
 url: https://innolearn.ir
 stack: [Next.js, TypeScript, Turborepo, pnpm, Tailwind CSS, Zustand]
-order: 2
+order: 1
 glyph: '{ }'
 kind: EdTech · Monorepo
 ---
 
-An all-in-one digital learning ecosystem: a learning management system and **InnoMeet**, a live online meeting platform. They live together in one Turborepo monorepo.
+A learning management system, built by a small team for a company in Melbourne. It lives in one Turborepo monorepo with **InnoMeet**, the live-class app, so the two share components, types and tooling.
 
 ## My part
 
-As one of two front-end developers on the product:
+I'm one of the two engineers on the product:
 
-- Built much of **InnoMeet**: chat, live video, image and audio streaming, and live quizzes and polls.
-- Built a **native image creation tool** with no AI involved.
-- Built the **assignments and exams** module and several landing pages for the main site.
-- Pitched in beyond the role on product UX and on the team's CI/CD.
+- Built the **assignments and exams** module.
+- Built a **native image creation tool**, with zero AI involved.
+- Built several landing pages for the main site.
+- Pitched in beyond the job title on product UX and on the team's CI/CD.

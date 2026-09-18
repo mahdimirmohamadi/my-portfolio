@@ -1,69 +1,491 @@
 ---
-/** How I use AI: one honest paragraph and the tools by their marks; the AI I shipped lives in Work. */
-import type { Lang } from '../../i18n/ui';
+/**
+ * How AI changed my workflow: the loop as a small branch. Five nodes joined by bronze stems,
+ * a dashed "not right? again" loop from review back to the agent. When it scrolls into view
+ * the stems draw in step by step (line drawing + stagger); after that a lime bud walks the
+ * loop, taking the retry lap once, so the diagram explains itself. Everything is visible
+ * without JS or motion; the animation only enhances it.
+ */
+import { Image } from 'astro:assets';
+import type { Lang, UIKey } from '../../i18n/ui';
 import { useT } from '../../i18n/utils';
 import { aiTools } from '../../data/profile';
 import SectionHead from '../ui/SectionHead.astro';
 import Logo from '../ui/Logo.astro';
+import Nix from '../art/Nix.astro';
+import me from '../../assets/photo/mahdi-original.png';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useT(lang);
+const steps = [
+  { id: 'plan', who: 'me' },
+  { id: 'draft', who: 'agent' },
+  { id: 'review', who: 'me' },
+  { id: 'test', who: 'ci' },
+  { id: 'ship', who: 'nix' },
+] as const;
 ---
 
 <section class="section wrap" id="ai" aria-labelledby="ai-title">
-  <div class="ai">
-    <SectionHead title={t('ai.title')} lead={t('ai.lead')} id="ai-title" />
-    <ul class="tools" role="list" aria-label={t('ai.tools')}>
+  <SectionHead title={t('ai.title')} lead={t('ai.lead')} id="ai-title" />
+
+  <figure class="flow" data-flow data-idle>
+    <ol class="flow__steps" role="list" aria-label={t('ai.flow.label')}>
+      {
+        steps.map((s, i) => (
+          <li class={`step step--${s.id}`} style={`--i:${i}`}>
+            <span class="step__node">
+              {s.who === 'me' && <Image class="step__me" src={me} width={52} height={52} widths={[52, 104]} sizes="52px" format="webp" quality={70} alt="" />}
+              {s.who === 'agent' && (
+                <span class="step__logos">
+                  <Logo name="Claude Code" size={22} brand />
+                  <Logo name="Cursor" size={22} brand />
+                </span>
+              )}
+              {s.who === 'ci' && <Logo name="CI/CD" size={26} brand />}
+              {s.who === 'nix' && <Nix size={50} class="step__nix" />}
+              <span class="step__bud" aria-hidden="true" />
+            </span>
+            <span class="step__title">{t(`ai.flow.${s.id}` as UIKey)}</span>
+            <span class="step__sub">{t(`ai.flow.${s.id}.sub` as UIKey)}</span>
+            {s.id === 'review' && <span class="step__again-inline">↺ {t('ai.flow.again')}</span>}
+          </li>
+        ))
+      }
+    </ol>
+    <div class="again" aria-hidden="true">
+      <span class="again__line"></span>
+      <span class="again__label">{t('ai.flow.again')}</span>
+    </div>
+  </figure>
+
+  <div class="tools">
+    <h3 class="tools__title">{t('ai.tools')}</h3>
+    <ul role="list">
       {
         aiTools.map((tool) => (
           <li>
-            <Logo name={tool} size={22} />
-            {tool}
+            <Logo name={tool} size={24} brand />
+            <span dir="ltr">{tool}</span>
           </li>
         ))
       }
     </ul>
-    <p class="ai__note">
-      <a href="#work-armani">{t('ai.shipped.note')}</a>
-    </p>
   </div>
 </section>
 
+<script>
+  // arm the reveal only for a flow that's still below the fold; it plays once when it arrives
+  import { prefersLessMotion } from '../../scripts/util';
+
+  document.addEventListener('astro:page-load', () => {
+    const flow = document.querySelector<HTMLElement>('[data-flow]');
+    if (!flow || flow.dataset.ready) return;
+    flow.dataset.ready = '';
+    if (prefersLessMotion() || document.documentElement.hasAttribute('data-lite')) return;
+    if (flow.getBoundingClientRect().top < innerHeight) {
+      flow.classList.add('is-on');
+      return;
+    }
+    flow.classList.add('is-armed');
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        flow.classList.add('is-on');
+        io.disconnect();
+      },
+      { rootMargin: '0px 0px -20% 0px' },
+    );
+    io.observe(flow);
+  });
+</script>
+
 <style>
+  .flow {
+    --node: 72px;
+    --gap: clamp(0.75rem, 2vw, 1.5rem);
+    --beat: 1.1s;
+    position: relative;
+    margin: 0;
+    padding: var(--space-m) 0 var(--space-l);
+  }
+  .flow__steps {
+    display: grid;
+    gap: var(--space-m);
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--node) 1fr;
+    grid-template-rows: auto auto 1fr;
+    column-gap: var(--space-s);
+    align-items: center;
+  }
+  .step__node {
+    position: relative;
+    grid-row: 1 / 4;
+    display: grid;
+    place-items: center;
+    width: var(--node);
+    height: var(--node);
+    border-radius: 50%;
+    border: var(--bw) solid var(--rule-strong);
+    background: var(--plaster-lift);
+    z-index: 1;
+  }
+  /* the "you are here" ring: fades in while the bud visits this step */
+  .step__node::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    opacity: 0;
+  }
+  .step__node :global(.step__me) {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 34% 30%;
+  }
+  .step__logos {
+    display: flex;
+    gap: 6px;
+  }
+  .step__node :global(.step__nix) {
+    width: 50px;
+    translate: 0 -4px;
+  }
+  .step__bud {
+    position: absolute;
+    inset-block-start: -4px;
+    inset-inline-end: -4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--lime);
+    border: 2px solid var(--ink);
+    scale: 0;
+  }
+  .step__title {
+    align-self: end;
+    font-weight: 600;
+    font-size: 1.02rem;
+  }
+  .step__sub {
+    align-self: start;
+    font-size: 0.86rem;
+    color: var(--ink-faint);
+  }
+  .step__again-inline {
+    grid-column: 2;
+    justify-self: start;
+    margin-block-start: 0.3rem;
+    padding: 0.05rem 0.5rem;
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+  }
+
+  /* phones: the stem runs down through the nodes */
+  .step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: calc(var(--node) / 2 - 1.5px);
+    inset-block-start: var(--node);
+    height: calc(100% - var(--node) + var(--space-m));
+    width: 3px;
+    background: var(--bronze-soft);
+    transform-origin: top;
+  }
+  .again {
+    display: none;
+  }
+
+  /* wide: the branch lies down, left to right (right to left in Persian) */
+  @media (min-width: 900px) {
+    .flow__steps {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--gap);
+    }
+    .step {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      justify-items: center;
+      align-content: start;
+      text-align: center;
+      row-gap: 0.2rem;
+    }
+    .step__node {
+      grid-row: auto;
+      margin-block-end: 0.6rem;
+    }
+    .step__title,
+    .step__sub {
+      align-self: auto;
+    }
+    .step__again-inline {
+      display: none;
+    }
+    .step:not(:last-child)::before {
+      inset-block-start: calc(var(--node) / 2 - 1.5px);
+      inset-inline-start: calc(50% + var(--node) / 2);
+      width: calc(100% + var(--gap) - var(--node));
+      height: 3px;
+      transform-origin: calc(50% - 50% * var(--dir)) 50%;
+    }
+
+    /* the retry loop: a dashed U under draft and review, arrowhead back up into the agent */
+    .again {
+      display: block;
+      position: relative;
+      /* from the centre of column 2 to the centre of column 3 */
+      margin-inline: calc((100% - 4 * var(--gap)) / 10 + (100% - 4 * var(--gap)) / 5 + var(--gap)) calc((100% - 4 * var(--gap)) / 10 + 2 * ((100% - 4 * var(--gap)) / 5 + var(--gap)));
+      margin-block-start: 0.5rem;
+      height: 2.2rem;
+      pointer-events: none;
+    }
+    .again__line {
+      position: absolute;
+      inset: 0;
+      border: 2px dashed var(--bronze-soft);
+      border-block-start: 0;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    /* the arrowhead on the agent's side */
+    .again__line::after {
+      content: '';
+      position: absolute;
+      inset-block-start: -1px;
+      inset-inline-start: -6px;
+      width: 12px;
+      height: 12px;
+      border-block-start: 2px solid var(--bronze-soft);
+      border-inline-start: 2px solid var(--bronze-soft);
+      rotate: calc(45deg * var(--dir));
+    }
+    .again__label {
+      position: absolute;
+      inset-block-end: -0.8rem;
+      inset-inline-start: 50%;
+      translate: calc(-50% * var(--dir)) 0;
+      padding: 0.05rem 0.6rem;
+      background: var(--plaster);
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .step__title {
+      margin-block-start: 0.1rem;
+    }
+    .flow {
+      padding-block-end: var(--space-xl);
+    }
+  }
+
+  /* ── motion ── */
+  /* armed (below the fold, motion allowed): the pieces wait for the reveal */
+  .flow.is-armed:not(.is-on) .step {
+    opacity: 0;
+    translate: 0 10px;
+  }
+  .flow.is-armed:not(.is-on) .step::before {
+    scale: 0 1;
+  }
+  .flow.is-armed:not(.is-on) .again {
+    opacity: 0;
+  }
+  @media (max-width: 899px) {
+    .flow.is-armed:not(.is-on) .step::before {
+      scale: 1 0;
+    }
+  }
+
+  /* the reveal: node, then its stem draws toward the next (stagger), then the retry loop */
+  .flow.is-on .step {
+    animation: step-in 420ms var(--ease-out) both;
+    animation-delay: calc(var(--i) * 260ms);
+  }
+  .flow.is-on .step:not(:last-child)::before {
+    animation: stem-x 300ms var(--ease-in-out) both;
+    animation-delay: calc(var(--i) * 260ms + 200ms);
+  }
+  .flow.is-on .again {
+    animation: step-in 400ms var(--ease-out) both;
+    animation-delay: 1300ms;
+  }
+  @media (max-width: 899px) {
+    .flow.is-on .step:not(:last-child)::before {
+      animation-name: stem-y;
+    }
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+      translate: 0 10px;
+    }
+  }
+  @keyframes stem-x {
+    from {
+      scale: 0 1;
+    }
+  }
+  @keyframes stem-y {
+    from {
+      scale: 1 0;
+    }
+  }
+
+  /* then the bud walks the loop: plan, draft, review, (again) draft, review, test, ship.
+     Eight beats; draft and review are visited twice. It pauses off-screen. */
+  .flow.is-on .step__bud,
+  .flow.is-on .step__node::after {
+    animation-duration: calc(8 * var(--beat));
+    animation-iteration-count: infinite;
+    animation-timing-function: var(--ease-out);
+    animation-delay: 1.9s;
+  }
+  .flow.is-on .step--plan .step__bud {
+    animation-name: bud-plan;
+  }
+  .flow.is-on .step--plan .step__node::after {
+    animation-name: ring-plan;
+  }
+  .flow.is-on .step--draft .step__bud {
+    animation-name: bud-draft;
+  }
+  .flow.is-on .step--draft .step__node::after {
+    animation-name: ring-draft;
+  }
+  .flow.is-on .step--review .step__bud {
+    animation-name: bud-review;
+  }
+  .flow.is-on .step--review .step__node::after {
+    animation-name: ring-review;
+  }
+  .flow.is-on .step--test .step__bud {
+    animation-name: bud-test;
+  }
+  .flow.is-on .step--test .step__node::after {
+    animation-name: ring-test;
+  }
+  .flow.is-on .step--ship .step__bud {
+    animation-name: bud-ship;
+  }
+  .flow.is-on .step--ship .step__node::after {
+    animation-name: ring-ship;
+  }
+  .flow.is-on .again__label {
+    animation: again-blink calc(8 * var(--beat)) var(--ease-out) 1.9s infinite;
+  }
+  .flow[data-offscreen] .step__bud,
+  .flow[data-offscreen] .step__node::after,
+  .flow[data-offscreen] .again__label {
+    animation-play-state: paused;
+  }
+
+  /* one beat = 12.5% */
+  @keyframes bud-plan {
+    0%, 11% { scale: 1; }
+    13%, 100% { scale: 0; }
+  }
+  @keyframes ring-plan {
+    0%, 11% { opacity: 1; }
+    13%, 100% { opacity: 0; }
+  }
+  @keyframes bud-draft {
+    0%, 12% { scale: 0; }
+    14%, 23% { scale: 1; }
+    25%, 49% { scale: 0; }
+    51%, 60% { scale: 1; }
+    62%, 100% { scale: 0; }
+  }
+  @keyframes ring-draft {
+    0%, 12% { opacity: 0; }
+    14%, 23% { opacity: 1; }
+    25%, 49% { opacity: 0; }
+    51%, 60% { opacity: 1; }
+    62%, 100% { opacity: 0; }
+  }
+  @keyframes bud-review {
+    0%, 24% { scale: 0; }
+    26%, 35% { scale: 1; }
+    37%, 62% { scale: 0; }
+    64%, 73% { scale: 1; }
+    75%, 100% { scale: 0; }
+  }
+  @keyframes ring-review {
+    0%, 24% { opacity: 0; }
+    26%, 35% { opacity: 1; }
+    37%, 62% { opacity: 0; }
+    64%, 73% { opacity: 1; }
+    75%, 100% { opacity: 0; }
+  }
+  @keyframes again-blink {
+    0%, 36% { opacity: 1; }
+    38%, 48% { opacity: 1; color: var(--ink); }
+    50%, 100% { opacity: 1; }
+  }
+  @keyframes bud-test {
+    0%, 74% { scale: 0; }
+    76%, 85% { scale: 1; }
+    87%, 100% { scale: 0; }
+  }
+  @keyframes ring-test {
+    0%, 74% { opacity: 0; }
+    76%, 85% { opacity: 1; }
+    87%, 100% { opacity: 0; }
+  }
+  @keyframes bud-ship {
+    0%, 86% { scale: 0; }
+    88%, 98% { scale: 1; }
+    100% { scale: 0; }
+  }
+  @keyframes ring-ship {
+    0%, 86% { opacity: 0; }
+    88%, 98% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* the tools I actually use, in their own colours */
   .tools {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    list-style: none;
-    padding: 0;
-    border-block-start: 1px solid var(--rule);
+    gap: var(--space-s);
+    margin-block-start: var(--space-m);
   }
   @media (min-width: 760px) {
     .tools {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: 11rem 1fr;
+      align-items: center;
     }
   }
-  .tools li {
+  .tools__title {
+    font-size: var(--step-1);
+  }
+  .tools ul {
     display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    padding: 0;
+    list-style: none;
+  }
+  .tools li {
+    display: inline-flex;
     align-items: center;
-    gap: 0.65rem;
-    min-height: 60px;
-    border-block-end: 1px solid var(--rule);
+    gap: 0.6rem;
+    min-height: 52px;
+    padding-inline: 0.9rem 1.1rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    background: var(--plaster-lift);
     font-weight: 600;
-  }
-  .ai__note {
-    margin-block-start: var(--space-s);
-    font-size: 0.95rem;
-  }
-  .ai__note a {
-    color: var(--ink-soft);
-    text-decoration-color: var(--rule);
-    text-underline-offset: 0.25em;
-  }
-  .ai__note a:hover {
-    color: var(--ink);
-    text-decoration-color: var(--lime-ink);
   }
 </style>

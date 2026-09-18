@@ -43,7 +43,6 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
         </div>
       )
     }
-    <p class="blog__rss mono"><a href={lang === 'fa' ? '/fa/rss.xml' : '/rss.xml'}>{t('blog.rss')}</a></p>
   </section>
 </BaseLayout>
 
@@ -65,8 +64,5 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
     display: flex;
     align-items: center;
     gap: var(--space-m);
-  }
-  .blog__rss {
-    margin-block-start: var(--space-l);
   }
 </style>

@@ -8,22 +8,22 @@ brand
 
 Four audiences, in order of weight:
 
-1. **Hiring managers and recruiters**, mostly for remote front-end roles abroad. They skim in under a minute, want proof of real production work, and decide fast.
+1. **Hiring managers and recruiters**, mostly for remote software engineering roles abroad. They skim in under a minute, want proof of real production work, and decide fast.
 2. **Freelance clients** who need a fast, well-built website or web app and want to know they're dealing with a careful professional.
 3. **Iranian employers** reading the Persian (RTL) version at `/fa/`. It is a first-class edition, not a translation afterthought.
-4. **Developer peers** who arrive through the blog (front-end, Linux, AI) and stay for the craft.
+4. **Developer peers** who arrive through the blog (the web, Linux, AI) and stay for the craft.
 
 They read on phones as often as on desktops, often on slow or throttled connections.
 
 ## Product Purpose
 
-The personal site of Mahdi MirMohamadi, a front-end engineer in Tehran with 4 years in production: React, Next.js, TypeScript and Astro, Linux as the daily driver, and AI tools in the loop. The site has to show, not claim, that he is professional with computers and genuinely curious about how things work.
+The personal site of Mahdi MirMohamadi, an AI-native software engineer in Tehran with 4 years on real products under real load: React, Next.js, TypeScript and Astro, Linux as the daily driver, and AI tools in the loop. The site has to show, not claim, that he is professional with computers and genuinely curious about how things work.
 
-**Success = the visitor emails him.** Every page should make that next step obvious and easy. Resume downloads and blog reads are supporting signals.
+**Success = the visitor calls or emails him.** The phone number and the email are the two most important things on the site; every page should make that next step obvious and easy. Resume downloads and blog reads are supporting signals.
 
 ## Brand Personality
 
-**Professional, curious, playful.** Mostly modern and technical, with a light cartoonish edge (a chunky soft display serif and Nix, the small mascot) that shows personality without looking childish. The voice is first person, nerdy and specific: short sentences, real numbers, no hype. It is Linux- and AI-native: the career drawn as a git branch, a live terminal, real screenshots of shipped work.
+**Professional, curious, playful.** Mostly modern and technical, with a light cartoonish edge (a chunky soft display serif and Nix, the small mascot) that shows personality without looking childish. The voice is first person, nerdy and specific, and it sounds spoken: friendly, a little funny ("Before that? I was studying, obviously!"), short sentences, real numbers, no hype. Persian copy is colloquial (محاوره), never formal. It is Linux- and AI-native: the career drawn as a git branch, a live terminal, real screenshots of shipped work.
 
 ## Anti-references
 
@@ -35,11 +35,11 @@ The personal site of Mahdi MirMohamadi, a front-end engineer in Tehran with 4 ye
 
 ## Design Principles
 
-1. **Practice what you preach.** A front-end engineer's site must be fast (Lighthouse mobile ≥ 95), accessible and polished. Performance is part of the pitch.
+1. **Practice what you preach.** A software engineer's site must be fast (Lighthouse mobile ≥ 95), accessible and polished. Performance is part of the pitch.
 2. **Real computer metaphors, used honestly.** Terminal, editor and git log are working UI with real content, not wallpaper. If a metaphor makes information harder to scan, drop it.
 3. **Show, don't claim.** Specific facts (30% faster page loads, InnoMeet live streaming, AI scoring) beat adjectives. Illustrative content is labelled as such.
 4. **Compact and scannable.** A recruiter should get role, experience, stack and contact within one or two screens. Every section earns its height.
-5. **Personality in the details, not the volume.** Delight comes from small, crafted moments (focus-follows-mouse, a 1-bit photo mode, the mascot), never from effects stacked on every element.
+5. **Personality in the details, not the volume.** Delight comes from small, crafted moments (the growing branch, the AI workflow loop, the mascot in many small places), never from effects stacked on every element.
 
 ## Accessibility & Inclusion
 

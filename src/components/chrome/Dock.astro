@@ -1,5 +1,5 @@
 ---
-/** Phones: a dock in thumb reach (the desktop uses the workspace pills in the top panel). */
+/** Phones: a dock in thumb reach (the desktop uses the links in the top bar). */
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
 import { workspaces } from './workspaces';
@@ -10,7 +10,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useT(lang);
 const home = lp(lang, '/');
-const items = workspaces;
+const items = workspaces.filter((w) => w.dock !== false);
 ---
 
 <nav class="dock" aria-label={t('nav.menu')}>
@@ -79,7 +79,7 @@ const items = workspaces;
     background: var(--lime);
     border: 1.5px solid var(--ink);
   }
-  @media (min-width: 1040px) {
+  @media (min-width: 900px) {
     .dock {
       display: none;
     }
