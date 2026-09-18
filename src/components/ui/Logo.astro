@@ -1,5 +1,5 @@
 ---
-/** A tool's brand mark in currentColor (decorative: the visible name carries the meaning). */
+/** A tool's brand mark in currentColor, or nothing when it has none (the visible name carries the meaning). */
 import { logoOf } from '../../data/logos';
 interface Props {
   name: string;
@@ -11,33 +11,15 @@ const logo = logoOf(name);
 ---
 
 {
-  logo.kind === 'svg' ? (
+  logo && (
     <svg class:list={['logo', cls]} viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
       <path d={logo.path} fill="currentColor" />
     </svg>
-  ) : (
-    <span class:list={['logo', 'logo--mono', cls]} style={`--s:${size}px`} aria-hidden="true">
-      {logo.text}
-    </span>
   )
 }
 
 <style>
   .logo {
     flex: none;
-  }
-  .logo--mono {
-    display: inline-grid;
-    place-items: center;
-    width: var(--s);
-    height: var(--s);
-    border: 1.5px solid currentColor;
-    border-radius: 5px;
-    font-family: var(--ff-mono);
-    font-size: calc(var(--s) * 0.5);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    direction: ltr;
   }
 </style>

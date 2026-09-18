@@ -37,6 +37,7 @@ export const ui = {
     'hero.bud.notes': 'Notes',
     'hero.branch.label': 'My career as a git branch: InnoLearn since 2025, Armani English since 2022, and my notes.',
     'hero.photo.caption': 'me, mid-thought',
+    'hero.coords': '35.69°N 51.39°E · since 2022',
     'hero.term.hint': 'Try a command:',
     'hero.term.label': 'Terminal command',
 
@@ -55,6 +56,7 @@ export const ui = {
     'ai.lead':
       'Claude Code and Cursor write a lot of my first drafts. I plan the change, let the agent do the typing, then review the diff like it came from a stranger, because it did.',
     'ai.built': 'AI I’ve shipped',
+    'ai.shipped.note': 'I’ve also shipped AI features myself: the exam scoring at Armani English is under Work.',
     'ai.tools': 'In my editor every day',
 
     'projects.title': 'Projects',
@@ -131,6 +133,7 @@ export const ui = {
     'hero.bud.notes': 'یادداشت‌ها',
     'hero.branch.label': 'مسیر کاری من به شکل یک شاخهٔ گیت: اینولرن از ۱۴۰۴، آرمانی انگلیش از ۱۴۰۱، و یادداشت‌هایم.',
     'hero.photo.caption': 'من، وسط یک فکر',
+    'hero.coords': '۳۵٫۶۹° شمالی ۵۱٫۳۹° شرقی · از ۱۴۰۱',
     'hero.term.hint': 'یک دستور امتحان کنید:',
     'hero.term.label': 'دستور ترمینال',
 
@@ -149,6 +152,7 @@ export const ui = {
     'ai.lead':
       'پیش‌نویس اول خیلی از کدهایم را Claude Code و Cursor می‌نویسند. من تغییر را برنامه‌ریزی می‌کنم، تایپ را به ایجنت می‌سپارم و بعد diff را طوری بازبینی می‌کنم که انگار یک غریبه نوشته، چون واقعاً همین‌طور است.',
     'ai.built': 'هوش مصنوعی‌ای که ساخته‌ام',
+    'ai.shipped.note': 'قابلیت‌های هوش مصنوعی هم ساخته‌ام: سامانهٔ تصحیح آزمون آرمانی انگلیش را در بخش کارها ببینید.',
     'ai.tools': 'هر روز در ویرایشگرم',
 
     'projects.title': 'پروژه‌ها',

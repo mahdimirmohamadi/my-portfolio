@@ -27,6 +27,7 @@ const t = useT(lang);
             <span class="leaf__now">{t('work.now')}</span>
           </p>
           <div class="session__body">
+            <div class="session__head">
             <h3 class="session__company">
               {j.url ? (
                 <a href={j.url} target="_blank" rel="noopener">
@@ -40,6 +41,7 @@ const t = useT(lang);
               {j.role[lang]} · {j.place[lang]}, {j.mode[lang]}
             </p>
             <p class="session__summary">{j.summary[lang]}</p>
+            </div>
             <ul class="shipped" role="list">
               {j.shipped[lang].map((s) => (
                 <li>{s}</li>
@@ -65,24 +67,31 @@ const t = useT(lang);
 </section>
 
 <style>
+  /* a ledger: one ruled row per team, the date leaf in the margin */
   .sessions {
-    display: grid;
-    gap: var(--space-m);
     list-style: none;
     padding: 0;
-  }
-  @media (min-width: 960px) {
-    .sessions {
-      grid-template-columns: 1fr 1fr;
-    }
+    border-block-end: 1px solid var(--rule-strong);
   }
   .session {
     display: grid;
     grid-template-columns: 5.5rem minmax(0, 1fr);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
-    background: var(--plaster-lift);
+    border-block-start: 1px solid var(--rule-strong);
     scroll-margin-block-start: 24px;
+  }
+  @media (min-width: 960px) {
+    .session {
+      grid-template-columns: 8rem minmax(0, 1fr);
+    }
+    .session__body {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      column-gap: var(--space-xl);
+      align-items: start;
+    }
+    .shipped {
+      margin-block-start: 0.35rem;
+    }
   }
   /* the calendar leaf */
   .leaf {
@@ -91,7 +100,6 @@ const t = useT(lang);
     justify-items: center;
     gap: 0.1rem;
     padding: var(--space-m) 0.5rem;
-    border-inline-end: 1px solid var(--rule);
     text-align: center;
   }
   .leaf time {
@@ -121,13 +129,13 @@ const t = useT(lang);
   .leaf__now {
     margin-block-start: 0.35rem;
     padding: 0 0.4rem;
+    border: 1px solid var(--rule-strong);
     border-radius: 3px;
-    background: var(--lime);
-    color: var(--on-lime);
+    color: var(--ink);
     font-weight: 600;
   }
   .session__body {
-    padding: var(--space-m);
+    padding-block: var(--space-m);
   }
   .session__company {
     font-size: var(--step-2);

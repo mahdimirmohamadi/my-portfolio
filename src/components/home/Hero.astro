@@ -24,7 +24,7 @@ const fa = lang === 'fa';
 // buds: tip positions in the 420×560 arrangement box (x from the inline-start side)
 const buds = [
   { x: 44, y: 200, label: 'InnoLearn', meta: fa ? '۱۴۰۴' : '2025', href: '#work-innolearn', above: true },
-  { x: 340, y: 360, label: 'Armani English', meta: fa ? '۱۴۰۱' : '2022', href: '#work-armani', above: false },
+  { x: 340, y: 360, label: 'Armani English', meta: fa ? '۱۴۰۱' : '2022', href: '#work-armani', side: true },
   { x: 164, y: 280, label: t('hero.bud.notes'), meta: '', href: lp(lang, '/blog'), above: true },
 ];
 // commit nodes sit on the main stem (points on its curve)
@@ -82,6 +82,7 @@ const commits = [
         <g>
           <path class="bowl__body" d="M136 506c6 26 30 36 74 36s68-10 74-36Z" />
           <ellipse class="bowl__rim" cx="210" cy="506" rx="74" ry="8" />
+          <path class="bowl__lip" d="M142 505c20 5 116 5 136 0" />
           <rect class="bowl__body" x="186" y="540" width="48" height="8" rx="2" />
         </g>
         {buds.map((b, i) => <circle class="bud" style={`--i:${i}`} cx={b.x} cy={b.y} r="10" />)}
@@ -90,7 +91,7 @@ const commits = [
       <ul class="buds" role="list">
         {
           buds.map((b, i) => (
-            <li class:list={{ above: b.above }} style={`--x:${(b.x / 420) * 100}%;--y:${(b.y / 560) * 100}%;--i:${i}`}>
+            <li class:list={{ above: b.above, side: b.side }} style={`--x:${(b.x / 420) * 100}%;--y:${(b.y / 560) * 100}%;--i:${i}`}>
               <a href={b.href}>
                 {b.label}
                 {b.meta && <span class="buds__meta">{b.meta}</span>}
@@ -103,7 +104,7 @@ const commits = [
       <div class="shelf-nix" aria-hidden="true"><Nix size={62} bob={false} /></div>
     </div>
 
-    <p class="coords" aria-hidden="true">35.69°N 51.39°E · since 2022</p>
+    <p class="coords" aria-hidden="true">{t('hero.coords')}</p>
   </div>
   <div class="shelf" aria-hidden="true"></div>
 </section>
@@ -117,12 +118,14 @@ const commits = [
     --branch: oklch(0.36 0.03 78);
     --bowl: oklch(0.3 0.025 78);
     --bowl-rim: oklch(0.42 0.03 78);
+    --bowl-lip: oklch(0.58 0.035 78);
     position: relative;
   }
   :global(:root[data-theme='dark']) .alcove {
     --branch: oklch(0.66 0.035 78);
     --bowl: oklch(0.36 0.02 78);
     --bowl-rim: oklch(0.5 0.025 78);
+    --bowl-lip: oklch(0.66 0.03 78);
   }
   .alcove__wall {
     position: relative;
@@ -193,6 +196,17 @@ const commits = [
     aspect-ratio: 420 / 560;
     justify-self: center;
   }
+  /* phones: the person leads, so the scroll and branch come before the words */
+  @media (max-width: 899px) {
+    .arrangement {
+      order: -1;
+      width: min(82vw, 340px);
+    }
+    .shelf-nix {
+      scale: 0.85;
+      transform-origin: bottom;
+    }
+  }
   @media (min-width: 900px) {
     .arrangement {
       justify-self: end;
@@ -229,6 +243,12 @@ const commits = [
   .bowl__rim {
     fill: var(--bowl-rim);
   }
+  .bowl__lip {
+    fill: none;
+    stroke: var(--bowl-lip);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
   .bud {
     fill: var(--lime);
     stroke: var(--ink);
@@ -255,6 +275,10 @@ const commits = [
   .buds li.above {
     translate: calc(-50% * var(--dir)) calc(-100% - 14px);
   }
+  /* beside the bud, on the side away from where its stem arrives */
+  .buds li.side {
+    translate: calc((-100% - 16px) * var(--dir)) -50%;
+  }
   .buds a {
     display: inline-flex;
     align-items: baseline;
@@ -262,8 +286,12 @@ const commits = [
     min-height: 32px;
     padding: 0.2rem 0.5rem;
     border-radius: 3px;
-    background: color-mix(in oklch, var(--plaster) 88%, transparent);
     color: var(--ink);
+    /* a halo in the wall colour, like a map label: the stems stay visible around the words */
+    text-shadow:
+      0 0 2px var(--plaster),
+      0 0 2px var(--plaster),
+      0 0 4px var(--plaster);
     font-size: 0.82rem;
     font-weight: 600;
     white-space: nowrap;
@@ -273,6 +301,7 @@ const commits = [
   .buds a:hover {
     background: var(--lime);
     color: var(--on-lime);
+    text-shadow: none;
   }
   .buds__meta {
     font-family: var(--ff-mono);
@@ -387,8 +416,10 @@ const commits = [
       font-size: 0.72rem;
       letter-spacing: 0.02em;
       color: var(--ink-faint);
-      direction: ltr;
     }
+  }
+  :global(:root[dir='rtl']) .coords {
+    font-family: var(--font-fa);
   }
 
   /* the shelf the arrangement stands on */

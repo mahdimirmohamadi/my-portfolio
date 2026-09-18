@@ -15,6 +15,7 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
 ---
 
 <section class="section wrap close" id="contact" aria-labelledby="contact-title">
+  <span class="shelf-rule close__shelf" aria-hidden="true"></span>
   <h2 class="close__title" id="contact-title">{t('contact.title')}</h2>
   <p class="close__lead">{t('contact.lead')}</p>
   <p class="close__mail">
@@ -61,8 +62,8 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
 </section>
 
 <style>
-  .close {
-    padding-block-start: calc(var(--space-2xl) + var(--space-m));
+  .close__shelf {
+    margin-block-end: var(--space-xl);
   }
   .close__title {
     font-size: var(--step-5);

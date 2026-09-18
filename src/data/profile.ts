@@ -123,6 +123,5 @@ export const stack: { id: string; label: L10n; items: string[] }[] = [
   { id: 'ui', label: { en: 'Styling', fa: 'استایل' }, items: ['Tailwind CSS', 'shadcn/ui', 'Chakra UI', 'MUI', 'Panda CSS'] },
   { id: 'state', label: { en: 'State & data', fa: 'State و داده' }, items: ['Zustand', 'Jotai', 'Redux', 'TanStack Query', 'SWR'] },
   { id: 'ops', label: { en: 'Tooling', fa: 'ابزارها' }, items: ['Linux', 'Git', 'GitHub', 'GitLab', 'Turborepo', 'pnpm', 'Docker', 'CI/CD'] },
-  { id: 'ai', label: { en: 'AI', fa: 'هوش مصنوعی' }, items: aiTools },
   { id: 'web', label: { en: 'Web quality', fa: 'کیفیت وب' }, items: ['Core Web Vitals', 'Technical SEO'] },
 ];

@@ -167,6 +167,19 @@
     color: var(--ink);
   }
 
+  /* a shelf: the alcove's bronze rail, used to close a passage */
+  .shelf-rule {
+    display: block;
+    height: 10px;
+    border-radius: 2px;
+    background: oklch(0.3 0.025 78);
+    border-block-start: 2px solid oklch(0.42 0.03 78);
+  }
+  :root[data-theme='dark'] .shelf-rule {
+    background: oklch(0.36 0.02 78);
+    border-block-start-color: oklch(0.5 0.025 78);
+  }
+
   /* a caption: small, quiet, for data and places (not an eyebrow) */
   .caption {
     font-family: var(--ff-mono);

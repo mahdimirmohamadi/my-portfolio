@@ -1,5 +1,5 @@
 // Tool name → brand mark (simple-icons, inlined at build time, drawn in currentColor).
-// Tools without a published mark get a neutral monogram tile instead of an imitation.
+// Tools without a published mark are shown by name alone; no imitation marks.
 import {
   siTypescript,
   siJavascript,
@@ -70,19 +70,10 @@ const marks: Record<string, Icon> = {
   Telegram: siTelegram,
 };
 
-const monograms: Record<string, string> = {
-  Antigravity: 'Ag',
-  Hermes: 'He',
-  Zustand: 'Zu',
-  Jotai: 'Jo',
-  'Panda CSS': 'Pa',
-  LinkedIn: 'in',
-};
+export type Logo = { kind: 'svg'; path: string } | null;
 
-export type Logo = { kind: 'svg'; path: string } | { kind: 'mono'; text: string };
-
+/** A tool's published mark, or null: tools without one are shown by name alone. */
 export function logoOf(name: string): Logo {
   const m = marks[name];
-  if (m) return { kind: 'svg', path: m.path };
-  return { kind: 'mono', text: monograms[name] ?? name.slice(0, 2) };
+  return m ? { kind: 'svg', path: m.path } : null;
 }

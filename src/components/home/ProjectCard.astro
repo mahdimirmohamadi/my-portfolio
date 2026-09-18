@@ -29,14 +29,13 @@ const shot = shotOf(slug);
         <Image src={shot} widths={[480, 800]} sizes="(min-width: 900px) 460px, 100vw" format="webp" quality={72} alt="" loading="lazy" />
       </a>
       <div class="proj__note">
-        <p class="proj__kind caption">{item.data.kind}</p>
         <h3 class="proj__title">
           <a href={href} style={`view-transition-name: proj-${slug}`}>
             {item.data.title}
           </a>
         </h3>
         <p class="proj__summary">{item.data.summary}</p>
-        <p class="proj__stack">{item.data.stack.slice(0, 5).join(' · ')}</p>
+        <p class="proj__stack">{item.data.kind} · {item.data.stack.slice(0, 4).join(', ')}</p>
         <p class="proj__links">
           <a class="arrow-link" href={href}>
             {t('projects.read')}
@@ -99,7 +98,6 @@ const shot = shotOf(slug);
     }
   }
   .proj__title {
-    margin-block-start: 0.3rem;
     font-size: var(--step-2);
   }
   .proj__title a,
@@ -123,9 +121,6 @@ const shot = shotOf(slug);
     margin-block-start: var(--space-xs);
     font-size: 0.85rem;
     color: var(--ink-faint);
-    direction: ltr;
-    text-align: start;
-    unicode-bidi: plaintext;
   }
   .proj__links {
     display: flex;
