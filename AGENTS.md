@@ -21,9 +21,9 @@ Consult these guides before working on related tasks:
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
 
-## Project notes (Ma edition, branch `theme/ma`)
+## Project notes (Ma edition, on `main`)
 
-- Read `README.md`, `PRODUCT.md` and `DESIGN.md` first. Other editions: manga on `main`, workstation on `theme/workstation`; don't mix them.
+- Read `README.md`, `PRODUCT.md` and `DESIGN.md` first. The old workstation edition lives on `theme/workstation`; the manga edition was removed.
 - Lime is reserved for the buds, the email action and the current nav item. No shadows, gradients, eyebrows or card grids; see DESIGN.md.
 - Every page is `src/pages/[...lang]/…` → builds `/` (en) and `/fa/` (fa, RTL). Use `lp(lang, path)` and `useT(lang)`; add UI strings to both locales in `src/i18n/ui.ts`.
 - Vanilla CSS with tokens (`src/styles/tokens.css`), no Tailwind. Logical properties; mirror transforms with `var(--dir)`. Geist Mono has no Persian glyphs: Persian text needs `--font-fa`.

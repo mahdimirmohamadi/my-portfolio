@@ -4,7 +4,7 @@ Mahdi MirMohamadi's portfolio as one quiet alcove: his photo hangs like a scroll
 
 The design system is written down in [DESIGN.md](DESIGN.md); product intent in [PRODUCT.md](PRODUCT.md).
 
-> Other editions: the manga (*The Saffron Chronicle*) on `main`, the Linux desktop on `theme/workstation`. This is `theme/ma`.
+> The earlier Linux-desktop edition is kept on the `theme/workstation` branch. The first (manga) edition was removed; it survives only in git history.
 
 ## Commands
 
