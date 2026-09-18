@@ -1,0 +1,69 @@
+---
+/** Footer: a last shelf. Nix naps on it; links sit beside him. */
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { person } from '../../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<footer class="foot">
+  <div class="foot__inner wrap">
+    <p class="foot__made">{t('footer.made')}</p>
+    <ul class="foot__links" role="list">
+      {person.links.map((l) => <li><a href={l.href} rel="me noopener" target="_blank">{l.label}</a></li>)}
+      <li><a href={`mailto:${person.email}`}>Email</a></li>
+      <li><a href={lang === 'fa' ? '/fa/rss.xml' : '/rss.xml'}>RSS</a></li>
+      <li><a href={lp(lang, '/lab')}>{t('nav.lab')}</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    margin-block-start: var(--space-2xl);
+    border-block-start: 1px solid var(--rule);
+    /* room for the phone dock */
+    padding-block-end: calc(80px + env(safe-area-inset-bottom));
+  }
+  @media (min-width: 1040px) {
+    .foot {
+      padding-block-end: 0;
+    }
+  }
+  .foot__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem var(--space-m);
+    padding-block: var(--space-m);
+  }
+  .foot__made {
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+  .foot__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-m);
+    list-style: none;
+    padding: 0;
+  }
+  .foot__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    text-decoration-color: var(--rule);
+  }
+  .foot__links a:hover {
+    color: var(--ink);
+    text-decoration-color: var(--lime-ink);
+  }
+</style>

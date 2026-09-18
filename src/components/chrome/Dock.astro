@@ -10,7 +10,7 @@ interface Props {
 const { lang } = Astro.props;
 const t = useT(lang);
 const home = lp(lang, '/');
-const items = workspaces.filter((w) => w.key !== 'nav.ai');
+const items = workspaces;
 ---
 
 <nav class="dock" aria-label={t('nav.menu')}>
@@ -36,30 +36,27 @@ const items = workspaces.filter((w) => w.key !== 'nav.ai');
     inset-inline: 10px;
     inset-block-end: calc(10px + env(safe-area-inset-bottom));
     z-index: 50;
-    border: var(--bw) solid var(--edge);
-    border-radius: 20px;
-    background: var(--surface);
-    box-shadow: var(--shadow);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--plaster-lift);
   }
   .dock ul {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
+    list-style: none;
+    padding: 0;
   }
   .dock a {
+    position: relative;
     display: grid;
     justify-items: center;
-    gap: 2px;
-    padding-block: 8px 6px;
+    gap: 3px;
+    padding-block: 8px 7px;
     min-height: 56px;
-    color: var(--text-soft);
+    color: var(--ink-soft);
     text-decoration: none;
-    font-family: var(--ff-mono);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     -webkit-tap-highlight-color: transparent;
-  }
-  :global(:root[dir='rtl']) .dock a {
-    font-family: var(--ff-body);
-    font-size: 0.74rem;
   }
   .dock a svg {
     transition: scale var(--dur-press) var(--ease-out);
@@ -67,9 +64,20 @@ const items = workspaces.filter((w) => w.key !== 'nav.ai');
   .dock a:active svg {
     scale: 0.86;
   }
-  .dock a.is-active,
-  .dock a[aria-current='page'] {
-    color: var(--lime-ink);
+  .dock a:is(.is-active, [aria-current='page']) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .dock a:is(.is-active, [aria-current='page'])::after {
+    content: '';
+    position: absolute;
+    inset-block-start: 5px;
+    inset-inline-end: calc(50% - 16px);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--lime);
+    border: 1.5px solid var(--ink);
   }
   @media (min-width: 1040px) {
     .dock {

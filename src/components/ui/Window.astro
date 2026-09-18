@@ -1,5 +1,5 @@
 ---
-/** An app window: traffic-light title bar + body. `shadow` picks the hard offset shadow colour. */
+/** A framed panel with a quiet caption line. (`shadow` is accepted for old call sites and ignored.) */
 import type { HTMLTag } from 'astro/types';
 interface Props {
   title: string;
@@ -10,12 +10,11 @@ interface Props {
   bodyClass?: string;
   [key: string]: unknown;
 }
-const { title, meta, as: Tag = 'div', shadow = 'ink', class: cls, bodyClass, ...rest } = Astro.props;
+const { title, meta, as: Tag = 'div', shadow: _shadow, class: cls, bodyClass, ...rest } = Astro.props;
 ---
 
-<Tag class:list={['win', shadow !== 'ink' && `win--${shadow}`, cls]} {...rest}>
+<Tag class:list={['win', cls]} {...rest}>
   <div class="win__bar">
-    <span class="win__dots" aria-hidden="true"><span></span><span></span><span></span></span>
     <span class="win__title">{title}</span>
     {meta && <span class="win__meta">{meta}</span>}
   </div>

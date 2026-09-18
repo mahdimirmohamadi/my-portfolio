@@ -1,25 +1,34 @@
-// Desktop-session chrome that survives page turns: theme toggle (circle reveal),
-// Tehran clock + CPU sparkline, workspace scroll-spy, Nix's eyes, idle pausing, copy.
+// Chrome that survives page turns: day/night switch (circle reveal), section scroll-spy,
+// Nix's eyes, idle pausing, copy-to-clipboard.
 import { prefersLessMotion, finePointer } from './util';
 
 const root = document.documentElement;
 
-function initTheme() {
+function syncTheme() {
+  const night = root.dataset.theme === 'dark';
   document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
-    const sync = () => btn.setAttribute('aria-pressed', String(root.dataset.theme === 'light'));
-    sync();
+    btn.setAttribute('aria-pressed', String(night));
+    const label = btn.querySelector('[data-theme-label]');
+    // the button names the state it switches to
+    if (label) label.textContent = (night ? btn.dataset.day : btn.dataset.night) ?? '';
+  });
+}
+
+function initTheme() {
+  syncTheme();
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const light = root.dataset.theme !== 'light';
+      const night = root.dataset.theme !== 'dark';
       const apply = () => {
-        if (light) root.dataset.theme = 'light';
+        if (night) root.dataset.theme = 'dark';
         else delete root.dataset.theme;
         try {
-          localStorage.setItem('theme', light ? 'light' : 'dark');
+          localStorage.setItem('theme', night ? 'dark' : 'light');
         } catch {}
-        sync();
+        syncTheme();
       };
       if (!document.startViewTransition || prefersLessMotion()) return apply();
-      // origin-aware: the new theme grows out of the button
+      // origin-aware: the new light spreads out from the switch you pressed
       const r = btn.getBoundingClientRect();
       const x = r.left + r.width / 2;
       const y = r.top + r.height / 2;
@@ -29,34 +38,12 @@ function initTheme() {
       vt.ready.then(() =>
         root.animate(
           { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
-          { duration: 560, easing: 'cubic-bezier(0.77, 0, 0.175, 1)', pseudoElement: '::view-transition-new(root)' },
+          { duration: 620, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', pseudoElement: '::view-transition-new(root)' },
         ),
       );
       vt.finished.finally(() => delete root.dataset.themeSwitching);
     });
   });
-}
-
-// ── tray: Tehran clock + a decorative CPU sparkline ──
-let trayTimer: number | undefined;
-function initTray() {
-  clearInterval(trayTimer);
-  const clock = document.querySelector<HTMLElement>('[data-clock]');
-  const cpu = document.querySelector<SVGPolylineElement>('[data-cpu] polyline');
-  const tf = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Tehran' });
-  const pts = Array.from({ length: 16 }, () => 8 + Math.random() * 8);
-  const draw = () => cpu?.setAttribute('points', pts.map((v, i) => `${(i * 60) / 15},${20 - v}`).join(' '));
-  const tick = () => {
-    if (clock) clock.textContent = `TEH ${tf.format(new Date())}`;
-    if (!document.hidden && !prefersLessMotion()) {
-      pts.shift();
-      const prev = pts[pts.length - 1];
-      pts.push(Math.max(2, Math.min(18, prev + (Math.random() - 0.5) * 7)));
-    }
-    draw();
-  };
-  tick();
-  trayTimer = window.setInterval(tick, 1200);
 }
 
 // ── workspace scroll-spy (home only) ──
@@ -151,7 +138,6 @@ function initCopy() {
 
 document.addEventListener('astro:page-load', () => {
   initTheme();
-  initTray();
   initSpy();
   initEyes();
   initIdle();

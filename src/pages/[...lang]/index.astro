@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/home/Hero.astro';
-import Whoami from '../../components/home/Whoami.astro';
-import GitLog from '../../components/home/GitLog.astro';
-import AiLoop from '../../components/home/AiLoop.astro';
+import Work from '../../components/home/Work.astro';
 import Projects from '../../components/home/Projects.astro';
+import AiNote from '../../components/home/AiNote.astro';
 import Skills from '../../components/home/Skills.astro';
+import Shell from '../../components/home/Shell.astro';
 import BlogTeaser from '../../components/home/BlogTeaser.astro';
 import Contact from '../../components/home/Contact.astro';
 import { langPaths, langFromParam } from '../../i18n/utils';
@@ -16,11 +16,11 @@ const lang = langFromParam(Astro.params.lang);
 
 <BaseLayout lang={lang}>
   <Hero lang={lang} />
-  <Whoami lang={lang} />
-  <GitLog lang={lang} />
-  <AiLoop lang={lang} />
+  <Work lang={lang} />
   <Projects lang={lang} />
+  <AiNote lang={lang} />
   <Skills lang={lang} />
+  <Shell lang={lang} />
   <BlogTeaser lang={lang} />
   <Contact lang={lang} />
 </BaseLayout>

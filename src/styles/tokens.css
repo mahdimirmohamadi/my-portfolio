@@ -1,53 +1,63 @@
-/* ─── workstation · design tokens ────────────────────────────────────────
-   Dark-first. Warm black, phosphor lime, amber, coral. No blue, no purple.
-   Cartoon edge: 2px outlines + hard (unblurred) offset shadows.          */
+/* ─── ma · design tokens ─────────────────────────────────────────────────
+   One alcove. Cool sage plaster, pine-grey ink, a bronze shelf, and one
+   accent (lime) reserved for the blooms, the email action and "you are here".
+   Day is the default (people read this at a desk); night is the same alcove
+   after dark. Legacy token names are kept so every page inherits the world. */
 
 @layer tokens {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
 
-    /* neutrals (warm, slightly green-tinted black) */
-    --bg: #0b0c09;
-    --bg-2: #0f110c;
-    --surface: #14170f;
-    --surface-2: #1b1f15;
-    --surface-3: #242a1c;
-    --text: #eef1e6;
-    --text-soft: #a4ac96;
-    --text-faint: #8a927c;
-    --edge: #e9eedf; /* cartoon outline */
-    --edge-soft: #2d3325;
-    /* background texture: film grain + faint CRT scanlines (textures, not colour gradients) */
-    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .16 0 0 0 -.05'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-    --scanline: rgb(255 255 255 / 0.018);
+    /* plaster + ink */
+    --plaster: oklch(0.936 0.013 128);
+    --plaster-deep: oklch(0.905 0.016 128);
+    --plaster-lift: oklch(0.962 0.009 128);
+    --ink: oklch(0.25 0.014 112);
+    --ink-soft: oklch(0.4 0.014 112);
+    --ink-faint: oklch(0.49 0.013 112);
+    --rule: oklch(0.8 0.016 120);
+    --rule-strong: oklch(0.34 0.014 112);
+    --bronze: oklch(0.31 0.022 80);
+    --bronze-soft: oklch(0.43 0.03 80);
 
-    /* signal colours */
-    --lime: #c6f432;
-    --lime-ink: #c6f432; /* lime used as text */
-    --amber: #ffb224;
-    --coral: #ff6a4d;
-    --cream: #f5efd9;
-    --on-accent: #0b0c09;
+    /* the one accent */
+    --lime: oklch(0.905 0.2 124);
+    --lime-ink: oklch(0.47 0.13 128);
+    --on-lime: oklch(0.22 0.03 125);
+    --oxblood: oklch(0.5 0.15 28);
 
-    /* roles */
+    /* legacy names → the ma world (blog, project, lab and 404 pages use these) */
+    --bg: var(--plaster);
+    --bg-2: var(--plaster-deep);
+    --surface: var(--plaster-lift);
+    --surface-2: var(--plaster-deep);
+    --surface-3: oklch(0.875 0.016 124);
+    --text: var(--ink);
+    --text-soft: var(--ink-soft);
+    --text-faint: var(--ink-faint);
+    --edge: var(--rule-strong);
+    --edge-soft: var(--rule);
+    --amber: var(--bronze-soft);
+    --coral: var(--oxblood);
+    --cream: var(--plaster-lift);
+    --on-accent: var(--on-lime);
     --accent: var(--lime);
     --link: var(--lime-ink);
-    --shadow-color: #000;
-    --focus: var(--lime);
-    --active-edge: var(--lime);
+    --focus: var(--lime-ink);
+    --active-edge: var(--lime-ink);
+    --shadow-color: transparent;
+    --shadow: none;
+    --shadow-lime: none;
+    --shadow-amber: none;
+    --shadow-coral: none;
 
-    /* reading direction as a number, for transforms that mirror in RTL */
     --dir: 1;
 
-    /* shape */
-    --radius: 14px;
-    --radius-sm: 9px;
+    /* shape: near-square, thin rules */
+    --radius: 6px;
+    --radius-sm: 4px;
     --radius-pill: 999px;
-    --bw: 2px;
-    --shadow: calc(5px * var(--dir)) 5px 0 var(--shadow-color);
-    --shadow-lime: calc(6px * var(--dir)) 6px 0 var(--lime);
-    --shadow-amber: calc(6px * var(--dir)) 6px 0 var(--amber);
-    --shadow-coral: calc(6px * var(--dir)) 6px 0 var(--coral);
+    --bw: 1.5px;
 
     /* type */
     --ff-body: var(--font-body);
@@ -57,10 +67,11 @@
 
     --step--1: clamp(0.84rem, 0.82rem + 0.1vw, 0.9rem);
     --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
-    --step-1: clamp(1.18rem, 1.1rem + 0.35vw, 1.38rem);
-    --step-2: clamp(1.3rem, 1.22rem + 0.4vw, 1.55rem);
-    --step-3: clamp(1.6rem, 1.42rem + 0.8vw, 2.1rem);
-    --step-4: clamp(1.95rem, 1.65rem + 1.3vw, 2.6rem);
+    --step-1: clamp(1.15rem, 1.08rem + 0.35vw, 1.35rem);
+    --step-2: clamp(1.35rem, 1.22rem + 0.6vw, 1.7rem);
+    --step-3: clamp(1.75rem, 1.5rem + 1.1vw, 2.45rem);
+    --step-4: clamp(2.2rem, 1.7rem + 2.2vw, 3.6rem);
+    --step-5: clamp(2.5rem, 1.75rem + 3.3vw, 4.4rem);
 
     /* space */
     --space-3xs: 0.25rem;
@@ -70,46 +81,38 @@
     --space-m: 1.5rem;
     --space-l: 2.25rem;
     --space-xl: 3.5rem;
-    --space-2xl: 4.5rem;
-    --page-gutter: 16px;
+    --space-2xl: 5rem;
+    --page-gutter: 18px;
     --measure: 68ch;
-    --page-max: 1200px;
+    --page-max: 1120px;
+    --rail: 0px;
 
     /* motion */
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
     --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-    --ease-spring: linear(
-      0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121,
-      1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%,
-      0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1
-    );
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
     --dur-press: 90ms;
-    --dur-hover: 150ms;
-    --dur-ui: 220ms;
+    --dur-hover: 160ms;
+    --dur-ui: 240ms;
   }
 
-  /* daylight: paper and ink; lime stays as a fill but text uses a darker lime */
-  :root[data-theme='light'] {
-    color-scheme: light;
-    --bg: #f3f1ea;
-    --bg-2: #ecE9df;
-    --surface: #ffffff;
-    --surface-2: #f6f4ee;
-    --surface-3: #e9e6dc;
-    --text: #121410;
-    --text-soft: #4f5546;
-    --text-faint: #676c5b;
-    --edge: #121410;
-    --edge-soft: #d8d4c8;
-    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .1 0 0 0 -.03'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-    --scanline: rgb(18 20 16 / 0.025);
-    --lime-ink: #4a6500;
-    --amber: #f0a010;
-    --coral: #e2472b;
-    --shadow-color: #121410;
-    --focus: #121410;
-    --active-edge: #6f9400;
+  /* night: the same alcove after dark */
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --plaster: oklch(0.205 0.009 128);
+    --plaster-deep: oklch(0.175 0.009 128);
+    --plaster-lift: oklch(0.235 0.01 128);
+    --ink: oklch(0.93 0.012 115);
+    --ink-soft: oklch(0.78 0.012 115);
+    --ink-faint: oklch(0.68 0.012 115);
+    --rule: oklch(0.33 0.012 120);
+    --rule-strong: oklch(0.72 0.012 115);
+    --bronze: oklch(0.13 0.012 80);
+    --bronze-soft: oklch(0.72 0.05 80);
+    --lime-ink: var(--lime);
+    --oxblood: oklch(0.7 0.14 30);
+    --surface-3: oklch(0.28 0.01 124);
   }
 
   :root[dir='rtl'] {
@@ -121,7 +124,12 @@
 
   @media (min-width: 768px) {
     :root {
-      --page-gutter: 28px;
+      --page-gutter: 32px;
+    }
+  }
+  @media (min-width: 1040px) {
+    :root {
+      --rail: 208px;
     }
   }
 }

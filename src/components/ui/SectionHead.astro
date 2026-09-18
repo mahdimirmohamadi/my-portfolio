@@ -1,17 +1,17 @@
 ---
-/** Section heading: a shell prompt line + the title. */
+/** Section heading: the title carries its own weight; an optional one-line lead. */
 interface Props {
-  cmd: string;
+  /** legacy: the old shell-prompt line (no longer rendered) */
+  cmd?: string;
   path?: string;
   title: string;
   lead?: string;
   id?: string;
 }
-const { cmd, path = '~', title, lead, id } = Astro.props;
+const { title, lead, id } = Astro.props;
 ---
 
-<header class="sec-head rise">
-  <p class="sec-head__prompt" aria-hidden="true"><b>mahdi@workstation</b>:{path}$ {cmd}</p>
+<header class="sec-head">
   <h2 class="sec-head__title" id={id}>{title}</h2>
   {lead && <p class="sec-head__lead">{lead}</p>}
 </header>

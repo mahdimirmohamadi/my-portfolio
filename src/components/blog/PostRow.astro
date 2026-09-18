@@ -1,5 +1,5 @@
 ---
-/** A blog post as an `ls -l` row (used on home and /blog). */
+/** A note in the list: date on the margin, title, one line, tags (home and /blog). */
 import type { Lang } from '../../i18n/ui';
 import { useT, lp, formatDate, formatNum, readingMinutes } from '../../i18n/utils';
 import { slugOf, tagSlug, type Post } from '../../lib/content';
@@ -13,19 +13,16 @@ interface Props {
 const { lang, post, headingLevel: H = 'h3', showTags = true } = Astro.props;
 const t = useT(lang);
 const slug = slugOf(post);
-const size = `${(Math.max(1, (post.body?.length ?? 0) / 1024)).toFixed(1)}K`;
 ---
 
-<article class="row focusable">
-  <p class="row__perm mono" aria-hidden="true">-rw-r--r-- mahdi {size}</p>
+<article class="row">
+  <p class="row__date caption"><time datetime={post.data.pubDate.toISOString()}>{formatDate(lang, post.data.pubDate)}</time></p>
   <div class="row__main">
     <H class="row__title">
       <a href={lp(lang, `/blog/${slug}`)} class="row__link" style={`view-transition-name: post-${slug}`}>{post.data.title}</a>
     </H>
     <p class="row__desc">{post.data.description}</p>
     <p class="row__meta">
-      <time datetime={post.data.pubDate.toISOString()}>{formatDate(lang, post.data.pubDate)}</time>
-      <span aria-hidden="true"> / </span>
       <span>{formatNum(lang, readingMinutes(post.body))} {t('blog.min')}</span>
       {post.data.draft && <span class="sticker sticker--coral">draft</span>}
     </p>
@@ -47,67 +44,52 @@ const size = `${(Math.max(1, (post.body?.length ?? 0) / 1024)).toFixed(1)}K`;
 
 <style>
   .row {
-    position: relative;
     display: grid;
-    gap: var(--space-2xs) var(--space-m);
-    padding: var(--space-m);
-    border: var(--bw) solid var(--edge);
-    border-radius: var(--radius);
-    background: var(--surface);
-    box-shadow: var(--shadow);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .row:is(:hover, :focus-within) {
-      border-color: var(--active-edge);
-    }
+    gap: 0.3rem var(--space-m);
+    padding-block: var(--space-m);
+    border-block-start: 1px solid var(--rule);
   }
   @media (min-width: 760px) {
     .row {
-      grid-template-columns: 13rem 1fr;
+      grid-template-columns: 11rem minmax(0, 1fr);
     }
   }
-  .row__perm {
-    font-size: 0.78rem;
-    color: var(--text-faint);
-    padding-block-start: 0.4rem;
-    direction: ltr;
-    text-align: start;
+  .row__date {
+    padding-block-start: 0.45rem;
   }
   .row__title {
     font-size: var(--step-2);
   }
   .row__link {
-    color: var(--text);
+    color: var(--ink);
     text-decoration: none;
   }
   .row__link:hover {
-    color: var(--lime-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--lime-ink);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
   }
   .row__desc {
-    margin-block-start: var(--space-2xs);
-    color: var(--text-soft);
+    margin-block-start: 0.4rem;
+    max-width: 62ch;
+    color: var(--ink-soft);
   }
   .row__meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
-    margin-block-start: var(--space-xs);
-    font-family: var(--ff-mono);
-    font-size: 0.8rem;
-    color: var(--text-faint);
-  }
-  :global(:root[dir='rtl']) .row__meta {
-    font-family: var(--ff-body);
+    gap: 0.5rem;
+    margin-block-start: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--ink-faint);
   }
   .row__tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
-    margin-block-start: var(--space-xs);
-  }
-  .row__tags .chip {
-    position: relative;
-    z-index: 2;
+    margin-block-start: 0.6rem;
+    list-style: none;
+    padding: 0;
   }
 </style>

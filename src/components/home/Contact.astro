@@ -1,92 +1,156 @@
 ---
+/** The close: a plain invitation, the address set large, then everywhere else. */
 import type { Lang } from '../../i18n/ui';
 import { useT } from '../../i18n/utils';
 import { person } from '../../data/profile';
-import SectionHead from '../ui/SectionHead.astro';
-import Window from '../ui/Window.astro';
-import Nix from '../art/Nix.astro';
+import Logo from '../ui/Logo.astro';
+import Arrow from '../ui/Arrow.astro';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useT(lang);
-const rows = [
-  ...person.links.map((l) => ({ cmd: 'open', arg: l.handle, href: l.href, ext: true, copy: l.href })),
-  { cmd: 'wget', arg: 'resume-en.pdf', href: person.resume.en, ext: false, copy: null },
-  { cmd: 'wget', arg: 'resume-fa.pdf', href: person.resume.fa, ext: false, copy: null },
-];
+const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn', telegram: 'Telegram' };
 ---
 
-<section class="section wrap" id="contact" aria-labelledby="contact-title">
-  <SectionHead cmd="ssh mahdi@mahdimirmo.ir" title={t('contact.title')} lead={t('contact.lead')} id="contact-title" />
-  <div class="contact">
-    <Window title="ssh — mahdi@mahdimirmo.ir" meta="connected" class="ssh rise">
-      <div class="ssh__mail">
-        <p class="mono ssh__line"><span class="ps1">$</span> mail <a href={`mailto:${person.email}`}>{person.email}</a></p>
-        <div class="ssh__actions">
-          <a class="btn" href={`mailto:${person.email}`}>✉ Email</a>
-          <button type="button" class="btn btn--ghost" data-copy={person.email} data-copied={t('contact.copied')}>
-            <span data-copy-label>{t('contact.copy')}</span>
-          </button>
-        </div>
-      </div>
-      <ul class="ssh__rows" role="list">
-        {
-          rows.map((r) => (
-            <li class="mono ssh__line">
-              <span class="ps1">$</span> {r.cmd}{' '}
-              <a href={r.href} {...(r.ext ? { target: '_blank', rel: 'me noopener' } : { download: '' })}>
-                {r.arg}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </Window>
-    <div class="contact__nix" aria-hidden="true"><Nix size={150} wave /></div>
+<section class="section wrap close" id="contact" aria-labelledby="contact-title">
+  <h2 class="close__title" id="contact-title">{t('contact.title')}</h2>
+  <p class="close__lead">{t('contact.lead')}</p>
+  <p class="close__mail">
+    <a href={`mailto:${person.email}`}>{person.email}</a>
+  </p>
+  <div class="close__actions">
+    <a class="btn" href={`mailto:${person.email}`}>
+      {t('hero.cta')}
+      <Arrow />
+    </a>
+    <button type="button" class="btn btn--ghost" data-copy={person.email} data-copied={t('contact.copied')}>
+      <span data-copy-label>{t('contact.copy')}</span>
+    </button>
+  </div>
+
+  <div class="elsewhere">
+    <h3 class="elsewhere__title">{t('contact.elsewhere')}</h3>
+    <ul role="list">
+      {
+        person.links.map((l) => (
+          <li>
+            <a href={l.href} target="_blank" rel="me noopener">
+              <Logo name={logoOf[l.id] ?? l.label} size={18} />
+              <span>{l.label}</span>
+              <span class="elsewhere__handle">{l.handle.replace(/^[^/]+\//, '')}</span>
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={person.resume.en} download>
+          <span>{t('contact.resume.en')}</span>
+          <span class="elsewhere__handle">PDF</span>
+        </a>
+      </li>
+      <li>
+        <a href={person.resume.fa} download>
+          <span>{t('contact.resume.fa')}</span>
+          <span class="elsewhere__handle">PDF</span>
+        </a>
+      </li>
+    </ul>
   </div>
 </section>
 
 <style>
-  .contact {
-    display: grid;
-    gap: var(--space-l);
-    align-items: center;
+  .close {
+    padding-block-start: calc(var(--space-2xl) + var(--space-m));
   }
-  @media (min-width: 900px) {
-    .contact {
-      grid-template-columns: 1fr auto;
-    }
+  .close__title {
+    font-size: var(--step-5);
   }
-  .contact__nix {
-    justify-self: center;
+  .close__lead {
+    margin-block-start: var(--space-s);
+    max-width: 52ch;
+    color: var(--ink-soft);
+    font-size: var(--step-1);
   }
-  :global(.ssh .win__body) {
-    background: var(--bg-2);
-    display: grid;
-    gap: var(--space-m);
-  }
-  .ssh__line {
-    direction: ltr;
-    text-align: left;
-    font-size: 0.9rem;
+  .close__mail {
+    margin-block-start: var(--space-l);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: clamp(1.2rem, 0.75rem + 2.3vw, 2.3rem);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
     overflow-wrap: anywhere;
+    direction: ltr;
+    text-align: start;
+    unicode-bidi: plaintext;
   }
-  .ssh__line a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 40px;
+  .close__mail a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: var(--lime);
+    text-decoration-thickness: 0.12em;
+    text-underline-offset: 0.18em;
+    transition: text-decoration-color var(--dur-hover) var(--ease-out);
   }
-  .ssh__actions {
+  .close__mail a:hover {
+    text-decoration-color: var(--lime-ink);
+  }
+  .close__actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-s);
-    margin-block-start: var(--space-s);
+    margin-block-start: var(--space-l);
   }
-  .ssh__rows {
+
+  .elsewhere {
     display: grid;
-    padding-block-start: var(--space-s);
-    border-block-start: 1.5px dashed var(--edge-soft);
+    gap: var(--space-s);
+    margin-block-start: var(--space-2xl);
+  }
+  @media (min-width: 760px) {
+    .elsewhere {
+      grid-template-columns: 9rem 1fr;
+      align-items: baseline;
+    }
+  }
+  .elsewhere__title {
+    font-size: var(--step-1);
+  }
+  .elsewhere ul {
+    display: grid;
+    list-style: none;
+    padding: 0;
+    border-block-start: 1px solid var(--rule);
+  }
+  @media (min-width: 760px) {
+    .elsewhere ul {
+      grid-template-columns: 1fr 1fr;
+      column-gap: var(--space-l);
+    }
+  }
+  .elsewhere a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 52px;
+    border-block-end: 1px solid var(--rule);
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color var(--dur-hover) var(--ease-out);
+  }
+  .elsewhere a :global(.logo) {
+    color: var(--ink-soft);
+  }
+  .elsewhere__handle {
+    margin-inline-start: auto;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    direction: ltr;
+  }
+  .elsewhere a:hover .elsewhere__handle {
+    color: var(--lime-ink);
   }
 </style>

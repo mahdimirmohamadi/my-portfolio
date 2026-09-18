@@ -1,41 +1,44 @@
 ---
-title: Hello from the workstation
-description: My portfolio now looks like a Linux desktop session, with a live terminal, a dithered photo and a tiny daemon named Nix. Here's how it works.
+title: Why my homepage is a branch in a bowl
+description: I rebuilt this site three times this month. Here's the version I kept, why the hero is a git branch, and how it stays fast.
 pubDate: 2026-09-18
+updatedDate: 2026-09-19
 tags: [astro, linux, design]
 translationKey: hello-workstation
 ---
 import { Term, Nix, Callout } from '../../../components/mdx';
 
-Most developer portfolios are the same landing page: gradient hero, three cards, a "Let's talk" button. I spend my days in a terminal and an editor, so I made my site look like where I actually work.
+I rebuilt this site three times in a month. The first version was a manga. The second was a fake Linux desktop with a neon terminal in the middle. Both looked fine, and both looked like something a model would make if you asked for "a creative developer portfolio". So I threw them out.
+
+This version starts from one idea: a tokonoma, the alcove in a Japanese room where you put one hanging scroll and one flower arrangement, and leave the rest of the wall empty on purpose.
+
+## The branch is real
+
+The thing in the bowl is my career drawn as a single git branch. The thick stem is the main line, the small rings on it are commits, and the three lime buds are what's alive right now: InnoLearn, Armani English, and these notes. Click a bud and it takes you there.
 
 <Term lines={[
-  { cmd: 'whoami' },
-  { out: 'mahdi, front-end engineer, Tehran' },
-  { cmd: 'cat ~/.plan' },
-  { out: 'build fast web apps · keep learning how things work' },
+  { cmd: 'git log --oneline --graph' },
+  { out: '* innolearn   (2025, remote, Melbourne)' },
+  { out: '* armani      (2022, Tehran)' },
+  { out: '* notes       (you are here)' },
 ]} />
 
-## What's on the desktop
+It's a hand-authored SVG path with `pathLength="1"`, so the grow-in is one `stroke-dashoffset` animation from 1 to 0. No library, no canvas.
 
-- **A live terminal.** It's a real little shell: type `help` and it answers. It's about 4KB of TypeScript, not a framework.
-- **A tiled desktop.** The intro is a Markdown buffer in an editor tile, next to the terminal. Hover a window and it takes focus, like in a tiling window manager.
-- **A 1-bit mode for my photo.** Press the button on the portrait and a dithered version wipes over it. It's made at build time with an 8×8 Bayer matrix and used as a CSS mask, so it recolours with the theme.
-- **`git log` for my career** and `ssh` to get in touch.
-
-<Nix>Hi, I'm Nix, a tiny CRT daemon. I live in the corners of this site and I watch your cursor.</Nix>
+<Nix>Hi, I'm Nix. I sit on the shelf next to the bowl. My eyes follow your cursor, which is the most JavaScript I'm allowed.</Nix>
 
 ## Why it's fast
 
-Every page is static HTML from Astro. The few scripts (the terminal, the AI session replay, the portrait toggle) load only where they're used, pause when they're off-screen, and switch off for people who prefer reduced motion.
+Every page is static HTML from Astro. The home page ships the terminal, the photo toggle and the day/night switch, and that's it. The photo is the largest thing on the first screen, so it's preloaded as a 420px WebP.
 
-<Callout title="Tip">The site has a daylight theme too. Press the sun/moon button in the top bar and watch the new theme spread out from it.</Callout>
+<Callout title="Try it">Press the day/night switch and the new light spreads out from the button you pressed. It's the View Transitions API and a `clip-path` circle.</Callout>
 
-```ts
-// the photo is a mask; the colour is just CSS
-.portrait { mask-image: url(dither.png); background: var(--lime); }
+```css
+/* the whole theme is two sets of custom properties */
+:root { --plaster: oklch(0.936 0.013 128); --ink: oklch(0.25 0.014 112); }
+:root[data-theme='dark'] { --plaster: oklch(0.205 0.009 128); --ink: oklch(0.93 0.012 115); }
 ```
 
 ## What's next
 
-The **~/lab** workspace is reserved for a lofi radio and a pomodoro timer. They'll keep playing while you move between pages.
+The **Lab** page is reserved for a lofi radio and a pomodoro timer. They'll keep playing while you move between pages.

@@ -1,0 +1,29 @@
+---
+/** The live terminal, given its own quiet corner: the note on one side, the shell on the other. */
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import SectionHead from '../ui/SectionHead.astro';
+import Terminal from './Terminal.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="section wrap shell" id="shell" aria-labelledby="shell-title">
+  <SectionHead title={t('term.title')} lead={t('term.lead')} id="shell-title" />
+  <Terminal lang={lang} />
+</section>
+
+<style>
+  @media (min-width: 960px) {
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+  }
+</style>

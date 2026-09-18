@@ -1,330 +1,446 @@
 ---
 /**
- * The hero is a tiled desktop (think i3 / Hyprland): an editor buffer holding the intro,
- * the live terminal, and a small status widget. Focus follows the mouse between tiles.
+ * The alcove. One sentence and the email on the open wall; on the other side the
+ * hanging scroll (Mahdi's photo) and the arrangement: his career drawn as a single
+ * git branch rising from a bronze bowl, three lime buds for what's live now.
+ * The branch leans toward the copy, so the empty wall points at the email.
  */
+import { Image } from 'astro:assets';
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
 import { person } from '../../data/profile';
-import Terminal from './Terminal.astro';
+import Arrow from '../ui/Arrow.astro';
+import Nix from '../art/Nix.astro';
+import original from '../../assets/photo/mahdi-original.png';
+import dither from '../../assets/photo/mahdi-dither.png';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useT(lang);
-const file = lang === 'fa' ? 'about.fa.md' : 'about.md';
-const bullets = [
-  { k: t('hero.k.work'), v: t('hero.v.work') },
-  { k: t('hero.k.stack'), v: 'React, Next.js, TypeScript, Astro' },
-  { k: t('hero.k.daily'), v: 'Linux, zsh, Claude Code, Cursor' },
+const fa = lang === 'fa';
+
+// buds: tip positions in the 420×560 arrangement box (x from the inline-start side)
+const buds = [
+  { x: 44, y: 200, label: 'InnoLearn', meta: fa ? '۱۴۰۴' : '2025', href: '#work-innolearn', above: true },
+  { x: 340, y: 360, label: 'Armani English', meta: fa ? '۱۴۰۱' : '2022', href: '#work-armani', above: false },
+  { x: 164, y: 280, label: t('hero.bud.notes'), meta: '', href: lp(lang, '/blog'), above: true },
 ];
-const sys = [
-  { k: 'uptime', v: t('hero.sys.uptime') },
-  { k: 'perf', v: t('hero.sys.perf') },
-  { k: 'teams', v: t('hero.sys.teams') },
-  { k: 'tz', v: t('hero.sys.tz') },
-];
-const links = [
-  { label: t('hero.link.projects'), href: '#projects' },
-  { label: t('hero.link.blog'), href: lp(lang, '/blog') },
-  { label: t('hero.link.resume'), href: person.resume[lang], download: true },
+// commit nodes sit on the main stem (points on its curve)
+const commits = [
+  [214.7, 471.9],
+  [222, 430],
+  [160, 356],
+  [102, 313.5],
 ];
 ---
 
-<section class="hero wrap" id="top" aria-labelledby="hero-title">
-  <div class="tiles" data-tiling>
-    <div class="win is-focused tile--editor">
-      <div class="win__bar">
-        <span class="win__dots" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="win__title">{file} — nvim</span>
+<section class="alcove" id="top" aria-labelledby="hero-title">
+  <div class="alcove__wall">
+    <div class="copy">
+      <h1 class="copy__title" id="hero-title">{t('hero.title')}</h1>
+      <p class="copy__lead">{t('hero.lead')}</p>
+      <div class="copy__actions">
+        <a class="btn" href={`mailto:${person.email}`}>
+          {t('hero.cta')}
+          <Arrow />
+        </a>
+        <a class="arrow-link" href={lp(lang, '/blog')}>
+          {t('hero.notes')}
+          <Arrow />
+        </a>
       </div>
-      <div class="editor">
-        <div class="buf">
-          <h1 class="ln" id="hero-title"><span class="md" aria-hidden="true"># </span>{t('site.name')}</h1>
-          <p class="ln ln--role"><span class="md" aria-hidden="true">## </span>{t('hero.role')}</p>
-          <p class="ln ln--lead">{t('hero.lead')}</p>
-          <ul class="ln-list" role="list">
-            {
-              bullets.map((b) => (
-                <li class="ln">
-                  <span class="md" aria-hidden="true">- </span>
-                  <b>{b.k}:</b> {b.v}
-                </li>
-              ))
-            }
-          </ul>
-          <p class="ln ln--links">
-            {
-              links.map((l) => (
-                <a href={l.href} class="mdlink" {...(l.download ? { download: '' } : {})}>
-                  <span class="md" aria-hidden="true">[</span>
-                  {l.label}
-                  <span class="md" aria-hidden="true">]</span>
-                </a>
-              ))
-            }
-            <span class="caret" aria-hidden="true"></span>
-          </p>
-          <p class="tilde" aria-hidden="true">~<br />~</p>
-        </div>
-        <p class="statusline" aria-hidden="true">
-          <span class="statusline__mode">NORMAL</span>
-          <span class="statusline__file">{file}</span>
-          <span class="statusline__fill"></span>
-          <span>markdown</span>
-          <span>utf-8</span>
-          <span class="statusline__pos">8:1</span>
-        </p>
-      </div>
+      <a class="copy__resume" href={person.resume[lang]} download>{t('hero.resume')}</a>
     </div>
 
-    <Terminal lang={lang} />
+    <div class="arrangement">
+      <figure class="scroll portrait" data-portrait>
+        <span class="scroll__rod" aria-hidden="true"></span>
+        <div class="scroll__frame">
+          <Image class="portrait__real" src={original} widths={[240, 420]} sizes="210px" format="webp" quality={80} alt={t('whoami.photo.real.alt')} loading="eager" fetchpriority="high" />
+          <div class="portrait__bits" aria-hidden="true">
+            <div class="portrait__dither" data-src={`url(${dither.src})`}></div>
+          </div>
+          <span class="portrait__scan" aria-hidden="true"></span>
+        </div>
+        <figcaption class="scroll__caption">
+          <span>{t('hero.photo.caption')}</span>
+          <button type="button" class="scroll__toggle" data-portrait-toggle data-label-on={t('whoami.color')} data-label-off={t('whoami.dither')} aria-pressed="false">
+            {t('whoami.dither')}
+          </button>
+        </figcaption>
+      </figure>
 
-    <div class="win tile--sys">
-      <div class="win__bar">
-        <span class="win__dots" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="win__title">status</span>
-        <span class="win__meta"><span class="live" aria-hidden="true"></span>online</span>
-      </div>
-      <dl class="sys">
+      <svg class="branch" viewBox="0 0 420 560" role="img" aria-label={t('hero.branch.label')}>
+        <g fill="none" stroke-linecap="round">
+          <path class="stem stem--a" pathLength="1" d="M210 512C204 478 228 456 222 430 216 402 190 384 160 356 124 322 76 306 56 268 44 244 40 222 44 200" />
+          <path class="stem stem--b" pathLength="1" d="M222 430C258 424 296 410 316 392 330 380 336 370 340 360" />
+          <path class="stem stem--c" pathLength="1" d="M160 356C168 332 156 304 164 280" />
+        </g>
+        {commits.map(([cx, cy]) => <circle class="commit" cx={cx} cy={cy} r="5.5" />)}
+        <g>
+          <path class="bowl__body" d="M136 506c6 26 30 36 74 36s68-10 74-36Z" />
+          <ellipse class="bowl__rim" cx="210" cy="506" rx="74" ry="8" />
+          <rect class="bowl__body" x="186" y="540" width="48" height="8" rx="2" />
+        </g>
+        {buds.map((b, i) => <circle class="bud" style={`--i:${i}`} cx={b.x} cy={b.y} r="10" />)}
+      </svg>
+
+      <ul class="buds" role="list">
         {
-          sys.map((r) => (
-            <div>
-              <dt>{r.k}</dt>
-              <dd>{r.v}</dd>
-            </div>
+          buds.map((b, i) => (
+            <li class:list={{ above: b.above }} style={`--x:${(b.x / 420) * 100}%;--y:${(b.y / 560) * 100}%;--i:${i}`}>
+              <a href={b.href}>
+                {b.label}
+                {b.meta && <span class="buds__meta">{b.meta}</span>}
+              </a>
+            </li>
           ))
         }
-      </dl>
+      </ul>
+
+      <div class="shelf-nix" aria-hidden="true"><Nix size={62} bob={false} /></div>
     </div>
+
+    <p class="coords" aria-hidden="true">35.69°N 51.39°E · since 2022</p>
   </div>
+  <div class="shelf" aria-hidden="true"></div>
 </section>
 
+<script>
+  import '../../scripts/portrait';
+</script>
+
 <style>
-  .hero {
-    padding-block-start: var(--space-m);
+  .alcove {
+    --branch: oklch(0.36 0.03 78);
+    --bowl: oklch(0.3 0.025 78);
+    --bowl-rim: oklch(0.42 0.03 78);
+    position: relative;
   }
-  .tiles {
+  :global(:root[data-theme='dark']) .alcove {
+    --branch: oklch(0.66 0.035 78);
+    --bowl: oklch(0.36 0.02 78);
+    --bowl-rim: oklch(0.5 0.025 78);
+  }
+  .alcove__wall {
+    position: relative;
     display: grid;
-    gap: 14px;
+    gap: var(--space-l);
+    padding: var(--space-l) var(--page-gutter) 0;
+    max-width: calc(var(--page-max) + 2 * var(--page-gutter));
+    margin-inline: auto;
   }
-  @media (min-width: 1000px) {
-    .hero {
-      padding-block-start: var(--space-l);
-    }
-    .tiles {
-      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
-      grid-template-rows: auto 1fr;
-    }
-    .tile--editor {
-      grid-row: span 2;
+  @media (min-width: 900px) {
+    .alcove__wall {
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      align-items: end;
+      gap: var(--space-xl);
+      min-height: min(calc(100svh - 22px), 860px);
+      padding-block-start: var(--space-xl);
     }
   }
 
-  /* ── editor tile ── */
-  .tile--editor {
-    display: flex;
-    flex-direction: column;
+  /* ── the open wall ── */
+  .copy {
+    align-self: center;
+    padding-block-end: var(--space-l);
   }
-  .editor {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: var(--bg-2);
+  .copy__title {
+    font-size: clamp(2.25rem, 1.6rem + 2.1vw, 3.4rem);
+    line-height: 1.04;
+    max-width: 13ch;
   }
-  .buf {
-    --gutter: 3.4rem;
-    flex: 1;
-    counter-reset: ln;
-    padding-block: var(--space-m) var(--space-s);
-    padding-inline: var(--gutter) var(--space-m);
-    display: grid;
-    align-content: start;
-    gap: 0.9rem;
+  :global(:root[dir='rtl']) .copy__title {
+    font-size: clamp(2rem, 1.4rem + 2.2vw, 3.2rem);
+    max-width: 16ch;
   }
-  .ln {
-    position: relative;
-    counter-increment: ln;
+  .copy__lead {
+    margin-block-start: var(--space-m);
+    max-width: 56ch;
+    font-size: var(--step-0);
+    color: var(--ink-soft);
   }
-  /* vim numbers only the first screen row of a wrapped line */
-  .ln::before {
-    content: counter(ln);
-    position: absolute;
-    inset-inline-start: calc(-1 * var(--gutter));
-    inset-block-start: 0.45em;
-    width: 2.4rem;
-    text-align: end;
-    font: 400 0.8rem/1 var(--ff-mono);
-    color: var(--text-faint);
-  }
-  .md {
-    font-family: var(--ff-mono);
-    font-weight: 400;
-    color: var(--text-faint);
-  }
-  h1.ln {
-    font-size: clamp(1.9rem, 1.45rem + 1.9vw, 2.7rem);
-    line-height: 1.1;
-  }
-  h1.ln::before {
-    inset-block-start: 0.55em;
-    font-size: 0.8rem;
-  }
-  h1 .md {
-    font-size: 0.6em;
-    vertical-align: 0.2em;
-  }
-  .ln--role {
-    font-family: var(--ff-display);
-    font-weight: 700;
-    font-size: var(--step-1);
-    color: var(--lime-ink);
-    margin-block-start: -0.4rem;
-  }
-  .ln--role .md {
-    font-size: 0.75em;
-  }
-  .ln--lead {
-    max-width: 60ch;
-    color: var(--text-soft);
-  }
-  .ln-list {
-    display: grid;
-    gap: 0.35rem;
-  }
-  .ln-list .ln {
-    color: var(--text-soft);
-  }
-  .ln-list b {
-    font-family: var(--ff-mono);
-    font-size: 0.9em;
-    font-weight: 600;
-    color: var(--amber);
-  }
-  :global(:root[data-theme='light']) .ln-list b {
-    color: #9a5b00;
-  }
-  :global(:root[dir='rtl']) .ln-list b {
-    font-family: var(--ff-body);
-    font-size: 1em;
-  }
-  .ln--links {
+  .copy__actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.25rem 1rem;
+    gap: var(--space-s) var(--space-m);
+    margin-block-start: var(--space-l);
   }
-  .ln--links::before {
-    inset-block-start: 0.95em;
-  }
-  .mdlink {
+  .copy__resume {
     display: inline-flex;
     align-items: center;
     min-height: 40px;
-    padding-inline: 0.35rem;
-    margin-inline: -0.35rem;
-    border-radius: 4px;
-    font-family: var(--ff-mono);
+    margin-block-start: 0.4rem;
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+    text-decoration-color: var(--rule);
+  }
+  .copy__resume:hover {
+    color: var(--ink);
+  }
+
+  /* ── the arrangement ── */
+  :global(:root[dir='rtl']) .coords {
+    right: auto;
+    left: 4px;
+  }
+  .arrangement {
+    position: relative;
+    width: min(100%, 440px);
+    aspect-ratio: 420 / 560;
+    justify-self: center;
+  }
+  @media (min-width: 900px) {
+    .arrangement {
+      justify-self: end;
+    }
+  }
+  .branch {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    scale: var(--dir) 1;
+  }
+  .stem {
+    stroke: var(--branch);
+  }
+  .stem--a {
+    stroke-width: 7;
+  }
+  .stem--b {
+    stroke-width: 4.5;
+  }
+  .stem--c {
+    stroke-width: 3.5;
+  }
+  .commit {
+    fill: var(--plaster);
+    stroke: var(--branch);
+    stroke-width: 2.5;
+  }
+  .bowl__body {
+    fill: var(--bowl);
+  }
+  .bowl__rim {
+    fill: var(--bowl-rim);
+  }
+  .bud {
+    fill: var(--lime);
+    stroke: var(--ink);
+    stroke-width: 2;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .buds {
+    position: absolute;
+    inset: 0;
+    list-style: none;
+    padding: 0;
+    pointer-events: none;
+  }
+  .buds li {
+    position: absolute;
+    inset-inline-start: var(--x);
+    inset-block-start: var(--y);
+    translate: calc(-50% * var(--dir)) 14px;
+    pointer-events: auto;
+  }
+  /* labels sit on the open side of their bud, never across the stem */
+  .buds li.above {
+    translate: calc(-50% * var(--dir)) calc(-100% - 14px);
+  }
+  .buds a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4em;
+    min-height: 32px;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    background: color-mix(in oklch, var(--plaster) 88%, transparent);
+    color: var(--ink);
+    font-size: 0.82rem;
     font-weight: 600;
-    color: var(--lime-ink);
+    white-space: nowrap;
     text-decoration: none;
-    transition:
-      background-color var(--dur-hover) var(--ease-out),
-      color var(--dur-hover) var(--ease-out);
+    transition: background-color var(--dur-hover) var(--ease-out);
   }
-  :global(:root[dir='rtl']) .mdlink {
-    font-family: var(--ff-body);
-  }
-  /* hover looks like a visual-mode selection */
-  .mdlink:hover {
+  .buds a:hover {
     background: var(--lime);
-    color: var(--on-accent);
+    color: var(--on-lime);
   }
-  .mdlink:hover .md {
+  .buds__meta {
+    font-family: var(--ff-mono);
+    font-weight: 400;
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+  }
+  .buds a:hover .buds__meta {
     color: inherit;
   }
-  .tilde {
-    margin-inline-start: calc(-1 * var(--gutter) + 1.9rem);
-    font-family: var(--ff-mono);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: var(--text-faint);
+
+  /* ── the hanging scroll (photo) ── */
+  .scroll {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 2%;
+    width: 50%;
+    margin: 0;
   }
-  .statusline {
-    display: flex;
-    font: 600 0.72rem/1 var(--ff-mono);
-    background: var(--surface-3);
-    color: var(--text-soft);
-    border-block-start: var(--bw) solid var(--edge);
-    direction: ltr;
-    white-space: nowrap;
+  .scroll__rod {
+    display: block;
+    height: 7px;
+    margin-inline: -8%;
+    border-radius: 4px;
+    background: var(--bowl);
+  }
+  .scroll__frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
+    border: 1px solid var(--rule-strong);
+    border-block-start: 0;
+    background: var(--plaster-deep);
   }
-  .statusline > span {
-    padding: 0.55rem 0.7rem;
+  .scroll__frame :global(.portrait__real) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 32% 40%;
   }
-  .statusline__mode {
+  .portrait__bits {
+    position: absolute;
+    inset: 0;
+    background: var(--plaster-deep);
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 700ms var(--ease-in-out);
+  }
+  .scroll:global(.is-bits) .portrait__bits {
+    clip-path: inset(0 0 0 0);
+  }
+  .portrait__dither {
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    mask: var(--src) center / cover no-repeat;
+  }
+  .portrait__scan {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 0;
+    height: 2px;
     background: var(--lime);
-    color: var(--on-accent);
+    opacity: 0;
+    pointer-events: none;
   }
-  .statusline__file {
-    background: var(--surface-2);
-    color: var(--text);
+  .scroll__caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-start: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
   }
-  .statusline__fill {
-    flex: 1;
+  .scroll__toggle {
+    min-height: 32px;
+    padding-inline: 0.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    font-family: var(--ff-mono);
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    transition: border-color var(--dur-hover) var(--ease-out);
   }
-  .statusline__pos {
-    background: var(--amber);
-    color: var(--on-accent);
+  :global(:root[dir='rtl']) .scroll__toggle {
+    font-family: var(--font-fa);
   }
-  @media (max-width: 480px) {
-    .statusline > span:nth-child(4),
-    .statusline > span:nth-child(5) {
-      display: none;
+  .scroll__toggle:hover {
+    border-color: var(--rule-strong);
+    color: var(--ink);
+  }
+
+  .shelf-nix {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 4%;
+  }
+
+  .coords {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    /* vertical text: physical offsets, since block/inline axes rotate with it */
+    .coords {
+      display: block;
+      position: absolute;
+      top: var(--space-xl);
+      right: 4px;
+      writing-mode: vertical-rl;
+      font-family: var(--ff-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.02em;
+      color: var(--ink-faint);
+      direction: ltr;
     }
   }
 
-  /* ── status widget (conky) ── */
-  .tile--sys {
-    display: flex;
-    flex-direction: column;
+  /* the shelf the arrangement stands on */
+  .shelf {
+    height: 22px;
+    background: var(--bowl);
+    border-block-start: 3px solid var(--bowl-rim);
   }
-  .sys {
-    flex: 1;
-    display: grid;
-    align-content: center;
-    gap: 0.3rem;
-    padding: var(--space-s) var(--space-m);
-    background: var(--bg-2);
+
+  /* ── the one authored moment: the branch grows, then the buds open ── */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html:not([data-lite])) .stem {
+      stroke-dasharray: 1;
+      animation: grow 1.5s var(--ease-out) both;
+    }
+    :global(html:not([data-lite])) .stem--a {
+      animation-delay: 150ms;
+    }
+    :global(html:not([data-lite])) .stem--b {
+      animation-delay: 700ms;
+      animation-duration: 900ms;
+    }
+    :global(html:not([data-lite])) .stem--c {
+      animation-delay: 950ms;
+      animation-duration: 700ms;
+    }
+    :global(html:not([data-lite])) .bud {
+      animation: open 520ms var(--ease-out) both;
+      animation-delay: calc(1250ms + var(--i) * 140ms);
+    }
+    :global(html:not([data-lite])) .buds li {
+      animation: label-in 400ms var(--ease-out) both;
+      animation-delay: calc(1450ms + var(--i) * 140ms);
+    }
   }
-  .sys div {
-    display: grid;
-    grid-template-columns: 4.5rem 1fr;
-    gap: var(--space-s);
-    font-size: 0.92rem;
+  @keyframes grow {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
   }
-  .sys dt {
-    font-family: var(--ff-mono);
-    font-size: 0.8rem;
-    color: var(--amber);
-    padding-block-start: 0.15em;
-    direction: ltr;
-    text-align: start;
+  @keyframes open {
+    from {
+      scale: 0.2;
+    }
   }
-  :global(:root[data-theme='light']) .sys dt {
-    color: #9a5b00;
-  }
-  .sys dd {
-    color: var(--text-soft);
-  }
-  .live {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    margin-inline-end: 0.45em;
-    border-radius: 50%;
-    background: var(--lime);
+  @keyframes label-in {
+    from {
+      opacity: 0;
+      filter: blur(3px);
+    }
   }
 </style>

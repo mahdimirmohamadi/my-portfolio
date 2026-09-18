@@ -4,7 +4,9 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { splitId, slugOf, tagSlug, getPosts, type Post } from '../../../lib/content';
 import { useT, lp, formatDate, formatNum, readingMinutes } from '../../../i18n/utils';
 import type { Lang } from '../../../i18n/ui';
-import face from '../../../assets/photo/mahdi-dither-face.png';
+import { Image } from 'astro:assets';
+import face from '../../../assets/photo/mahdi-original.png';
+import Arrow from '../../../components/ui/Arrow.astro';
 
 export async function getStaticPaths() {
   const all = await getCollection('blog', (p) => import.meta.env.DEV || !p.data.draft);
@@ -32,12 +34,14 @@ const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
 
 <BaseLayout lang={lang} title={post.data.title} description={post.data.description} altHref={altHref} progress ogType="article">
   <article class="post wrap">
-    <p class="crumb mono"><a href={lp(lang, '/blog')}>~/blog</a>/<b>{slug}.md</b></p>
+    <p class="crumb">
+      <a class="arrow-link back" href={lp(lang, '/blog')}><Arrow />{t('blog.back')}</a>
+    </p>
     <header class="post__head">
       <h1 class="post__title" style={`view-transition-name: post-${slug}`}>{post.data.title}</h1>
       <p class="post__desc">{post.data.description}</p>
       <div class="post__byline">
-        <span class="post__face" style={`--face:url(${face.src})`} aria-hidden="true"></span>
+        <Image class="post__face" src={face} width={88} height={88} format="webp" alt="" />
         <p>
           <strong>{t('site.name')}</strong><br />
           <span class="post__meta">
@@ -65,11 +69,11 @@ const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
       <Content />
     </div>
     <footer class="post__end">
-      <p class="eof mono" aria-hidden="true">— {t('blog.eof')} —</p>
+      <p class="eof">{t('blog.eof')}</p>
       {
         next && (
           <a class="next" href={lp(lang, `/blog/${slugOf(next)}`)}>
-            <span class="next__label mono">{t('blog.next')} →</span>
+            <span class="next__label">{t('blog.next')}</span>
             <span class="next__title">{next.data.title}</span>
           </a>
         )
@@ -82,20 +86,21 @@ const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
   .post {
     padding-block-start: var(--space-xl);
   }
-  .crumb {
-    font-size: 0.85rem;
-    color: var(--text-faint);
-    direction: ltr;
-    text-align: start;
+  .back {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
   }
-  .crumb b {
-    color: var(--text);
+  .back :global(svg) {
+    scale: -1 1;
+  }
+  :global(:root[dir='rtl']) .back :global(svg) {
+    scale: 1 1;
   }
   .post__head {
     max-width: var(--measure);
     margin-block: var(--space-m) var(--space-xl);
     padding-block-end: var(--space-l);
-    border-block-end: 1.5px dashed var(--edge-soft);
+    border-block-end: 1px solid var(--rule);
   }
   .post__title {
     font-size: var(--step-4);
@@ -114,24 +119,15 @@ const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
     line-height: 1.45;
   }
   .post__face {
-    position: relative;
     width: 44px;
     height: 44px;
-    border: var(--bw) solid var(--edge);
-    border-radius: 12px;
-    background: var(--surface-2);
-    overflow: hidden;
-  }
-  .post__face::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--lime-ink);
-    mask: var(--face) center / cover no-repeat;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 32% 30%;
+    border: 1px solid var(--rule-strong);
   }
   .post__meta {
     color: var(--text-faint);
-    font-family: var(--ff-mono);
   }
   :global(:root[dir='rtl']) .post__meta {
     font-family: var(--ff-body);
@@ -149,32 +145,31 @@ const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
     gap: var(--space-l);
   }
   .eof {
-    text-align: center;
-    color: var(--text-faint);
-    letter-spacing: 0.2em;
+    font-family: var(--ff-display);
+    font-size: var(--step-1);
+    color: var(--ink-soft);
   }
   .next {
     display: grid;
     gap: 0.2rem;
-    padding: var(--space-m);
-    border: var(--bw) solid var(--edge);
-    border-radius: var(--radius);
-    background: var(--surface);
-    box-shadow: var(--shadow-lime);
+    padding-block: var(--space-m);
+    border-block: 1px solid var(--rule);
     text-decoration: none;
-    color: var(--text);
-    transition: translate var(--dur-hover) var(--ease-out);
-  }
-  .next:hover {
-    translate: calc(-2px * var(--dir)) -2px;
+    color: var(--ink);
   }
   .next__label {
-    font-size: 0.8rem;
-    color: var(--lime-ink);
+    font-size: 0.85rem;
+    color: var(--ink-faint);
   }
   .next__title {
     font-family: var(--ff-display);
-    font-weight: 700;
     font-size: var(--step-2);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color var(--dur-hover) var(--ease-out);
+  }
+  .next:hover .next__title {
+    text-decoration-color: var(--lime-ink);
   }
 </style>

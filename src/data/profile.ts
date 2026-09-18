@@ -29,66 +29,68 @@ export const fetch: { k: string; v: L10n }[] = [
 
 export const jobs: {
   id: string;
-  branch: string;
   company: string;
   url?: string;
   place: L10n;
   mode: L10n;
-  since: L10n;
-  lead?: L10n;
-  commits: L10nList;
+  since: { month: L10n; year: L10n; iso: string };
+  role: L10n;
+  summary: L10n;
+  shipped: L10nList;
 }[] = [
   {
     id: 'innolearn',
-    branch: 'remote/melbourne',
     company: 'InnoLearn',
     url: 'https://innolearn.ir',
     place: { en: 'Melbourne, Australia', fa: 'ملبورن، استرالیا' },
-    mode: { en: 'Remote', fa: 'دورکاری' },
-    since: { en: 'Oct 2025', fa: 'مهر ۱۴۰۴' },
-    lead: {
-      en: 'An LMS plus InnoMeet, a live meeting app. One of two front-end engineers.',
-      fa: 'سامانهٔ LMS و اینومیت، اپ جلسات زنده. یکی از دو مهندس فرانت‌اند محصول.',
+    mode: { en: 'remote', fa: 'دورکاری' },
+    since: { month: { en: 'Oct', fa: 'مهر' }, year: { en: '2025', fa: '۱۴۰۴' }, iso: '2025-10' },
+    role: { en: 'Front-end engineer (one of two)', fa: 'مهندس فرانت‌اند (یکی از دو نفر)' },
+    summary: {
+      en: 'An LMS plus InnoMeet, the live-class app where students and teachers actually meet.',
+      fa: 'یک LMS به‌همراه اینومیت، اپ کلاس زنده‌ای که دانش‌آموز و معلم واقعاً در آن همدیگر را می‌بینند.',
     },
-    commits: {
+    shipped: {
       en: [
-        'feat(innomeet): chat, live video, audio and image streaming',
-        'feat(innomeet): live quizzes and polls',
-        'feat: native image creation tool (no AI)',
-        'feat: assignments & exams module, landing pages',
-        'chore: improve UX and the team’s CI/CD',
+        'Chat plus live video, audio and image streaming inside InnoMeet',
+        'Live quizzes and polls during a class',
+        'A native image-making tool, no AI involved',
+        'The assignments and exams module, and the landing pages',
+        'Smaller UX fixes and a cleaner CI/CD for the team',
       ],
       fa: [
-        'feat(innomeet): چت، استریم زندهٔ ویدیو، صدا و تصویر',
-        'feat(innomeet): کوییز و نظرسنجی زنده',
-        'feat: ابزار تصویرساز native (بدون هوش مصنوعی)',
-        'feat: بخش تکالیف و آزمون‌ها، لندینگ پیج‌ها',
-        'chore: بهبود تجربهٔ کاربری و CI/CD تیم',
+        'چت و استریم زندهٔ ویدیو، صدا و تصویر داخل اینومیت',
+        'کوییز و نظرسنجی زنده وسط کلاس',
+        'یک ابزار ساخت تصویر native، بدون هوش مصنوعی',
+        'بخش تکالیف و آزمون‌ها و صفحه‌های فرود',
+        'اصلاح‌های کوچک تجربهٔ کاربری و CI/CD تمیزتر برای تیم',
       ],
     },
   },
   {
     id: 'armani',
-    branch: 'main',
     company: 'Armani English',
     url: 'https://armanienglish.com',
     place: { en: 'Tehran, Iran', fa: 'تهران، ایران' },
-    mode: { en: 'Hybrid', fa: 'هیبریدی' },
-    since: { en: 'Sep 2022', fa: 'شهریور ۱۴۰۱' },
-    commits: {
+    mode: { en: 'hybrid', fa: 'هیبریدی' },
+    since: { month: { en: 'Sep', fa: 'شهریور' }, year: { en: '2022', fa: '۱۴۰۱' }, iso: '2022-09' },
+    role: { en: 'Front-end engineer', fa: 'مهندس فرانت‌اند' },
+    summary: {
+      en: 'The main website, the admin panels and a shared component library, built with the design team.',
+      fa: 'وب‌سایت اصلی، پنل‌های مدیریت و یک کتابخانهٔ کامپوننت مشترک، همراه با تیم طراحی.',
+    },
+    shipped: {
       en: [
-        'feat: main website + admin panels, reusable UI with the design team',
-        'feat(ai): automated exam and AI scoring system',
-        'perf: fix Core Web Vitals, page loads 30% faster',
-        'ci: better SEO and CI/CD pipeline',
-        'chore: AI-assisted workflow with Claude Code and Cursor',
+        'An exam system where AI does the scoring',
+        'Core Web Vitals fixes that made pages load 30% faster',
+        'Better technical SEO and a real CI/CD pipeline',
+        'An AI-assisted workflow with Claude Code and Cursor',
       ],
       fa: [
-        'feat: وب‌سایت اصلی و پنل‌های مدیریت، کامپوننت‌های قابل‌استفادهٔ مجدد با تیم طراحی',
-        'feat(ai): سامانهٔ آزمون و تصحیح خودکار با هوش مصنوعی',
-        'perf: اصلاح Core Web Vitals، بارگذاری ۳۰٪ سریع‌تر',
-        'ci: بهبود سئو و CI/CD',
-        'chore: جریان کاری مبتنی بر AI با Claude Code و Cursor',
+        'سامانهٔ آزمونی که تصحیحش با هوش مصنوعی است',
+        'اصلاح Core Web Vitals که بارگذاری صفحه‌ها را ۳۰٪ سریع‌تر کرد',
+        'سئوی فنی بهتر و یک پایپ‌لاین CI/CD واقعی',
+        'جریان کاری با کمک Claude Code و Cursor',
       ],
     },
   },

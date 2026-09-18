@@ -1,0 +1,102 @@
+---
+/** How I use AI: one honest paragraph, what I've shipped with it, and the tools by their marks. */
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { aiBuilt, aiTools } from '../../data/profile';
+import SectionHead from '../ui/SectionHead.astro';
+import Logo from '../ui/Logo.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="section wrap" id="ai" aria-labelledby="ai-title">
+  <div class="ai">
+    <SectionHead title={t('ai.title')} lead={t('ai.lead')} id="ai-title" />
+    <div class="ai__cols">
+      <div>
+        <h3 class="ai__sub">{t('ai.built')}</h3>
+        <ul class="built" role="list">
+          {
+            aiBuilt.map((b) => (
+              <li>
+                <p class="built__title">{b.title[lang]}</p>
+                <p class="built__body">
+                  {b.body[lang]} <span class="caption">{b.where}</span>
+                </p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h3 class="ai__sub">{t('ai.tools')}</h3>
+        <ul class="tools" role="list">
+          {
+            aiTools.map((tool) => (
+              <li>
+                <Logo name={tool} size={22} />
+                {tool}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ai__cols {
+    display: grid;
+    gap: var(--space-l);
+  }
+  @media (min-width: 860px) {
+    .ai__cols {
+      grid-template-columns: 1.3fr 1fr;
+      gap: var(--space-xl);
+    }
+  }
+  .ai__sub {
+    font-size: var(--step-1);
+    margin-block-end: var(--space-s);
+  }
+  .built {
+    display: grid;
+    list-style: none;
+    padding: 0;
+  }
+  .built li {
+    padding-block: var(--space-s);
+    border-block-start: 1px solid var(--rule);
+  }
+  .built__title {
+    font-weight: 600;
+  }
+  .built__body {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .tools {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    list-style: none;
+    padding: 0;
+    border-block-start: 1px solid var(--rule);
+  }
+  .tools li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 56px;
+    border-block-end: 1px solid var(--rule);
+    font-weight: 600;
+    direction: ltr;
+  }
+  :global(:root[dir='rtl']) .tools li {
+    justify-content: flex-end;
+  }
+</style>

@@ -1,9 +1,12 @@
 ---
+/** Projects: the ones with a live site as framed prints, the rest as an index. */
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
-import { getProjects } from '../../lib/content';
+import { getProjects, slugOf } from '../../lib/content';
+import { shotOf } from '../../lib/shots';
 import SectionHead from '../ui/SectionHead.astro';
 import ProjectCard from './ProjectCard.astro';
+import Arrow from '../ui/Arrow.astro';
 
 interface Props {
   lang: Lang;
@@ -12,45 +15,57 @@ interface Props {
 const { lang, standalone = false } = Astro.props;
 const t = useT(lang);
 const items = await getProjects(lang);
+const prints = items.filter((p) => shotOf(slugOf(p)));
+const lines = items.filter((p) => !shotOf(slugOf(p)));
 ---
 
 <section class="section wrap" id="projects" aria-labelledby="projects-title">
-  <SectionHead cmd="ls -la ~/projects" path="~" title={t('projects.title')} id="projects-title" />
-  <div class="bento">
-    {items.map((item, i) => <ProjectCard lang={lang} item={item} feature={i === 0 || i === 1} />)}
+  <SectionHead title={t('projects.title')} lead={t('projects.lead')} id="projects-title" />
+  <div class="prints">
+    {
+      prints.map((item) => (
+        <div class="slot">
+          <ProjectCard lang={lang} item={item} />
+        </div>
+      ))
+    }
+  </div>
+  <div class="lines">
+    {lines.map((item) => <ProjectCard lang={lang} item={item} />)}
   </div>
   {
     !standalone && (
       <p class="more">
-        <a class="btn btn--ghost" href={lp(lang, '/projects')}>{t('projects.all')} →</a>
+        <a class="arrow-link" href={lp(lang, '/projects')}>
+          {t('projects.all')}
+          <Arrow />
+        </a>
       </p>
     )
   }
 </section>
 
 <style>
-  .bento {
+  .prints {
     display: grid;
-    gap: var(--space-m);
+    gap: var(--space-xl) var(--space-l);
   }
-  @media (min-width: 640px) {
-    .bento {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  .slot {
+    container: prints / inline-size;
   }
-  /* 6 columns: two featured cards (3 + 3), then three regular ones (2 + 2 + 2) */
   @media (min-width: 900px) {
-    .bento {
-      grid-template-columns: repeat(6, 1fr);
+    .prints {
+      grid-template-columns: 1fr 1fr;
     }
-    .bento > :global(.proj) {
-      grid-column: span 2;
+    .slot:first-child {
+      grid-column: 1 / -1;
     }
-    .bento > :global(.proj--feature) {
-      grid-column: span 3;
-    }
+  }
+  .lines {
+    margin-block-start: var(--space-xl);
+    border-block-end: 1px solid var(--rule);
   }
   .more {
-    margin-block-start: var(--space-l);
+    margin-block-start: var(--space-m);
   }
 </style>

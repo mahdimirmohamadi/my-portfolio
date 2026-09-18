@@ -1,160 +1,172 @@
 ---
+/**
+ * A project. With a screenshot it's a framed print beside its note;
+ * without one it's a single index line.
+ */
+import { Image } from 'astro:assets';
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
 import { slugOf, type Project } from '../../lib/content';
+import { shotOf } from '../../lib/shots';
+import Arrow from '../ui/Arrow.astro';
 
 interface Props {
   lang: Lang;
   item: Project;
-  feature?: boolean;
 }
-const { lang, item, feature = false } = Astro.props;
+const { lang, item } = Astro.props;
 const t = useT(lang);
 const slug = slugOf(item);
 const href = lp(lang, `/projects/${slug}`);
 const host = item.data.url ? new URL(item.data.url).host : null;
+const shot = shotOf(slug);
 ---
 
-<article class:list={['proj', 'focusable', 'rise', { 'proj--feature': feature }]}>
-  <div class="proj__top">
-    <span class="proj__glyph mono" aria-hidden="true">{item.data.glyph}</span>
-    <span class="proj__kind">{item.data.kind}</span>
-  </div>
-  <h3 class="proj__title">
-    <a href={href} class="proj__link" style={`view-transition-name: proj-${slug}`}>{item.data.title}</a>
-  </h3>
-  <p class="proj__summary">{item.data.summary}</p>
-  <ul class="proj__stack" role="list" aria-label={t('projects.stack')}>
-    {item.data.stack.slice(0, feature ? 6 : 4).map((s) => <li class="chip">{s}</li>)}
-  </ul>
-  <div class="proj__foot">
-    <span class="proj__readme mono" aria-hidden="true">README.md →</span>
-    {host && <a class="proj__ext mono" href={item.data.url} target="_blank" rel="noopener">{host} ↗</a>}
-  </div>
-</article>
+{
+  shot ? (
+    <article class="proj">
+      <a class="proj__print" href={href} tabindex="-1" aria-hidden="true">
+        <Image src={shot} widths={[480, 800]} sizes="(min-width: 900px) 460px, 100vw" format="webp" quality={72} alt="" loading="lazy" />
+      </a>
+      <div class="proj__note">
+        <p class="proj__kind caption">{item.data.kind}</p>
+        <h3 class="proj__title">
+          <a href={href} style={`view-transition-name: proj-${slug}`}>
+            {item.data.title}
+          </a>
+        </h3>
+        <p class="proj__summary">{item.data.summary}</p>
+        <p class="proj__stack">{item.data.stack.slice(0, 5).join(' · ')}</p>
+        <p class="proj__links">
+          <a class="arrow-link" href={href}>
+            {t('projects.read')}
+            <Arrow />
+          </a>
+          {host && (
+            <a class="proj__ext" href={item.data.url} target="_blank" rel="noopener">
+              {host}
+              <Arrow kind="out" size={13} />
+            </a>
+          )}
+        </p>
+      </div>
+    </article>
+  ) : (
+    <article class="line">
+      <h3 class="line__title">
+        <a href={href} style={`view-transition-name: proj-${slug}`}>
+          {item.data.title}
+        </a>
+      </h3>
+      <p class="line__summary">{item.data.summary}</p>
+      <p class="line__kind caption">{item.data.kind}</p>
+    </article>
+  )
+}
 
 <style>
   .proj {
-    position: relative;
     display: grid;
-    align-content: start;
-    gap: var(--space-xs);
-    padding: var(--space-m);
-    border: var(--bw) solid var(--edge);
-    border-radius: var(--radius);
-    background: var(--surface);
-    box-shadow: var(--shadow);
-  }
-  .proj:active {
-    translate: calc(2px * var(--dir)) 2px;
-    box-shadow: 0 0 0 var(--shadow-color);
-    transition: translate var(--dur-press) var(--ease-out), box-shadow var(--dur-press) var(--ease-out);
-  }
-  /* hover: the card takes focus (border, see ui.css) and its icon inverts like a selected file */
-  @media (hover: hover) and (pointer: fine) {
-    .proj:is(:hover, :focus-within) {
-      border-color: var(--active-edge);
-    }
-    .proj:hover .proj__glyph {
-      background: var(--edge);
-      color: var(--bg);
-    }
-    .proj:hover .proj__readme {
-      translate: calc(4px * var(--dir)) 0;
-    }
-  }
-  .proj__top {
-    display: flex;
+    gap: var(--space-m);
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-s);
   }
-  .proj__glyph {
-    display: grid;
-    place-items: center;
-    min-width: 48px;
-    height: 48px;
-    padding-inline: 0.5rem;
-    border: var(--bw) solid var(--edge);
-    border-radius: 12px;
-    background: var(--lime);
-    color: #0b0c09;
-    font-size: 1.1rem;
-    font-weight: 600;
-    direction: ltr;
-    transition:
-      background-color var(--dur-hover) var(--ease-out),
-      color var(--dur-hover) var(--ease-out);
+  /* side by side only when the slot is wide (the lead project); otherwise print above note */
+  @container prints (min-width: 760px) {
+    .proj {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: var(--space-xl);
+    }
   }
-  .proj__kind {
-    font-family: var(--ff-mono);
-    font-size: 0.75rem;
-    color: var(--text-faint);
-    text-align: end;
+  .proj__print {
+    display: block;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--plaster-deep);
   }
-  :global(:root[dir='rtl']) .proj__kind {
-    font-family: var(--ff-body);
-    font-size: 0.82rem;
+  .proj__print :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top;
+    transition: scale 700ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .proj:hover .proj__print :global(img) {
+      scale: 1.025;
+    }
   }
   .proj__title {
+    margin-block-start: 0.3rem;
     font-size: var(--step-2);
-    margin-block-start: var(--space-2xs);
   }
-  .proj__link {
-    color: var(--text);
+  .proj__title a,
+  .line__title a {
+    color: var(--ink);
     text-decoration: none;
   }
-  /* the whole card is the click target; the title link carries the name */
-  .proj__link::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    border-radius: var(--radius);
+  .proj__title a:hover,
+  .line__title a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--lime-ink);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.2em;
   }
   .proj__summary {
-    color: var(--text-soft);
+    margin-block-start: var(--space-xs);
+    color: var(--ink-soft);
+    max-width: 48ch;
   }
   .proj__stack {
+    margin-block-start: var(--space-xs);
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    direction: ltr;
+    text-align: start;
+    unicode-bidi: plaintext;
+  }
+  .proj__links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-  .proj__foot {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: var(--space-s);
-    margin-block-start: var(--space-2xs);
-    font-size: 0.8rem;
-  }
-  .proj__readme {
-    color: var(--lime-ink);
-    transition: translate var(--dur-hover) var(--ease-out);
+    gap: 0 var(--space-m);
+    margin-block-start: var(--space-xs);
   }
   .proj__ext {
-    position: relative;
-    z-index: 2;
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    color: var(--text-soft);
+    gap: 0.3em;
+    min-height: 44px;
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+    text-decoration-color: var(--rule);
   }
   .proj__ext:hover {
-    color: var(--lime-ink);
+    color: var(--ink);
   }
-  @media (min-width: 640px) and (max-width: 899px) {
-    .proj--feature {
-      grid-column: 1 / -1;
-    }
+  :global(:root[dir='rtl']) .proj__ext :global(svg) {
+    scale: -1 1;
   }
-  @media (min-width: 900px) {
-    .proj--feature {
-      background: var(--surface-2);
-    }
 
-    .proj--feature .proj__glyph {
-      background: var(--amber);
+  .line {
+    display: grid;
+    gap: 0.2rem var(--space-m);
+    padding-block: var(--space-s);
+    border-block-start: 1px solid var(--rule);
+  }
+  @media (min-width: 760px) {
+    .line {
+      grid-template-columns: 14rem minmax(0, 1fr) auto;
+      align-items: baseline;
     }
+  }
+  .line__title {
+    font-size: var(--step-1);
+  }
+  .line__summary {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
   }
 </style>

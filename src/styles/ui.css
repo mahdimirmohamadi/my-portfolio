@@ -1,238 +1,162 @@
-/* ─── workstation primitives: windows, stickers, buttons, chips ─── */
+/* ─── ma primitives: panels, headings, buttons, tags ─── */
 
 @layer components {
-  /* ── Window ─────────────────────────────── */
+  /* ── Panel (the old "window"): a framed recess with a quiet caption ── */
   .win {
     position: relative;
-    background: var(--surface);
-    border: var(--bw) solid var(--edge);
+    background: var(--plaster-lift);
+    border: 1px solid var(--rule);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
     overflow: clip;
-  }
-  /* Focus follows the mouse, like a tiling WM: the window under the pointer gets the
-     active border, and unfocused windows grey out their traffic lights. */
-  .win,
-  .focusable {
-    transition:
-      border-color var(--dur-hover) var(--ease-out),
-      box-shadow var(--dur-hover) var(--ease-out);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    :is(.win, .focusable):is(:hover, :focus-within) {
-      border-color: var(--active-edge);
-    }
-    .win:not(:hover, :focus-within, .is-focused) .win__dots span {
-      background: var(--surface-3);
-    }
-    .win.is-focused {
-      border-color: var(--active-edge);
-    }
-    /* hovering a sibling window takes focus away from the default one */
-    [data-tiling]:has(.win:hover) .win.is-focused:not(:hover, :focus-within) {
-      border-color: var(--edge);
-    }
-    [data-tiling]:has(.win:hover) .win.is-focused:not(:hover, :focus-within) .win__dots span {
-      background: var(--surface-3);
-    }
-  }
-  .win--lime {
-    box-shadow: var(--shadow-lime);
-  }
-  .win--amber {
-    box-shadow: var(--shadow-amber);
-  }
-  .win--coral {
-    box-shadow: var(--shadow-coral);
   }
   .win__bar {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: var(--space-xs);
-    min-height: 40px;
-    padding-inline: var(--space-s);
-    border-block-end: var(--bw) solid var(--edge);
-    background: var(--surface-2);
+    padding: 0.7rem var(--space-m) 0;
     font-family: var(--ff-mono);
-    font-size: 0.8rem;
-    color: var(--text-soft);
+    font-size: 0.75rem;
+    color: var(--ink-faint);
     direction: ltr;
-  }
-  .win__dots {
-    display: flex;
-    gap: 7px;
-    flex: none;
-  }
-  .win__dots span {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid var(--edge);
-  }
-  .win__dots span {
-    transition: background-color var(--dur-hover) var(--ease-out);
-  }
-  .win__dots span:nth-child(1) {
-    background: var(--coral);
-  }
-  .win__dots span:nth-child(2) {
-    background: var(--amber);
-  }
-  .win__dots span:nth-child(3) {
-    background: var(--lime);
   }
   .win__title {
     flex: 1;
     min-width: 0;
-    text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .win__meta {
     flex: none;
-    color: var(--text-faint);
   }
   .win__body {
     padding: var(--space-m);
   }
 
-  /* ── Section heading: a shell prompt + a title ── */
+  /* ── Section heading ── */
   .sec-head {
     display: grid;
-    gap: 0.3rem;
-    margin-block-end: var(--space-m);
-  }
-  .sec-head__prompt {
-    font-family: var(--ff-mono);
-    font-size: 0.8rem;
-    color: var(--text-faint);
-    direction: ltr;
-    unicode-bidi: isolate;
-    justify-self: start;
-  }
-  .sec-head__prompt b {
-    color: var(--lime-ink);
-    font-weight: 600;
+    gap: 0.5rem;
+    margin-block-end: var(--space-l);
+    max-width: 62ch;
   }
   .sec-head__title {
     font-size: var(--step-3);
   }
   .sec-head__lead {
-    color: var(--text-soft);
+    color: var(--ink-soft);
     font-size: var(--step-0);
   }
 
-  /* ── Sticker: a chunky, slightly tilted label (the cartoon bit) ── */
-  .sticker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45em;
-    padding: 0.3em 0.85em;
-    border: var(--bw) solid var(--edge);
-    border-radius: var(--radius-pill);
-    background: var(--surface);
-    font-family: var(--ff-mono);
-    font-size: 0.82rem;
-    font-weight: 600;
-    white-space: nowrap;
-    box-shadow: calc(3px * var(--dir)) 3px 0 var(--shadow-color);
-    rotate: var(--tilt, 0deg);
-  }
-  :root[dir='rtl'] .sticker {
-    font-family: var(--ff-body);
-    font-size: 0.86rem;
-  }
-  .sticker--lime {
-    background: var(--lime);
-    color: var(--on-accent);
-  }
-  .sticker--amber {
-    background: var(--amber);
-    color: var(--on-accent);
-  }
-  .sticker--coral {
-    background: var(--coral);
-    color: var(--on-accent);
-  }
-  .sticker__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-
-  /* ── Button ── */
+  /* ── Button: a plain rectangle; lime is only for the one thing that matters ── */
   .btn {
-    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.55em;
+    gap: 0.7em;
     min-height: 48px;
-    padding: 0.6em 1.25em;
-    border: var(--bw) solid var(--edge);
-    border-radius: var(--radius-pill);
+    padding: 0.6em 1.3em;
+    border: var(--bw) solid var(--ink);
+    border-radius: var(--radius-sm);
     background: var(--lime);
-    color: var(--on-accent);
-    font-family: var(--ff-mono);
+    color: var(--on-lime);
+    font-family: var(--ff-body);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     text-decoration: none;
-    box-shadow: calc(4px * var(--dir)) 4px 0 var(--shadow-color);
     transition:
-      translate var(--dur-hover) var(--ease-out),
-      box-shadow var(--dur-hover) var(--ease-out),
-      transform 260ms var(--ease-out);
+      background-color var(--dur-hover) var(--ease-out),
+      scale var(--dur-press) var(--ease-out);
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
-  :root[data-theme='light'] .btn {
-    color: #121410;
+  :root[data-theme='dark'] .btn {
+    border-color: var(--lime);
   }
-  .btn--ghost {
-    background: var(--surface);
-    color: var(--text);
-  }
-  :root[data-theme='light'] .btn--ghost {
-    color: var(--text);
+  .btn svg {
+    transition: translate var(--dur-ui) var(--ease-out);
   }
   @media (hover: hover) and (pointer: fine) {
-    .btn:hover {
-      translate: calc(-2px * var(--dir)) -2px;
-      box-shadow: calc(6px * var(--dir)) 6px 0 var(--shadow-color);
-      text-decoration: none;
+    .btn:hover svg {
+      translate: calc(4px * var(--dir)) 0;
     }
   }
   .btn:active {
-    translate: calc(3px * var(--dir)) 3px;
-    box-shadow: 0 0 0 var(--shadow-color);
-    transition-duration: var(--dur-press);
+    scale: 0.97;
+  }
+  .btn--ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--rule-strong);
+  }
+  :root[data-theme='dark'] .btn--ghost {
+    border-color: var(--rule-strong);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn--ghost:hover {
+      background: var(--plaster-deep);
+    }
+  }
+  :root[dir='rtl'] .btn svg {
+    scale: -1 1;
   }
 
-  /* Geist Mono has no Persian glyphs: Persian buttons/chips use Vazirmatn */
-  :root[dir='rtl'] :is(.btn, .chip),
-  :is(.btn, .chip):lang(fa) {
-    font-family: var(--font-fa);
-  }
-
-  /* ── Chip (tags, stack) ── */
-  .chip {
+  /* an arrow link: text + a small arrow that leans forward on hover */
+  .arrow-link {
     display: inline-flex;
     align-items: center;
-    min-height: 28px;
-    padding: 0.1em 0.65em;
-    border: 1.5px solid var(--edge-soft);
-    border-radius: var(--radius-pill);
-    background: var(--surface-2);
+    gap: 0.45em;
+    min-height: 44px;
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 0.3em;
+    transition: text-decoration-color var(--dur-hover) var(--ease-out);
+  }
+  .arrow-link svg {
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  .arrow-link:hover {
+    text-decoration-color: var(--lime-ink);
+  }
+  .arrow-link:hover svg {
+    translate: calc(4px * var(--dir)) 0;
+  }
+  :root[dir='rtl'] .arrow-link svg {
+    scale: -1 1;
+  }
+
+  /* ── Tag ── */
+  .chip,
+  .sticker {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 0.05em 0.6em;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
     font-family: var(--ff-mono);
-    font-size: 0.78rem;
-    color: var(--text-soft);
+    font-size: 0.75rem;
+    color: var(--ink-soft);
     white-space: nowrap;
     direction: ltr;
   }
+  :root[dir='rtl'] :is(.chip, .sticker):not(.ltr),
+  :is(.chip, .sticker):lang(fa) {
+    font-family: var(--font-fa);
+  }
+  .sticker--coral {
+    border-color: var(--oxblood);
+    color: var(--oxblood);
+  }
+  .sticker--amber,
+  .sticker--lime {
+    border-color: var(--rule-strong);
+    color: var(--ink);
+  }
   a.chip {
-    min-height: 40px;
+    min-height: 36px;
     text-decoration: none;
     transition:
       border-color var(--dur-hover) var(--ease-out),
@@ -240,10 +164,17 @@
   }
   a.chip:hover {
     border-color: var(--lime-ink);
-    color: var(--lime-ink);
+    color: var(--ink);
   }
 
-  /* ── Prompt glyph used inline ── */
+  /* a caption: small, quiet, for data and places (not an eyebrow) */
+  .caption {
+    font-family: var(--ff-mono);
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
   .ps1 {
     font-family: var(--ff-mono);
     color: var(--lime-ink);
@@ -251,9 +182,9 @@
   }
   .caret {
     display: inline-block;
-    width: 0.6em;
-    height: 1.1em;
-    vertical-align: -0.18em;
-    background: var(--lime);
+    width: 0.55em;
+    height: 1.05em;
+    vertical-align: -0.16em;
+    background: var(--lime-ink);
   }
 }

@@ -33,7 +33,7 @@ const data = {
 const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo hire-me', 'clear'];
 ---
 
-<Window title="mahdi@workstation: ~ — zsh" meta="80×24" class="term" id="terminal" data-term>
+<Window title="zsh · mahdi@tehran" meta="80×24" class="term" id="terminal" data-term>
   <div class="term__screen" data-term-screen>
     <div class="term__log" role="log" aria-live="polite" data-term-log>
       <p><span class="ps1">$</span> neofetch --short</p>
@@ -68,14 +68,12 @@ const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo 
     display: flex;
     flex-direction: column;
     padding: 0;
-    background: var(--bg-2);
+    background: var(--plaster-lift);
   }
   .term__screen {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    height: 260px;
-    min-height: 260px;
+    height: 300px;
     padding: var(--space-s) var(--space-m);
     font-family: var(--ff-mono);
     font-size: 0.86rem;
@@ -138,7 +136,7 @@ const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo 
     flex-wrap: wrap;
     gap: 0.4rem;
     padding: 0.6rem var(--space-m) 0.75rem;
-    border-block-start: 1.5px dashed var(--edge-soft);
+    border-block-start: 1px solid var(--rule);
     direction: ltr;
   }
   .term-chips .chip {

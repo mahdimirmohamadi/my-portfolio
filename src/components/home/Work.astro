@@ -1,0 +1,203 @@
+---
+/** Work: each team as a dated session, the date set large like a calendar leaf. */
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { jobs, education } from '../../data/profile';
+import SectionHead from '../ui/SectionHead.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="section wrap" id="work" aria-labelledby="work-title">
+  <SectionHead title={t('work.title')} lead={t('work.lead')} id="work-title" />
+  <ol class="sessions" role="list">
+    {
+      jobs.map((j) => (
+        <li class="session" id={`work-${j.id}`}>
+          <p class="leaf">
+            <span class="leaf__since">{t('work.since')}</span>
+            <time datetime={j.since.iso}>
+              <span class="leaf__month">{j.since.month[lang]}</span>
+              <span class="leaf__year">{j.since.year[lang]}</span>
+            </time>
+            <span class="leaf__now">{t('work.now')}</span>
+          </p>
+          <div class="session__body">
+            <h3 class="session__company">
+              {j.url ? (
+                <a href={j.url} target="_blank" rel="noopener">
+                  {j.company}
+                </a>
+              ) : (
+                j.company
+              )}
+            </h3>
+            <p class="session__meta">
+              {j.role[lang]} · {j.place[lang]}, {j.mode[lang]}
+            </p>
+            <p class="session__summary">{j.summary[lang]}</p>
+            <ul class="shipped" role="list">
+              {j.shipped[lang].map((s) => (
+                <li>{s}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+  <div class="edu">
+    <h3 class="edu__title">{t('work.edu')}</h3>
+    <ul role="list">
+      {
+        education.map((e) => (
+          <li>
+            <b>{e.title[lang]}</b>, {e.place[lang]} <span class="caption">{e.years[lang]}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .sessions {
+    display: grid;
+    gap: var(--space-m);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 960px) {
+    .sessions {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .session {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--plaster-lift);
+    scroll-margin-block-start: 24px;
+  }
+  /* the calendar leaf */
+  .leaf {
+    display: grid;
+    align-content: start;
+    justify-items: center;
+    gap: 0.1rem;
+    padding: var(--space-m) 0.5rem;
+    border-inline-end: 1px solid var(--rule);
+    text-align: center;
+  }
+  .leaf time {
+    display: grid;
+    justify-items: center;
+  }
+  .leaf__since,
+  .leaf__now {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+  }
+  .leaf__month {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  .leaf__year {
+    font-family: var(--ff-display);
+    font-size: 1.9rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  :global(:root[dir='rtl']) .leaf__year {
+    font-weight: 800;
+    font-size: 1.6rem;
+  }
+  .leaf__now {
+    margin-block-start: 0.35rem;
+    padding: 0 0.4rem;
+    border-radius: 3px;
+    background: var(--lime);
+    color: var(--on-lime);
+    font-weight: 600;
+  }
+  .session__body {
+    padding: var(--space-m);
+  }
+  .session__company {
+    font-size: var(--step-2);
+  }
+  .session__company a {
+    color: var(--ink);
+    text-decoration-color: var(--rule);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .session__company a:hover {
+    text-decoration-color: var(--lime-ink);
+  }
+  .session__meta {
+    margin-block-start: 0.3rem;
+    font-size: 0.88rem;
+    color: var(--ink-faint);
+  }
+  .session__summary {
+    margin-block-start: var(--space-s);
+    color: var(--ink);
+  }
+  .shipped {
+    display: grid;
+    gap: 0.45rem;
+    margin-block-start: var(--space-s);
+    padding: 0;
+    list-style: none;
+  }
+  .shipped li {
+    position: relative;
+    padding-inline-start: 1.1rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  /* a small commit node, the branch motif carried into the list */
+  .shipped li::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0.55em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1.5px solid var(--bronze-soft);
+  }
+
+  .edu {
+    display: grid;
+    gap: 0.5rem;
+    margin-block-start: var(--space-l);
+  }
+  @media (min-width: 760px) {
+    .edu {
+      grid-template-columns: 9rem 1fr;
+      align-items: baseline;
+    }
+  }
+  .edu__title {
+    font-size: var(--step-1);
+  }
+  .edu ul {
+    display: grid;
+    gap: 0.3rem;
+    list-style: none;
+    padding: 0;
+    color: var(--ink-soft);
+  }
+  .edu b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>

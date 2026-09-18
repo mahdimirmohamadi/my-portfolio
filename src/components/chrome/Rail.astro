@@ -1,0 +1,239 @@
+---
+/**
+ * Desktop: a quiet rail along the inline-start edge (brand, sections, a "now" note,
+ * language + day/night). Phones: a slim top bar; navigation lives in the Dock.
+ */
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { workspaces } from './workspaces';
+
+interface Props {
+  lang: Lang;
+  altHref: string;
+}
+const { lang, altHref } = Astro.props;
+const t = useT(lang);
+const home = lp(lang, '/');
+const path = Astro.url.pathname.replace(/\/$/, '');
+const isHome = path === '' || path === '/fa';
+const hrefOf = (w: (typeof workspaces)[number]) => (w.path && !isHome ? lp(lang, w.path) : w.hash ? `${home}#${w.hash}` : lp(lang, w.path));
+const activeOf = (w: (typeof workspaces)[number]) => !isHome && !!w.path && path.startsWith(lp(lang, w.path).replace(/\/$/, ''));
+const other = lang === 'fa' ? 'en' : 'fa';
+---
+
+<header class="rail">
+  <a class="mark" href={home}>
+    <svg class="mark__glyph" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+      <path d="M7 21V4M7 14c0-4 10-3 10-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      <circle cx="17" cy="5" r="2.6" class="mark__bud" />
+      <circle cx="7" cy="18" r="1.9" fill="var(--plaster)" stroke="currentColor" stroke-width="1.6" />
+    </svg>
+    <span class="mark__name">{t('site.name')}</span>
+  </a>
+  <p class="rail__role">{t('rail.role')}</p>
+
+  <nav class="rail__nav" aria-label={t('nav.menu')}>
+    <ul role="list">
+      {
+        workspaces.map((w) => (
+          <li>
+            <a href={hrefOf(w)} data-ws={w.hash ?? ''} aria-current={activeOf(w) ? 'page' : undefined}>
+              {t(w.key)}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={lp(lang, '/lab')} class="rail__soon" aria-current={path.endsWith('/lab') ? 'page' : undefined}>
+          {t('nav.lab')} <span>{t('nav.soon')}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="rail__now">
+    <p class="rail__now-label">{t('rail.now.label')}</p>
+    <p>{t('rail.now')}</p>
+  </div>
+
+  <div class="switches">
+    <a class="switch" href={altHref} hreflang={other} lang={other} aria-label={t('lang.switch.label')}>{t('lang.switch')}</a>
+    <button class="switch" type="button" data-theme-toggle aria-label={t('theme.toggle')} data-day={t('theme.day')} data-night={t('theme.night')}>
+      <span data-theme-label>{t('theme.night')}</span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .rail {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    padding: 0.6rem var(--page-gutter);
+    background: var(--plaster);
+    border-block-end: 1px solid var(--rule);
+  }
+  .rail__role,
+  .rail__nav,
+  .rail__now {
+    display: none;
+  }
+  .switches {
+    display: flex;
+    gap: 0.4rem;
+    margin-inline-start: auto;
+  }
+
+  @media (min-width: 1040px) {
+    .rail {
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: var(--rail);
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding: 2.25rem 1.5rem 1.5rem;
+      border-block-end: 0;
+      border-inline-end: 1px solid var(--rule);
+    }
+    .rail__role,
+    .rail__nav,
+    .rail__now {
+      display: block;
+    }
+    .switches {
+      margin-block-start: auto;
+      margin-inline-start: 0;
+    }
+  }
+
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .mark__glyph {
+    flex: none;
+    color: var(--ink);
+  }
+  .mark__bud {
+    fill: var(--lime);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+  }
+  .mark__name {
+    font-family: var(--ff-display);
+    font-size: 1.12rem;
+    line-height: 1.15;
+  }
+  :global(:root[dir='rtl']) .mark__name {
+    font-weight: 800;
+  }
+  .rail__role {
+    margin-block: 0.4rem 2.5rem;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+
+  .rail__nav ul {
+    display: grid;
+    gap: 0.1rem;
+    list-style: none;
+    padding: 0;
+  }
+  .rail__nav a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 38px;
+    padding-inline-start: 1.1rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color var(--dur-hover) var(--ease-out);
+  }
+  /* the "you are here" dot: a small bud */
+  .rail__nav a::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rule);
+    transition:
+      background-color var(--dur-hover) var(--ease-out),
+      border-color var(--dur-hover) var(--ease-out),
+      scale var(--dur-ui) var(--ease-out);
+  }
+  .rail__nav a:hover {
+    color: var(--ink);
+  }
+  .rail__nav a:is(.is-active, [aria-current='page']) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .rail__nav a:is(.is-active, [aria-current='page'])::before {
+    background: var(--lime);
+    border-color: var(--ink);
+    scale: 1.45;
+  }
+  .rail__soon span {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+
+  .rail__now {
+    margin-block-start: 2.5rem;
+    padding-block-start: 1.25rem;
+    border-block-start: 1px solid var(--rule);
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .rail__now-label {
+    margin-block-end: 0.3rem;
+    font-family: var(--ff-display);
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+  :global(:root[dir='rtl']) .rail__now-label {
+    font-weight: 800;
+  }
+
+  .switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    min-width: 44px;
+    padding-inline: 0.8rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    font-size: 0.84rem;
+    text-decoration: none;
+    transition:
+      border-color var(--dur-hover) var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out);
+  }
+  .switch:hover {
+    border-color: var(--rule-strong);
+    background: var(--plaster-deep);
+  }
+  .switch[lang='fa'] {
+    font-family: var(--font-fa);
+  }
+  .switch[lang='en'] {
+    font-family: var(--font-body);
+  }
+</style>

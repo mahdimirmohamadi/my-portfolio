@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# impeccable scratch (decision page logs, review captures)
+.impeccable/questions/
+.impeccable/review/

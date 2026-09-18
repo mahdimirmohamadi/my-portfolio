@@ -5,6 +5,9 @@ import Window from '../../../components/ui/Window.astro';
 import { splitId, slugOf, type Project } from '../../../lib/content';
 import { useT, lp } from '../../../i18n/utils';
 import type { Lang } from '../../../i18n/ui';
+import { Image } from 'astro:assets';
+import { shotOf } from '../../../lib/shots';
+import Arrow from '../../../components/ui/Arrow.astro';
 
 export async function getStaticPaths() {
   const items = await getCollection('projects');
@@ -19,13 +22,15 @@ const t = useT(lang);
 const slug = slugOf(item);
 const { Content } = await render(item);
 const other = lang === 'fa' ? 'en' : 'fa';
+const shot = shotOf(slug);
 ---
 
 <BaseLayout lang={lang} title={item.data.title} description={item.data.summary} altHref={lp(other, `/projects/${slug}`)}>
   <article class="readme wrap">
-    <p class="crumb mono"><a href={lp(lang, '/projects')}>~/projects</a>/{slug}/<b>README.md</b></p>
+    <p class="crumb">
+      <a class="arrow-link back" href={lp(lang, '/projects')}><Arrow />{t('projects.all')}</a>
+    </p>
     <header class="readme__head">
-      <span class="readme__glyph mono" aria-hidden="true">{item.data.glyph}</span>
       <p class="readme__kind">{item.data.kind}</p>
       <h1 class="readme__title" style={`view-transition-name: proj-${slug}`}>{item.data.title}</h1>
       <p class="readme__summary">{item.data.summary}</p>
@@ -33,12 +38,20 @@ const other = lang === 'fa' ? 'en' : 'fa';
         item.data.url && (
           <p>
             <a class="btn" href={item.data.url} target="_blank" rel="noopener">
-              {t('projects.visit')} ↗
+              {t('projects.visit')}
+              <Arrow kind="out" />
             </a>
           </p>
         )
       }
     </header>
+    {
+      shot && (
+        <figure class="readme__shot">
+          <Image src={shot} widths={[640, 1280]} sizes="(min-width: 1040px) 900px, 100vw" format="webp" quality={76} alt="" />
+        </figure>
+      )
+    }
     <div class="readme__body">
       <div class="prose">
         <Content />
@@ -54,42 +67,37 @@ const other = lang === 'fa' ? 'en' : 'fa';
   .readme {
     padding-block-start: var(--space-xl);
   }
-  .crumb {
-    font-size: 0.85rem;
-    color: var(--text-faint);
-    direction: ltr;
-    text-align: start;
+  .back {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
   }
-  .crumb b {
-    color: var(--text);
+  .back :global(svg) {
+    scale: -1 1;
+  }
+  :global(:root[dir='rtl']) .back :global(svg) {
+    scale: 1 1;
   }
   .readme__head {
     display: grid;
     gap: var(--space-xs);
     margin-block: var(--space-l) var(--space-xl);
     padding-block-end: var(--space-l);
-    border-block-end: 1.5px dashed var(--edge-soft);
-  }
-  .readme__glyph {
-    justify-self: start;
-    display: grid;
-    place-items: center;
-    min-width: 72px;
-    height: 72px;
-    padding-inline: 0.7rem;
-    border: var(--bw) solid var(--edge);
-    border-radius: 16px;
-    background: var(--lime);
-    color: #0b0c09;
-    font-size: 1.6rem;
-    font-weight: 600;
-    box-shadow: var(--shadow);
-    direction: ltr;
+    border-block-end: 1px solid var(--rule);
   }
   .readme__kind {
-    font-family: var(--ff-mono);
-    font-size: 0.8rem;
+    font-size: 0.88rem;
     color: var(--text-faint);
+  }
+  .readme__shot {
+    margin: 0 0 var(--space-xl);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .readme__shot :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
   }
   .readme__title {
     font-size: var(--step-4);
@@ -110,7 +118,7 @@ const other = lang === 'fa' ? 'en' : 'fa';
     }
     :global(.stack) {
       position: sticky;
-      inset-block-start: 80px;
+      inset-block-start: 24px;
     }
   }
   .stack__json {
