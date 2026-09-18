@@ -24,7 +24,7 @@ const fa = lang === 'fa';
 // buds: tip positions in the 420×560 arrangement box (x from the inline-start side)
 const buds = [
   { x: 44, y: 200, label: 'InnoLearn', meta: fa ? '۱۴۰۴' : '2025', href: '#work-innolearn', above: true },
-  { x: 340, y: 360, label: 'Armani English', meta: fa ? '۱۴۰۱' : '2022', href: '#work-armani', side: true },
+  { x: 360, y: 410, label: 'Armani English', meta: fa ? '۱۴۰۱' : '2022', href: '#work-armani' },
   { x: 164, y: 280, label: t('hero.bud.notes'), meta: '', href: lp(lang, '/blog'), above: true },
 ];
 // commit nodes sit on the main stem (points on its curve)
@@ -75,7 +75,7 @@ const commits = [
       <svg class="branch" viewBox="0 0 420 560" role="img" aria-label={t('hero.branch.label')}>
         <g fill="none" stroke-linecap="round">
           <path class="stem stem--a" pathLength="1" d="M210 512C204 478 228 456 222 430 216 402 190 384 160 356 124 322 76 306 56 268 44 244 40 222 44 200" />
-          <path class="stem stem--b" pathLength="1" d="M222 430C258 424 296 410 316 392 330 380 336 370 340 360" />
+          <path class="stem stem--b" pathLength="1" d="M222 430C262 428 300 426 330 418 346 414 354 412 360 410" />
           <path class="stem stem--c" pathLength="1" d="M160 356C168 332 156 304 164 280" />
         </g>
         {commits.map(([cx, cy]) => <circle class="commit" cx={cx} cy={cy} r="5.5" />)}

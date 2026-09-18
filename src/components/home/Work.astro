@@ -64,6 +64,7 @@ const t = useT(lang);
       }
     </ul>
   </div>
+  <span class="shelf-rule work__shelf" aria-hidden="true"></span>
 </section>
 
 <style>
@@ -193,6 +194,9 @@ const t = useT(lang);
       grid-template-columns: 9rem 1fr;
       align-items: baseline;
     }
+  }
+  .work__shelf {
+    margin-block-start: var(--space-xl);
   }
   .edu__title {
     font-size: var(--step-1);
