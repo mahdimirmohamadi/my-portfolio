@@ -178,7 +178,7 @@ components:
 
 The site is a tokonoma, not a landing page. One recessed wall of cool sage plaster holds three things: the owner's photo hung as a scroll, his career drawn as a single git branch rising from a bronze bowl, and the empty wall between them, which points at the email. Everything after the alcove keeps the same quiet: ruled ledgers instead of cards, framed prints instead of tiles, thin ink lines instead of boxes and shadows. The emptiness is load-bearing ("ma"); it is what makes the one lime bloom read.
 
-Density is calm but not sparse. Sections are ruled lists that a recruiter can scan in seconds, set in a plain sans under a chunky soft serif. Personality lives in a few crafted details (the branch that grows, the 1-bit portrait toggle, Nix asleep on the shelf, a live terminal) rather than in effects laid over every element. Night is the same alcove after dark: charcoal plaster, bone ink, the lime unchanged.
+Density is calm but not sparse. Sections are ruled lists that a recruiter can scan in seconds, set in a plain sans under a chunky soft serif. Personality lives in a few crafted details (the branch that grows, the 1-bit portrait toggle, Nix the mascot, a live terminal) rather than in effects laid over every element. Night is the same alcove after dark: charcoal plaster, bone ink, the lime unchanged.
 
 The world explicitly refuses: hard offset shadows, colour gradients, glow, eyebrows and kickers over headings, card grids, imitation brand marks, and monospace used as costume. PRODUCT.md's earlier "chunky outlines, hard offset shadows" personality belonged to the workstation edition; this world does not carry it.
 
@@ -290,7 +290,11 @@ A recess, not a window: plaster-lift, 1px hairline, 6px corners, a quiet mono ca
 - **Mobile:** sticky top bar plus a floating dock (plaster-lift, ink-rule frame, 6px, 56px items); the current item gets the same lime bud dot.
 
 ### The Alcove (signature)
-Copy on the open wall (inline-start), the arrangement on the other side: photo scroll hung off-centre, the SVG branch (7 / 4.5 / 3.5 stroke widths, bronze) rising from a bronze bowl, hollow commit nodes on the stem, three lime buds (r 10, 2px ink stroke), and halo map-labels linking to what they mark, with a small mono date. Nix sleeps on the shelf; a vertical mono coordinate caption runs down the far edge on desktop. The branch mirrors in RTL with `scale: var(--dir) 1`. The portrait has a 1-bit dither toggle revealed by a 700ms clip-path wipe.
+Copy on the open wall (inline-start), the arrangement on the other side: photo scroll hung off-centre, the SVG branch (7 / 4.5 / 3.5 stroke widths, bronze) rising from a bronze bowl, hollow commit nodes on the stem, three lime buds (r 10, 2px ink stroke), and halo map-labels linking to what they mark, with a small mono date. Nix stands on the shelf waving toward the copy (mirrored per direction, tilts on hover); a vertical mono coordinate caption runs down the far edge on desktop. The branch mirrors in RTL with `scale: var(--dir) 1`. The portrait has a 1-bit dither toggle revealed by a 700ms clip-path wipe.
+
+### Nix (mascot)
+
+A raster character: four poses (waving, sleeping, panicked, typing) cut with real alpha from the owner's generated sheet by `scripts/nix.mjs` and served as WebP through `src/components/art/Nix.astro` (`mood="happy" | "sleep" | "panic" | "type"`). One pose per place, each with a job: waving on the hero shelf and beside "Say hi.", typing next to the terminal, napping in the footer and on empty/unbuilt pages, panicking on the 404, waving as the avatar of MDX `<Nix>` asides. Always decorative (empty alt) unless it carries meaning. By day he sits directly on the plaster; by night a 1px `--rule-strong` cut line (four stacked 0-blur drop-shadows) keeps his black outline from dissolving into the dark. His own colours (cream body, amber horns, coral tail and blush, lime face) are part of the character, not the page palette, and never leak into UI.
 
 ### Work Ledger
 One ruled row per employer (ink-rule, 1px). A calendar leaf in the margin: faint "since", month in 600, the year in Young Serif 1.9rem, and a small outlined "now" tag. Shipped items are listed with hollow bronze commit nodes, carrying the branch into the list.

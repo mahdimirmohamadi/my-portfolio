@@ -101,7 +101,7 @@ const commits = [
         }
       </ul>
 
-      <div class="shelf-nix" aria-hidden="true"><Nix size={62} bob={false} /></div>
+      <div class="shelf-nix"><Nix size={92} eager /></div>
     </div>
 
     <p class="coords" aria-hidden="true">{t('hero.coords')}</p>
@@ -202,9 +202,8 @@ const commits = [
       order: -1;
       width: min(82vw, 340px);
     }
-    .shelf-nix {
-      scale: 0.85;
-      transform-origin: bottom;
+    .shelf-nix :global(.nix) {
+      width: 74px;
     }
   }
   @media (min-width: 900px) {
@@ -394,7 +393,18 @@ const commits = [
   .shelf-nix {
     position: absolute;
     inset-block-end: 0;
-    inset-inline-end: 4%;
+    inset-inline-end: 0;
+    /* he waves toward the words */
+    scale: calc(-1 * var(--dir)) 1;
+  }
+  .shelf-nix :global(.nix) {
+    transform-origin: 50% 100%;
+    transition: rotate 420ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .shelf-nix:hover :global(.nix) {
+      rotate: -6deg;
+    }
   }
 
   .coords {

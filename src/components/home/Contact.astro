@@ -5,6 +5,7 @@ import { useT } from '../../i18n/utils';
 import { person } from '../../data/profile';
 import Logo from '../ui/Logo.astro';
 import Arrow from '../ui/Arrow.astro';
+import Nix from '../art/Nix.astro';
 
 interface Props {
   lang: Lang;
@@ -16,7 +17,10 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
 
 <section class="section wrap close" id="contact" aria-labelledby="contact-title">
   <span class="shelf-rule close__shelf" aria-hidden="true"></span>
-  <h2 class="close__title" id="contact-title">{t('contact.title')}</h2>
+  <div class="close__head">
+    <h2 class="close__title" id="contact-title">{t('contact.title')}</h2>
+    <Nix size={96} class="close__nix" />
+  </div>
   <p class="close__lead">{t('contact.lead')}</p>
   <p class="close__mail">
     <a href={`mailto:${person.email}`}>{person.email}</a>
@@ -65,8 +69,17 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
   .close__shelf {
     margin-block-end: var(--space-xl);
   }
+  .close__head {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-s);
+  }
   .close__title {
     font-size: var(--step-5);
+  }
+  .close__head :global(.close__nix) {
+    width: clamp(64px, 12vw, 96px);
+    margin-block-end: 0.2em;
   }
   .close__lead {
     margin-block-start: var(--space-s);

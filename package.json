@@ -13,7 +13,8 @@
     "check": "astro check",
     "dither": "node scripts/dither.mjs",
     "og": "node scripts/og.mjs",
-    "art": "node scripts/dither.mjs && node scripts/og.mjs"
+    "art": "node scripts/dither.mjs && node scripts/og.mjs",
+    "nix": "node scripts/nix.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.1",

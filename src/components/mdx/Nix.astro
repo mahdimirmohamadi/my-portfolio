@@ -4,7 +4,7 @@ import NixArt from '../art/Nix.astro';
 ---
 
 <aside class="mdx-nix">
-  <NixArt size={72} bob={false} />
+  <NixArt size={76} />
   <div class="mdx-nix__say"><slot /></div>
 </aside>
 
@@ -19,10 +19,9 @@ import NixArt from '../art/Nix.astro';
     position: relative;
     flex: 1;
     padding: var(--space-s) var(--space-m);
-    border: var(--bw) solid var(--edge);
+    border: 1px solid var(--rule-strong);
     border-radius: var(--radius);
-    background: var(--surface);
-    box-shadow: var(--shadow);
+    background: var(--plaster-lift);
   }
   .mdx-nix__say::before {
     content: '';
@@ -31,9 +30,9 @@ import NixArt from '../art/Nix.astro';
     inset-block-start: calc(50% - 8px);
     width: 14px;
     height: 14px;
-    background: var(--surface);
-    border-inline-start: var(--bw) solid var(--edge);
-    border-block-end: var(--bw) solid var(--edge);
+    background: var(--plaster-lift);
+    border-inline-start: 1px solid var(--rule-strong);
+    border-block-end: 1px solid var(--rule-strong);
     rotate: calc(45deg * var(--dir));
   }
   :global(:root[dir='rtl']) .mdx-nix__say::before {

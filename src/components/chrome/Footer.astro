@@ -3,6 +3,7 @@
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
 import { person } from '../../data/profile';
+import Nix from '../art/Nix.astro';
 
 interface Props {
   lang: Lang;
@@ -13,7 +14,10 @@ const t = useT(lang);
 
 <footer class="foot">
   <div class="foot__inner wrap">
-    <p class="foot__made">{t('footer.made')}</p>
+    <div class="foot__who">
+      <Nix mood="sleep" size={56} />
+      <p class="foot__made">{t('footer.made')}</p>
+    </div>
     <ul class="foot__links" role="list">
       {person.links.map((l) => <li><a href={l.href} rel="me noopener" target="_blank">{l.label}</a></li>)}
       <li><a href={`mailto:${person.email}`}>Email</a></li>
@@ -42,6 +46,11 @@ const t = useT(lang);
     justify-content: space-between;
     gap: 0.5rem var(--space-m);
     padding-block: var(--space-m);
+  }
+  .foot__who {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
   }
   .foot__made {
     font-size: var(--step--1);

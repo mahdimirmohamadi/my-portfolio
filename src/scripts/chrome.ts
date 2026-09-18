@@ -1,6 +1,6 @@
 // Chrome that survives page turns: day/night switch (circle reveal), section scroll-spy,
-// Nix's eyes, idle pausing, copy-to-clipboard.
-import { prefersLessMotion, finePointer } from './util';
+// idle pausing, copy-to-clipboard.
+import { prefersLessMotion } from './util';
 
 const root = document.documentElement;
 
@@ -70,39 +70,6 @@ function initSpy() {
   sections.forEach((s) => spy!.observe(s));
 }
 
-// ── Nix's eyes follow the pointer ──
-let eyesBound = false;
-function initEyes() {
-  if (eyesBound || !finePointer() || prefersLessMotion()) return;
-  eyesBound = true;
-  let raf = 0;
-  let px = 0;
-  let py = 0;
-  window.addEventListener(
-    'pointermove',
-    (e) => {
-      px = e.clientX;
-      py = e.clientY;
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        document.querySelectorAll<SVGGElement>('[data-nix-eyes] .eyes').forEach((g) => {
-          const svg = g.ownerSVGElement;
-          if (!svg) return;
-          const r = svg.getBoundingClientRect();
-          if (r.bottom < 0 || r.top > innerHeight) return;
-          const dx = px - (r.left + r.width / 2);
-          const dy = py - (r.top + r.height / 2);
-          const d = Math.hypot(dx, dy) || 1;
-          const k = Math.min(1, d / 300) * 4;
-          g.style.translate = `${((dx / d) * k).toFixed(2)}px ${((dy / d) * k).toFixed(2)}px`;
-        });
-      });
-    },
-    { passive: true },
-  );
-}
-
 // ── idle loops pause off-screen ──
 let idle: IntersectionObserver | undefined;
 function initIdle() {
@@ -139,7 +106,6 @@ function initCopy() {
 document.addEventListener('astro:page-load', () => {
   initTheme();
   initSpy();
-  initEyes();
   initIdle();
   initCopy();
 });
