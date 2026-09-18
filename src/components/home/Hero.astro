@@ -91,7 +91,7 @@ const commits = [
       <ul class="buds" role="list">
         {
           buds.map((b, i) => (
-            <li class:list={{ above: b.above, side: b.side }} style={`--x:${(b.x / 420) * 100}%;--y:${(b.y / 560) * 100}%;--i:${i}`}>
+            <li class:list={{ above: b.above }} style={`--x:${(b.x / 420) * 100}%;--y:${(b.y / 560) * 100}%;--i:${i}`}>
               <a href={b.href}>
                 {b.label}
                 {b.meta && <span class="buds__meta">{b.meta}</span>}
@@ -274,10 +274,6 @@ const commits = [
   /* labels sit on the open side of their bud, never across the stem */
   .buds li.above {
     translate: calc(-50% * var(--dir)) calc(-100% - 14px);
-  }
-  /* beside the bud, on the side away from where its stem arrives */
-  .buds li.side {
-    translate: calc((-100% - 16px) * var(--dir)) -50%;
   }
   .buds a {
     display: inline-flex;
