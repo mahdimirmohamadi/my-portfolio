@@ -6,8 +6,7 @@
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
 import Window from '../ui/Window.astro';
-import Nix from '../art/Nix.astro';
-import { person, fetch as facts, procs, aiTools, aiBuilt } from '../../data/profile';
+import { person, fetch as facts, stack, aiTools, aiBuilt } from '../../data/profile';
 import { getProjects, getPosts, slugOf } from '../../lib/content';
 
 interface Props {
@@ -28,58 +27,55 @@ const data = {
   facts: facts.map((f) => [f.k, f.v.en]),
   projects,
   posts,
-  skills: procs.map((p) => [p.cmd, p.tools.join(', ')]),
+  skills: stack.map((g) => [g.label.en.toLowerCase(), g.items.join(', ')]),
   ai: { tools: aiTools, built: aiBuilt.map((b) => `${b.title.en} (${b.where})`) },
 };
 const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo hire-me', 'clear'];
 ---
 
-<div class="term-wrap" id="terminal">
-  <div class="term-nix" aria-hidden="true"><Nix size={78} wave /></div>
-  <Window title="mahdi@workstation: ~ — zsh" meta="80×24" shadow="lime" class="term" data-term>
-    <div class="term__screen" data-term-screen>
-      <div class="term__log" role="log" aria-live="polite" data-term-log>
-        <p><span class="ps1">$</span> neofetch --short</p>
-        <p class="t-out"><b class="t-lime">mahdi</b>@<b class="t-lime">workstation</b></p>
-        <p class="t-out">front-end engineer · linux · ai-assisted</p>
-        <p class="t-out t-dim">type <b class="t-amber">help</b> to see what I can do</p>
-      </div>
-      <form class="term__prompt" data-term-form autocomplete="off">
-        <label class="ps1" for="term-input">$</label>
-        <input id="term-input" class="term__input" data-term-input type="text" spellcheck="false" autocapitalize="off" enterkeyhint="send" aria-label={t('hero.term.label')} />
-      </form>
+<Window title="mahdi@workstation: ~ — zsh" meta="80×24" class="term" id="terminal" data-term>
+  <div class="term__screen" data-term-screen>
+    <div class="term__log" role="log" aria-live="polite" data-term-log>
+      <p><span class="ps1">$</span> neofetch --short</p>
+      <p class="t-out"><b class="t-lime">mahdi</b>@<b class="t-lime">workstation</b></p>
+      <p class="t-out">front-end engineer · linux · ai-assisted</p>
+      <p class="t-out t-dim">type <b class="t-amber">help</b> or tap a command below</p>
     </div>
-  </Window>
+    <form class="term__prompt" data-term-form autocomplete="off">
+      <label class="ps1" for="term-input">$</label>
+      <input id="term-input" class="term__input" data-term-input type="text" spellcheck="false" autocapitalize="off" enterkeyhint="send" aria-label={t('hero.term.label')} />
+    </form>
+  </div>
   <div class="term-chips">
-    <span class="term-chips__hint">{t('hero.term.hint')}</span>
+    <span class="sr-only">{t('hero.term.hint')}</span>
     {chips.map((c) => <button type="button" class="chip" data-term-run={c}>{c}</button>)}
   </div>
   <script type="application/json" data-term-data set:html={JSON.stringify(data)} />
-</div>
+</Window>
 
 <script>
   import '../../scripts/terminal';
 </script>
 
 <style>
-  .term-wrap {
-    position: relative;
+  :global(.term) {
+    display: flex;
+    flex-direction: column;
     min-width: 0;
   }
-  .term-nix {
-    position: absolute;
-    inset-block-start: -62px;
-    inset-inline-end: 96px;
-    z-index: 2;
-  }
   :global(.term .win__body) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     padding: 0;
     background: var(--bg-2);
   }
   .term__screen {
     display: flex;
     flex-direction: column;
-    height: clamp(280px, 40vh, 340px);
+    flex: 1;
+    height: 260px;
+    min-height: 260px;
     padding: var(--space-s) var(--space-m);
     font-family: var(--ff-mono);
     font-size: 0.86rem;
@@ -140,17 +136,14 @@ const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo 
   .term-chips {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    gap: 0.45rem;
-    margin-block-start: var(--space-m);
-  }
-  .term-chips__hint {
-    font-size: var(--step--1);
-    color: var(--text-faint);
-    margin-inline-end: 0.2rem;
+    gap: 0.4rem;
+    padding: 0.6rem var(--space-m) 0.75rem;
+    border-block-start: 1.5px dashed var(--edge-soft);
+    direction: ltr;
   }
   .term-chips .chip {
     min-height: 36px;
+    font-family: var(--ff-mono);
     cursor: pointer;
     transition:
       border-color var(--dur-hover) var(--ease-out),

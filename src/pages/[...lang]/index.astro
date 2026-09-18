@@ -5,8 +5,7 @@ import Whoami from '../../components/home/Whoami.astro';
 import GitLog from '../../components/home/GitLog.astro';
 import AiLoop from '../../components/home/AiLoop.astro';
 import Projects from '../../components/home/Projects.astro';
-import Htop from '../../components/home/Htop.astro';
-import Marquee from '../../components/home/Marquee.astro';
+import Skills from '../../components/home/Skills.astro';
 import BlogTeaser from '../../components/home/BlogTeaser.astro';
 import Contact from '../../components/home/Contact.astro';
 import { langPaths, langFromParam } from '../../i18n/utils';
@@ -21,8 +20,7 @@ const lang = langFromParam(Astro.params.lang);
   <GitLog lang={lang} />
   <AiLoop lang={lang} />
   <Projects lang={lang} />
-  <Htop lang={lang} />
-  <Marquee />
+  <Skills lang={lang} />
   <BlogTeaser lang={lang} />
   <Contact lang={lang} />
 </BaseLayout>

@@ -16,7 +16,7 @@ const slug = slugOf(post);
 const size = `${(Math.max(1, (post.body?.length ?? 0) / 1024)).toFixed(1)}K`;
 ---
 
-<article class="row spotlight" data-spotlight>
+<article class="row focusable">
   <p class="row__perm mono" aria-hidden="true">-rw-r--r-- mahdi {size}</p>
   <div class="row__main">
     <H class="row__title">
@@ -55,6 +55,11 @@ const size = `${(Math.max(1, (post.body?.length ?? 0) / 1024)).toFixed(1)}K`;
     border-radius: var(--radius);
     background: var(--surface);
     box-shadow: var(--shadow);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .row:is(:hover, :focus-within) {
+      border-color: var(--active-edge);
+    }
   }
   @media (min-width: 760px) {
     .row {

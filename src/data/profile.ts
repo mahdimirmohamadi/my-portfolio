@@ -23,7 +23,6 @@ export const fetch: { k: string; v: L10n }[] = [
   { k: 'Shell', v: { en: 'zsh', fa: 'zsh' } },
   { k: 'Languages', v: { en: 'TypeScript, JavaScript', fa: 'TypeScript، JavaScript' } },
   { k: 'Frameworks', v: { en: 'React 19, Next.js, Astro, Remix', fa: 'React 19، Next.js، Astro، Remix' } },
-  { k: 'AI', v: { en: 'Claude Code, Cursor, Antigravity, Hermes', fa: 'Claude Code، Cursor، Antigravity، Hermes' } },
   { k: 'Education', v: { en: 'B.Sc. Mechatronics, IUST', fa: 'کارشناسی مکاترونیک، علم و صنعت' } },
   { k: 'Focus', v: { en: 'Performance, SEO, DX', fa: 'پرفورمنس، سئو، تجربهٔ توسعه' } },
 ];
@@ -115,16 +114,13 @@ export const aiBuilt: { title: L10n; body: L10n; where: string }[] = [
 
 export const aiTools = ['Claude Code', 'Cursor', 'Antigravity', 'Hermes'];
 
-/** htop rows: skill groups as processes */
-export const procs: { pid: number; cmd: string; label: L10n; tools: string[]; load: number }[] = [
-  { pid: 1, cmd: 'typescript', label: { en: 'Languages', fa: 'زبان‌ها' }, tools: ['TypeScript', 'JavaScript (ES6+)', 'HTML5', 'CSS3'], load: 92 },
-  { pid: 42, cmd: 'react-runtime', label: { en: 'Frameworks', fa: 'فریم‌ورک‌ها' }, tools: ['React 18/19', 'Next.js (App Router)', 'Astro', 'Remix', 'Refine', 'TanStack Start'], load: 88 },
-  { pid: 128, cmd: 'ai-copilots', label: { en: 'AI-assisted dev', fa: 'توسعه با AI' }, tools: ['Claude Code', 'Cursor', 'Antigravity', 'Hermes'], load: 81 },
-  { pid: 256, cmd: 'stylesd', label: { en: 'Styling & UI', fa: 'استایل و UI' }, tools: ['Tailwind CSS', 'Shadcn UI', 'Chakra UI', 'Material UI', 'PandaCSS'], load: 74 },
-  { pid: 512, cmd: 'state-sync', label: { en: 'State & data', fa: 'State و داده' }, tools: ['Zustand', 'Jotai', 'Redux', 'TanStack Query', 'SWR'], load: 69 },
-  { pid: 1024, cmd: 'build-farm', label: { en: 'Tools & DevOps', fa: 'ابزار و DevOps' }, tools: ['Git', 'GitHub', 'GitLab', 'Turborepo', 'pnpm', 'Docker', 'CI/CD'], load: 63 },
-  { pid: 2048, cmd: 'vitals-watch', label: { en: 'Performance & SEO', fa: 'پرفورمنس و سئو' }, tools: ['Core Web Vitals', 'Technical SEO', 'Performance'], load: 57 },
+/** skill groups, shown as logo lists (names map to icons in data/logos.ts) */
+export const stack: { id: string; label: L10n; items: string[] }[] = [
+  { id: 'lang', label: { en: 'Languages', fa: 'زبان‌ها' }, items: ['TypeScript', 'JavaScript', 'HTML', 'CSS'] },
+  { id: 'fw', label: { en: 'Frameworks', fa: 'فریم‌ورک‌ها' }, items: ['React', 'Next.js', 'Astro', 'Remix', 'Refine', 'TanStack Start'] },
+  { id: 'ui', label: { en: 'Styling', fa: 'استایل' }, items: ['Tailwind CSS', 'shadcn/ui', 'Chakra UI', 'MUI', 'Panda CSS'] },
+  { id: 'state', label: { en: 'State & data', fa: 'State و داده' }, items: ['Zustand', 'Jotai', 'Redux', 'TanStack Query', 'SWR'] },
+  { id: 'ops', label: { en: 'Tooling', fa: 'ابزارها' }, items: ['Linux', 'Git', 'GitHub', 'GitLab', 'Turborepo', 'pnpm', 'Docker', 'CI/CD'] },
+  { id: 'ai', label: { en: 'AI', fa: 'هوش مصنوعی' }, items: aiTools },
+  { id: 'web', label: { en: 'Web quality', fa: 'کیفیت وب' }, items: ['Core Web Vitals', 'Technical SEO'] },
 ];
-
-/** marquee: tech names */
-export const tech = ['Linux', 'zsh', 'TypeScript', 'React', 'Next.js', 'Astro', 'Remix', 'Node.js', 'Tailwind', 'Zustand', 'TanStack', 'Turborepo', 'pnpm', 'Docker', 'Git', 'Claude Code', 'Cursor', 'Core Web Vitals'];

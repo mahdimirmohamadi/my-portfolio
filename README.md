@@ -46,17 +46,17 @@ src/
   scripts/
     terminal.ts            the shell: commands, history, tab completion
     chrome.ts              theme circle-reveal, clock, scroll-spy, Nix's eyes, idle pausing, copy
-    fx/                    decrypt text, dot grid, spotlight + magnet, count-up, click sparks
+    fx/                    click sparks
     portrait.ts session.ts portrait wipe, streaming AI session
 scripts/                   build-time: dither.mjs, og.mjs
 ```
 
 ## Design rules
 
-- **Palette:** warm black, phosphor lime `#C6F432`, amber and coral, plus a daylight theme. No blue or purple. Gradients appear only as the dot texture and the hover spotlight.
+- **Palette:** warm black, phosphor lime `#C6F432`, amber and coral, plus a daylight theme. No blue or purple. No gradients: the background is film grain plus faint CRT scanlines. Tool logos come from simple-icons, inlined at build time in currentColor.
 - **The cartoon edge:** 2px outlines, hard offset shadows (never blurred), tilted stickers, and Nix.
 - **Motion:** `transform`/`opacity` only. Frequent interactions stay under 250ms. `prefers-reduced-motion` and `html[data-lite]` (low-end or save-data devices) turn the effects off, and nothing ever stays hidden.
-- **Performance:** static HTML, about 12KB gzipped of JS on the home page, and no framework runtime. The decrypt effect draws in an overlay, so it causes zero layout shift.
+- **Performance:** static HTML, about 12KB gzipped of JS on the home page, and no framework runtime. Hover states are border/colour changes (focus follows the mouse, like a tiling WM), not glows.
 - **RTL:** logical properties everywhere, and `--dir` mirrors shadows and transforms. Terminal and code blocks stay LTR.
 
 ## Reserved: ~/lab (lofi radio + pomodoro)

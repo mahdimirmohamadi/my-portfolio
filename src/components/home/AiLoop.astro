@@ -4,6 +4,7 @@ import { useT } from '../../i18n/utils';
 import { aiBuilt, aiTools } from '../../data/profile';
 import SectionHead from '../ui/SectionHead.astro';
 import Window from '../ui/Window.astro';
+import Logo from '../ui/Logo.astro';
 
 interface Props {
   lang: Lang;
@@ -32,7 +33,7 @@ const session: L[] = [
 <section class="section wrap" id="ai" aria-labelledby="ai-title">
   <SectionHead cmd="cat ~/ai/README.md" path="~/ai" title={t('ai.title')} lead={t('ai.lead')} id="ai-title" />
   <div class="ai">
-    <Window title="agent session — ~/shop" meta="illustrative" shadow="lime" class="session rise" data-session>
+    <Window title="agent session — ~/shop" meta="illustrative" class="session rise" data-session>
       <ol class="session__log mono" role="list" aria-label="Illustrative AI pair-programming session">
         {
           session.map((l) => (
@@ -69,9 +70,10 @@ const session: L[] = [
         <h3 class="panel-card__title">{t('ai.tools')}</h3>
         <ul class="tools" role="list">
           {
-            aiTools.map((tool, i) => (
-              <li class="sticker" style={`--tilt:${[-2, 1.5, -1, 2.5][i]}deg`}>
-                {tool}
+            aiTools.map((tool) => (
+              <li class="tool">
+                <Logo name={tool} size={26} />
+                <span>{tool}</span>
               </li>
             ))
           }
@@ -108,7 +110,7 @@ const session: L[] = [
     line-height: 1.6;
     direction: ltr;
     text-align: left;
-    min-height: 23rem;
+    min-height: 21rem;
   }
   .sl {
     display: flex;
@@ -213,8 +215,23 @@ const session: L[] = [
     text-align: start;
   }
   .tools {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .tool {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.7rem;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.7rem;
+    border: 1.5px solid var(--edge-soft);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    font-size: 0.92rem;
+    font-weight: 600;
+    direction: ltr;
+  }
+  .tool :global(.logo) {
+    color: var(--text);
   }
 </style>

@@ -15,7 +15,7 @@ const href = lp(lang, `/projects/${slug}`);
 const host = item.data.url ? new URL(item.data.url).host : null;
 ---
 
-<article class:list={['proj', 'spotlight', 'rise', { 'proj--feature': feature }]} data-spotlight>
+<article class:list={['proj', 'focusable', 'rise', { 'proj--feature': feature }]}>
   <div class="proj__top">
     <span class="proj__glyph mono" aria-hidden="true">{item.data.glyph}</span>
     <span class="proj__kind">{item.data.kind}</span>
@@ -44,20 +44,24 @@ const host = item.data.url ? new URL(item.data.url).host : null;
     border-radius: var(--radius);
     background: var(--surface);
     box-shadow: var(--shadow);
-    transition:
-      translate var(--dur-hover) var(--ease-out),
-      box-shadow var(--dur-hover) var(--ease-out);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .proj:hover {
-      translate: calc(-3px * var(--dir)) -3px;
-      box-shadow: var(--shadow-lime);
-    }
   }
   .proj:active {
     translate: calc(2px * var(--dir)) 2px;
     box-shadow: 0 0 0 var(--shadow-color);
-    transition-duration: var(--dur-press);
+    transition: translate var(--dur-press) var(--ease-out), box-shadow var(--dur-press) var(--ease-out);
+  }
+  /* hover: the card takes focus (border, see ui.css) and its icon inverts like a selected file */
+  @media (hover: hover) and (pointer: fine) {
+    .proj:is(:hover, :focus-within) {
+      border-color: var(--active-edge);
+    }
+    .proj:hover .proj__glyph {
+      background: var(--edge);
+      color: var(--bg);
+    }
+    .proj:hover .proj__readme {
+      translate: calc(4px * var(--dir)) 0;
+    }
   }
   .proj__top {
     display: flex;
@@ -68,16 +72,19 @@ const host = item.data.url ? new URL(item.data.url).host : null;
   .proj__glyph {
     display: grid;
     place-items: center;
-    min-width: 56px;
-    height: 56px;
+    min-width: 48px;
+    height: 48px;
     padding-inline: 0.5rem;
     border: var(--bw) solid var(--edge);
     border-radius: 12px;
     background: var(--lime);
     color: #0b0c09;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
     direction: ltr;
+    transition:
+      background-color var(--dur-hover) var(--ease-out),
+      color var(--dur-hover) var(--ease-out);
   }
   .proj__kind {
     font-family: var(--ff-mono);
@@ -123,6 +130,7 @@ const host = item.data.url ? new URL(item.data.url).host : null;
   }
   .proj__readme {
     color: var(--lime-ink);
+    transition: translate var(--dur-hover) var(--ease-out);
   }
   .proj__ext {
     position: relative;
@@ -144,9 +152,7 @@ const host = item.data.url ? new URL(item.data.url).host : null;
     .proj--feature {
       background: var(--surface-2);
     }
-    .proj--feature .proj__title {
-      font-size: var(--step-3);
-    }
+
     .proj--feature .proj__glyph {
       background: var(--amber);
     }

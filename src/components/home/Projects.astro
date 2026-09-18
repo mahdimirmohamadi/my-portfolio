@@ -15,7 +15,7 @@ const items = await getProjects(lang);
 ---
 
 <section class="section wrap" id="projects" aria-labelledby="projects-title">
-  <SectionHead cmd="ls -la ~/projects" path="~" title={t('projects.title')} lead={t('projects.lead')} id="projects-title" />
+  <SectionHead cmd="ls -la ~/projects" path="~" title={t('projects.title')} id="projects-title" />
   <div class="bento">
     {items.map((item, i) => <ProjectCard lang={lang} item={item} feature={i === 0 || i === 1} />)}
   </div>

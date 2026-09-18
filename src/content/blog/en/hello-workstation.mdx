@@ -19,14 +19,15 @@ Most developer portfolios are the same landing page: gradient hero, three cards,
 ## What's on the desktop
 
 - **A live terminal.** It's a real little shell: type `help` and it answers. It's about 4KB of TypeScript, not a framework.
-- **A 1-bit portrait.** My photo is dithered at build time with an 8×8 Bayer matrix and used as a CSS mask, so it recolours with the theme and costs about 9KB.
-- **`git log` for my career**, `htop` for my skills, and `ssh` to get in touch.
+- **A tiled desktop.** The intro is a Markdown buffer in an editor tile, next to the terminal. Hover a window and it takes focus, like in a tiling window manager.
+- **A 1-bit mode for my photo.** Press the button on the portrait and a dithered version wipes over it. It's made at build time with an 8×8 Bayer matrix and used as a CSS mask, so it recolours with the theme.
+- **`git log` for my career** and `ssh` to get in touch.
 
 <Nix>Hi, I'm Nix, a tiny CRT daemon. I live in the corners of this site and I watch your cursor.</Nix>
 
 ## Why it's fast
 
-Every page is static HTML from Astro. The effects (decrypted text, the dot grid, spotlights) are small scripts that load only where they're used, pause when they're off-screen, and switch off for people who prefer reduced motion.
+Every page is static HTML from Astro. The few scripts (the terminal, the AI session replay, the portrait toggle) load only where they're used, pause when they're off-screen, and switch off for people who prefer reduced motion.
 
 <Callout title="Tip">The site has a daylight theme too. Press the sun/moon button in the top bar and watch the new theme spread out from it.</Callout>
 

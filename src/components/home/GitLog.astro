@@ -20,34 +20,33 @@ const typeOf = (msg: string) => msg.match(/^(\w+)(\([^)]*\))?:/);
 ---
 
 <section class="section wrap" id="work" aria-labelledby="work-title">
-  <SectionHead cmd="git log --graph --oneline" title={t('work.title')} lead={t('work.lead')} id="work-title" />
-  <Window title="git log — ~/career" meta="HEAD → main" class="gitlog rise">
+  <SectionHead cmd="git log --graph --oneline" title={t('work.title')} id="work-title" />
+  <Window title="git log — ~/career" meta="--graph --oneline" class="gitlog rise">
     <ol class="log" role="list">
       {
         jobs.map((j, ji) => (
           <li class:list={['job', `job--${ji}`]}>
             <div class="job__head">
-              <span class="lane" aria-hidden="true"><span class="node node--big" /></span>
-              <div class="job__meta">
-                <p class="job__refs mono">
-                  <span class="ref ref--head">HEAD</span>
-                  <span class="ref">{j.branch}</span>
-                </p>
-                <h3 class="job__company">
-                  {j.url ? <a href={j.url} target="_blank" rel="noopener">{j.company}</a> : j.company}
-                </h3>
-                <p class="job__where">
-                  {j.place[lang]} · {j.mode[lang]} · <span class="tabular">{j.since[lang]} – {t('work.now')}</span>
-                </p>
-                {j.lead && <p class="job__lead">{j.lead[lang]}</p>}
-              </div>
+              <p class="job__refs mono">
+                <span class="ref ref--head">HEAD</span>
+                <span class="ref">{j.branch}</span>
+              </p>
+              <h3 class="job__company">
+                {j.url ? <a href={j.url} target="_blank" rel="noopener">{j.company}</a> : j.company}
+              </h3>
+              <p class="job__where">
+                {j.place[lang]} · {j.mode[lang]}
+                <br />
+                <span class="tabular">{j.since[lang]} – {t('work.now')}</span>
+              </p>
+              {j.lead && <p class="job__lead">{j.lead[lang]}</p>}
             </div>
             <ul class="commits" role="list">
-              {j.commits[lang].map((msg) => {
+              {j.commits[lang].map((msg, ci) => {
                 const m = typeOf(msg);
                 return (
                   <li class="commit">
-                    <span class="lane" aria-hidden="true"><span class="node" /></span>
+                    <span class="lane" aria-hidden="true"><span class:list={['node', { 'node--big': ci === 0 }]} /></span>
                     <span class="commit__hash mono" aria-hidden="true">{hash(msg)}</span>
                     <span class="commit__msg">
                       {m ? (
@@ -66,17 +65,25 @@ const typeOf = (msg: string) => msg.match(/^(\w+)(\([^)]*\))?:/);
           </li>
         ))
       }
-      {
-        education.map((e, i) => (
-          <li class="commit commit--tag">
-            <span class="lane" aria-hidden="true"><span class="node node--tag" /></span>
-            <span class="commit__hash mono" aria-hidden="true">{hash(e.title.en)}</span>
-            <span class="commit__msg">
-              <span class="ref ref--tag mono">tag: v0.{education.length - 1 - i}</span> <b>{e.title[lang]}</b> — {e.place[lang]} <span class="tabular">({e.years[lang]})</span>
-            </span>
-          </li>
-        ))
-      }
+      <li class="job job--edu">
+        <div class="job__head">
+          <p class="job__refs mono"><span class="ref ref--tag">tags</span></p>
+          <h3 class="job__company">{t('work.edu')}</h3>
+        </div>
+        <ul class="commits" role="list">
+          {
+            education.map((e, i) => (
+              <li class="commit commit--tag">
+                <span class="lane" aria-hidden="true"><span class="node node--tag" /></span>
+                <span class="commit__hash mono" aria-hidden="true">v0.{education.length - 1 - i}</span>
+                <span class="commit__msg">
+                  <b>{e.title[lang]}</b> — {e.place[lang]} <span class="tabular">({e.years[lang]})</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </li>
     </ol>
   </Window>
 </section>
@@ -87,18 +94,37 @@ const typeOf = (msg: string) => msg.match(/^(\w+)(\([^)]*\))?:/);
   }
   .log {
     display: grid;
-    gap: var(--space-m);
   }
   .job {
     --lane-c: var(--lime);
+    display: grid;
+    gap: var(--space-s) var(--space-l);
+    padding-block: var(--space-m);
+  }
+  .job + .job {
+    border-block-start: 1.5px dashed var(--edge-soft);
+  }
+  .job:first-child {
+    padding-block-start: 0;
+  }
+  .job:last-child {
+    padding-block-end: 0;
   }
   .job--0 {
     --lane-c: var(--amber);
   }
+  .job--edu {
+    --lane-c: var(--edge-soft);
+  }
+  @media (min-width: 900px) {
+    .job {
+      grid-template-columns: minmax(0, 17rem) minmax(0, 1fr);
+    }
+  }
   .lane {
     position: relative;
     flex: none;
-    width: 22px;
+    width: 18px;
     align-self: stretch;
     display: grid;
     justify-items: center;
@@ -106,27 +132,33 @@ const typeOf = (msg: string) => msg.match(/^(\w+)(\([^)]*\))?:/);
   .lane::before {
     content: '';
     position: absolute;
-    inset-block: -0.9rem;
+    inset-block: 0;
     width: 3px;
-    background: var(--lane-c, var(--edge-soft));
-    border-radius: 3px;
+    background: var(--lane-c);
     transform-origin: top;
+  }
+  .commit:first-child .lane::before {
+    inset-block-start: 0.6em;
+  }
+  .commit:last-child .lane::before {
+    inset-block-end: auto;
+    height: 0.8em;
   }
   .node {
     position: relative;
-    margin-block-start: 0.45em;
+    margin-block-start: 0.4em;
     width: 12px;
     height: 12px;
     border-radius: 50%;
     background: var(--bg-2);
-    border: 3px solid var(--lane-c, var(--edge-soft));
+    border: 3px solid var(--lane-c);
   }
   .node--big {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
+    margin-block-start: 0.3em;
     background: var(--lane-c);
-    border-color: var(--edge);
-    border-width: 2px;
+    border: 2px solid var(--edge);
   }
   .node--tag {
     border-radius: 3px;
@@ -134,10 +166,6 @@ const typeOf = (msg: string) => msg.match(/^(\w+)(\([^)]*\))?:/);
     background: var(--cream);
     border-color: var(--edge);
     border-width: 2px;
-  }
-  .job__head {
-    display: flex;
-    gap: var(--space-s);
   }
   .job__refs {
     display: flex;
@@ -165,8 +193,8 @@ const typeOf = (msg: string) => msg.match(/^(\w+)(\([^)]*\))?:/);
     color: var(--text-soft);
   }
   .job__company {
-    font-size: var(--step-3);
-    margin-block: 0.25rem 0.2rem;
+    font-size: var(--step-2);
+    margin-block: 0.4rem 0.2rem;
   }
   .job__company a {
     color: var(--text);
@@ -178,17 +206,17 @@ const typeOf = (msg: string) => msg.match(/^(\w+)(\([^)]*\))?:/);
   }
   .job__lead {
     margin-block-start: var(--space-2xs);
-    max-width: 60ch;
+    font-size: 0.95rem;
   }
   .commits {
     display: grid;
-    gap: 0.2rem;
-    margin-block-start: var(--space-s);
+    align-content: start;
   }
   .commit {
     display: flex;
     gap: var(--space-s);
     align-items: flex-start;
+    padding-block: 0.2rem;
     font-size: 0.95rem;
   }
   .commit__hash {

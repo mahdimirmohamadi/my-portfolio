@@ -21,11 +21,11 @@ const rows = [
 <section class="section wrap" id="contact" aria-labelledby="contact-title">
   <SectionHead cmd="ssh mahdi@mahdimirmo.ir" title={t('contact.title')} lead={t('contact.lead')} id="contact-title" />
   <div class="contact">
-    <Window title="ssh — mahdi@mahdimirmo.ir" meta="connected" shadow="lime" class="ssh rise">
+    <Window title="ssh — mahdi@mahdimirmo.ir" meta="connected" class="ssh rise">
       <div class="ssh__mail">
         <p class="mono ssh__line"><span class="ps1">$</span> mail <a href={`mailto:${person.email}`}>{person.email}</a></p>
         <div class="ssh__actions">
-          <a class="btn" href={`mailto:${person.email}`} data-magnet>✉ Email</a>
+          <a class="btn" href={`mailto:${person.email}`}>✉ Email</a>
           <button type="button" class="btn btn--ghost" data-copy={person.email} data-copied={t('contact.copied')}>
             <span data-copy-label>{t('contact.copy')}</span>
           </button>

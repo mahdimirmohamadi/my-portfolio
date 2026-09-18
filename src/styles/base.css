@@ -63,9 +63,8 @@
     min-height: 100dvh;
     font-size: var(--step-0);
     background-color: var(--bg);
-    /* static dot grid: texture, not a colour gradient */
-    background-image: radial-gradient(var(--grid-dot) 1px, transparent 1.4px);
-    background-size: 24px 24px;
+    background-image: var(--grain), repeating-linear-gradient(to bottom, var(--scanline) 0 1px, transparent 1px 4px);
+    background-size: 160px 160px, auto;
     -webkit-font-smoothing: antialiased;
     overflow-x: clip;
   }

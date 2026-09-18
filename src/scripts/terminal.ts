@@ -25,7 +25,7 @@ function init(root: HTMLElement) {
   const form = root.querySelector<HTMLFormElement>('[data-term-form]')!;
   const input = root.querySelector<HTMLInputElement>('[data-term-input]')!;
   const screen = root.querySelector<HTMLElement>('[data-term-screen]')!;
-  const data: Data = JSON.parse(root.closest('.term-wrap')!.querySelector('[data-term-data]')!.textContent!);
+  const data: Data = JSON.parse(root.querySelector('[data-term-data]')!.textContent!);
   const history: string[] = [];
   let hIndex = 0;
   let busy = false;
@@ -205,11 +205,8 @@ function init(root: HTMLElement) {
     if ((e.target as HTMLElement).closest('a') || getSelection()?.toString()) return;
     input.focus({ preventScroll: true });
   });
-  root.closest('.term-wrap')!.querySelectorAll<HTMLButtonElement>('[data-term-run]').forEach((btn) =>
+  root.querySelectorAll<HTMLButtonElement>('[data-term-run]').forEach((btn) =>
     btn.addEventListener('click', () => typeAndRun(btn.dataset.termRun!)),
-  );
-  document.querySelectorAll('[data-focus-term]').forEach((el) =>
-    el.addEventListener('click', () => setTimeout(() => input.focus({ preventScroll: true }), 350)),
   );
 }
 

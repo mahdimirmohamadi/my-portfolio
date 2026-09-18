@@ -17,7 +17,9 @@
     --text-faint: #8a927c;
     --edge: #e9eedf; /* cartoon outline */
     --edge-soft: #2d3325;
-    --grid-dot: #2a3021;
+    /* background texture: film grain + faint CRT scanlines (textures, not colour gradients) */
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .16 0 0 0 -.05'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    --scanline: rgb(255 255 255 / 0.018);
 
     /* signal colours */
     --lime: #c6f432;
@@ -32,6 +34,7 @@
     --link: var(--lime-ink);
     --shadow-color: #000;
     --focus: var(--lime);
+    --active-edge: var(--lime);
 
     /* reading direction as a number, for transforms that mirror in RTL */
     --dir: 1;
@@ -55,10 +58,9 @@
     --step--1: clamp(0.84rem, 0.82rem + 0.1vw, 0.9rem);
     --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
     --step-1: clamp(1.18rem, 1.1rem + 0.35vw, 1.38rem);
-    --step-2: clamp(1.42rem, 1.28rem + 0.7vw, 1.9rem);
-    --step-3: clamp(1.8rem, 1.5rem + 1.4vw, 2.75rem);
-    --step-4: clamp(2.3rem, 1.75rem + 2.8vw, 4.1rem);
-    --step-5: clamp(2.7rem, 1.8rem + 4.4vw, 5.6rem);
+    --step-2: clamp(1.3rem, 1.22rem + 0.4vw, 1.55rem);
+    --step-3: clamp(1.6rem, 1.42rem + 0.8vw, 2.1rem);
+    --step-4: clamp(1.95rem, 1.65rem + 1.3vw, 2.6rem);
 
     /* space */
     --space-3xs: 0.25rem;
@@ -68,7 +70,7 @@
     --space-m: 1.5rem;
     --space-l: 2.25rem;
     --space-xl: 3.5rem;
-    --space-2xl: 6rem;
+    --space-2xl: 4.5rem;
     --page-gutter: 16px;
     --measure: 68ch;
     --page-max: 1200px;
@@ -100,12 +102,14 @@
     --text-faint: #676c5b;
     --edge: #121410;
     --edge-soft: #d8d4c8;
-    --grid-dot: #d3cfc2;
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .1 0 0 0 -.03'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    --scanline: rgb(18 20 16 / 0.025);
     --lime-ink: #4a6500;
     --amber: #f0a010;
     --coral: #e2472b;
     --shadow-color: #121410;
     --focus: #121410;
+    --active-edge: #6f9400;
   }
 
   :root[dir='rtl'] {

@@ -10,6 +10,32 @@
     box-shadow: var(--shadow);
     overflow: clip;
   }
+  /* Focus follows the mouse, like a tiling WM: the window under the pointer gets the
+     active border, and unfocused windows grey out their traffic lights. */
+  .win,
+  .focusable {
+    transition:
+      border-color var(--dur-hover) var(--ease-out),
+      box-shadow var(--dur-hover) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    :is(.win, .focusable):is(:hover, :focus-within) {
+      border-color: var(--active-edge);
+    }
+    .win:not(:hover, :focus-within, .is-focused) .win__dots span {
+      background: var(--surface-3);
+    }
+    .win.is-focused {
+      border-color: var(--active-edge);
+    }
+    /* hovering a sibling window takes focus away from the default one */
+    [data-tiling]:has(.win:hover) .win.is-focused:not(:hover, :focus-within) {
+      border-color: var(--edge);
+    }
+    [data-tiling]:has(.win:hover) .win.is-focused:not(:hover, :focus-within) .win__dots span {
+      background: var(--surface-3);
+    }
+  }
   .win--lime {
     box-shadow: var(--shadow-lime);
   }
@@ -43,6 +69,9 @@
     border-radius: 50%;
     border: 1.5px solid var(--edge);
   }
+  .win__dots span {
+    transition: background-color var(--dur-hover) var(--ease-out);
+  }
   .win__dots span:nth-child(1) {
     background: var(--coral);
   }
@@ -68,33 +97,30 @@
     padding: var(--space-m);
   }
 
-  /* ── Section heading: a shell prompt + a big title ── */
+  /* ── Section heading: a shell prompt + a title ── */
   .sec-head {
     display: grid;
-    gap: var(--space-2xs);
-    margin-block-end: var(--space-l);
+    gap: 0.3rem;
+    margin-block-end: var(--space-m);
   }
   .sec-head__prompt {
     font-family: var(--ff-mono);
-    font-size: var(--step--1);
-    color: var(--text-soft);
+    font-size: 0.8rem;
+    color: var(--text-faint);
     direction: ltr;
+    unicode-bidi: isolate;
     justify-self: start;
-  }
-  :root[dir='rtl'] .sec-head__prompt {
-    justify-self: end;
   }
   .sec-head__prompt b {
     color: var(--lime-ink);
     font-weight: 600;
   }
   .sec-head__title {
-    font-size: var(--step-4);
+    font-size: var(--step-3);
   }
   .sec-head__lead {
-    max-width: 60ch;
     color: var(--text-soft);
-    font-size: var(--step-1);
+    font-size: var(--step-0);
   }
 
   /* ── Sticker: a chunky, slightly tilted label (the cartoon bit) ── */
@@ -215,28 +241,6 @@
   a.chip:hover {
     border-color: var(--lime-ink);
     color: var(--lime-ink);
-  }
-
-  /* ── Spotlight (pointer-follow light on cards) ── */
-  .spotlight {
-    --mx: 50%;
-    --my: 50%;
-    --spot: 0;
-  }
-  .spotlight::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background: radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, var(--lime) 13%, transparent), transparent 60%);
-    opacity: var(--spot);
-    transition: opacity 250ms var(--ease-out);
-    z-index: 0;
-  }
-  .spotlight > * {
-    position: relative;
-    z-index: 1;
   }
 
   /* ── Prompt glyph used inline ── */

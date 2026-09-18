@@ -1,144 +1,330 @@
 ---
+/**
+ * The hero is a tiled desktop (think i3 / Hyprland): an editor buffer holding the intro,
+ * the live terminal, and a small status widget. Focus follows the mouse between tiles.
+ */
 import type { Lang } from '../../i18n/ui';
-import { useT, lp, formatNum } from '../../i18n/utils';
+import { useT, lp } from '../../i18n/utils';
+import { person } from '../../data/profile';
 import Terminal from './Terminal.astro';
-import { getProjects } from '../../lib/content';
 
 interface Props {
   lang: Lang;
 }
 const { lang } = Astro.props;
 const t = useT(lang);
-const projectCount = (await getProjects(lang)).length;
-const stats = [
-  { n: 4, suffix: '', label: t('stat.years') },
-  { n: 30, suffix: lang === 'fa' ? '٪' : '%', label: t('stat.faster') },
-  { n: projectCount, suffix: '', label: t('stat.projects') },
+const file = lang === 'fa' ? 'about.fa.md' : 'about.md';
+const bullets = [
+  { k: t('hero.k.work'), v: t('hero.v.work') },
+  { k: t('hero.k.stack'), v: 'React, Next.js, TypeScript, Astro' },
+  { k: t('hero.k.daily'), v: 'Linux, zsh, Claude Code, Cursor' },
+];
+const sys = [
+  { k: 'uptime', v: t('hero.sys.uptime') },
+  { k: 'perf', v: t('hero.sys.perf') },
+  { k: 'teams', v: t('hero.sys.teams') },
+  { k: 'tz', v: t('hero.sys.tz') },
+];
+const links = [
+  { label: t('hero.link.projects'), href: '#projects' },
+  { label: t('hero.link.blog'), href: lp(lang, '/blog') },
+  { label: t('hero.link.resume'), href: person.resume[lang], download: true },
 ];
 ---
 
-<section class="hero" id="top" aria-labelledby="hero-title">
-  <canvas class="hero__grid" data-dotgrid aria-hidden="true"></canvas>
-  <div class="hero__inner wrap">
-    <div class="hero__copy">
-      <ul class="hero__stickers" role="list">
-        <li class="sticker sticker--lime"><span class="sticker__dot"></span>{t('hero.kicker')}</li>
-        <li class="sticker" style="--tilt:-3deg">λ Linux</li>
-        <li class="sticker sticker--amber" style="--tilt:2.5deg">✦ AI-native</li>
-      </ul>
-      <h1 class="hero__title" id="hero-title">
-        <span class="hero__line" data-decrypt>{t('hero.title.1')}</span>
-        <span class="hero__line hero__line--accent" data-decrypt>{t('hero.title.2')}</span>
-      </h1>
-      <p class="hero__lead">{t('hero.lead')}</p>
-      <div class="hero__ctas">
-        <a class="btn" href="#terminal" data-magnet data-focus-term>
-          <span aria-hidden="true">&gt;_</span>
-          {t('hero.cta.terminal')}
-        </a>
-        <a class="btn btn--ghost" href={lp(lang, '/blog')} data-magnet>{t('hero.cta.blog')}</a>
+<section class="hero wrap" id="top" aria-labelledby="hero-title">
+  <div class="tiles" data-tiling>
+    <div class="win is-focused tile--editor">
+      <div class="win__bar">
+        <span class="win__dots" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="win__title">{file} — nvim</span>
       </div>
-      <dl class="hero__stats">
+      <div class="editor">
+        <div class="buf">
+          <h1 class="ln" id="hero-title"><span class="md" aria-hidden="true"># </span>{t('site.name')}</h1>
+          <p class="ln ln--role"><span class="md" aria-hidden="true">## </span>{t('hero.role')}</p>
+          <p class="ln ln--lead">{t('hero.lead')}</p>
+          <ul class="ln-list" role="list">
+            {
+              bullets.map((b) => (
+                <li class="ln">
+                  <span class="md" aria-hidden="true">- </span>
+                  <b>{b.k}:</b> {b.v}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="ln ln--links">
+            {
+              links.map((l) => (
+                <a href={l.href} class="mdlink" {...(l.download ? { download: '' } : {})}>
+                  <span class="md" aria-hidden="true">[</span>
+                  {l.label}
+                  <span class="md" aria-hidden="true">]</span>
+                </a>
+              ))
+            }
+            <span class="caret" aria-hidden="true"></span>
+          </p>
+          <p class="tilde" aria-hidden="true">~<br />~</p>
+        </div>
+        <p class="statusline" aria-hidden="true">
+          <span class="statusline__mode">NORMAL</span>
+          <span class="statusline__file">{file}</span>
+          <span class="statusline__fill"></span>
+          <span>markdown</span>
+          <span>utf-8</span>
+          <span class="statusline__pos">8:1</span>
+        </p>
+      </div>
+    </div>
+
+    <Terminal lang={lang} />
+
+    <div class="win tile--sys">
+      <div class="win__bar">
+        <span class="win__dots" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="win__title">status</span>
+        <span class="win__meta"><span class="live" aria-hidden="true"></span>online</span>
+      </div>
+      <dl class="sys">
         {
-          stats.map((s) => (
-            <div class="stat">
-              <dt class="sr-only">{s.label}</dt>
-              <dd>
-                <span class="stat__n tabular">
-                  <span data-count={s.n}>{formatNum(lang, s.n)}</span>
-                  {s.suffix}
-                </span>
-                <span class="stat__label" aria-hidden="true">{s.label}</span>
-              </dd>
+          sys.map((r) => (
+            <div>
+              <dt>{r.k}</dt>
+              <dd>{r.v}</dd>
             </div>
           ))
         }
       </dl>
     </div>
-    <Terminal lang={lang} />
   </div>
 </section>
 
-<script>
-  import '../../scripts/fx/dotgrid';
-</script>
-
 <style>
   .hero {
-    position: relative;
-    padding-block: var(--space-xl) var(--space-2xl);
-    overflow: clip;
+    padding-block-start: var(--space-m);
   }
-  .hero__grid {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-  .hero__inner {
-    position: relative;
+  .tiles {
     display: grid;
-    gap: calc(var(--space-xl) + 20px);
-    align-items: center;
+    gap: 14px;
   }
-  @media (min-width: 1040px) {
+  @media (min-width: 1000px) {
     .hero {
-      padding-block-start: var(--space-2xl);
+      padding-block-start: var(--space-l);
     }
-    .hero__inner {
-      grid-template-columns: 1.05fr 1fr;
-      gap: var(--space-xl);
+    .tiles {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+    }
+    .tile--editor {
+      grid-row: span 2;
     }
   }
-  .hero__stickers {
+
+  /* ── editor tile ── */
+  .tile--editor {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-block-end: var(--space-m);
+    flex-direction: column;
   }
-  .hero__title {
+  .editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-2);
+  }
+  .buf {
+    --gutter: 3.4rem;
+    flex: 1;
+    counter-reset: ln;
+    padding-block: var(--space-m) var(--space-s);
+    padding-inline: var(--gutter) var(--space-m);
     display: grid;
-    font-size: clamp(2.5rem, 1.7rem + 3.1vw, 4.5rem);
-    margin-block-end: var(--space-m);
+    align-content: start;
+    gap: 0.9rem;
   }
-  :global(:root[dir='rtl']) .hero__title {
-    font-size: clamp(2.2rem, 1.5rem + 2.6vw, 3.8rem);
+  .ln {
+    position: relative;
+    counter-increment: ln;
   }
-  .hero__line--accent {
-    color: var(--lime-ink);
-  }
-  .hero__lead {
-    max-width: 56ch;
-    font-size: var(--step-1);
-    color: var(--text-soft);
-  }
-  .hero__ctas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-s);
-    margin-block: var(--space-l);
-  }
-  .hero__stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-m) var(--space-l);
-  }
-  .stat dd {
-    display: grid;
-  }
-  .stat__n {
-    font-family: var(--ff-display);
-    font-size: var(--step-3);
-    line-height: 1;
-  }
-  .stat__label {
-    font-family: var(--ff-mono);
-    font-size: 0.78rem;
+  /* vim numbers only the first screen row of a wrapped line */
+  .ln::before {
+    content: counter(ln);
+    position: absolute;
+    inset-inline-start: calc(-1 * var(--gutter));
+    inset-block-start: 0.45em;
+    width: 2.4rem;
+    text-align: end;
+    font: 400 0.8rem/1 var(--ff-mono);
     color: var(--text-faint);
   }
-  :global(:root[dir='rtl']) .stat__label {
+  .md {
+    font-family: var(--ff-mono);
+    font-weight: 400;
+    color: var(--text-faint);
+  }
+  h1.ln {
+    font-size: clamp(1.9rem, 1.45rem + 1.9vw, 2.7rem);
+    line-height: 1.1;
+  }
+  h1.ln::before {
+    inset-block-start: 0.55em;
+    font-size: 0.8rem;
+  }
+  h1 .md {
+    font-size: 0.6em;
+    vertical-align: 0.2em;
+  }
+  .ln--role {
+    font-family: var(--ff-display);
+    font-weight: 700;
+    font-size: var(--step-1);
+    color: var(--lime-ink);
+    margin-block-start: -0.4rem;
+  }
+  .ln--role .md {
+    font-size: 0.75em;
+  }
+  .ln--lead {
+    max-width: 60ch;
+    color: var(--text-soft);
+  }
+  .ln-list {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .ln-list .ln {
+    color: var(--text-soft);
+  }
+  .ln-list b {
+    font-family: var(--ff-mono);
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--amber);
+  }
+  :global(:root[data-theme='light']) .ln-list b {
+    color: #9a5b00;
+  }
+  :global(:root[dir='rtl']) .ln-list b {
     font-family: var(--ff-body);
+    font-size: 1em;
+  }
+  .ln--links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1rem;
+  }
+  .ln--links::before {
+    inset-block-start: 0.95em;
+  }
+  .mdlink {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding-inline: 0.35rem;
+    margin-inline: -0.35rem;
+    border-radius: 4px;
+    font-family: var(--ff-mono);
+    font-weight: 600;
+    color: var(--lime-ink);
+    text-decoration: none;
+    transition:
+      background-color var(--dur-hover) var(--ease-out),
+      color var(--dur-hover) var(--ease-out);
+  }
+  :global(:root[dir='rtl']) .mdlink {
+    font-family: var(--ff-body);
+  }
+  /* hover looks like a visual-mode selection */
+  .mdlink:hover {
+    background: var(--lime);
+    color: var(--on-accent);
+  }
+  .mdlink:hover .md {
+    color: inherit;
+  }
+  .tilde {
+    margin-inline-start: calc(-1 * var(--gutter) + 1.9rem);
+    font-family: var(--ff-mono);
     font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-faint);
+  }
+  .statusline {
+    display: flex;
+    font: 600 0.72rem/1 var(--ff-mono);
+    background: var(--surface-3);
+    color: var(--text-soft);
+    border-block-start: var(--bw) solid var(--edge);
+    direction: ltr;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .statusline > span {
+    padding: 0.55rem 0.7rem;
+  }
+  .statusline__mode {
+    background: var(--lime);
+    color: var(--on-accent);
+  }
+  .statusline__file {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .statusline__fill {
+    flex: 1;
+  }
+  .statusline__pos {
+    background: var(--amber);
+    color: var(--on-accent);
+  }
+  @media (max-width: 480px) {
+    .statusline > span:nth-child(4),
+    .statusline > span:nth-child(5) {
+      display: none;
+    }
+  }
+
+  /* ── status widget (conky) ── */
+  .tile--sys {
+    display: flex;
+    flex-direction: column;
+  }
+  .sys {
+    flex: 1;
+    display: grid;
+    align-content: center;
+    gap: 0.3rem;
+    padding: var(--space-s) var(--space-m);
+    background: var(--bg-2);
+  }
+  .sys div {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr;
+    gap: var(--space-s);
+    font-size: 0.92rem;
+  }
+  .sys dt {
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    color: var(--amber);
+    padding-block-start: 0.15em;
+    direction: ltr;
+    text-align: start;
+  }
+  :global(:root[data-theme='light']) .sys dt {
+    color: #9a5b00;
+  }
+  .sys dd {
+    color: var(--text-soft);
+  }
+  .live {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-inline-end: 0.45em;
+    border-radius: 50%;
+    background: var(--lime);
   }
 </style>

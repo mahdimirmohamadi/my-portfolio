@@ -1,26 +1,22 @@
-// whoami portrait: 1-bit dither ⇄ colour photo, with a scanline riding the wipe.
+// About portrait: the real photo by default; "1-bit mode" wipes a dithered layer over it,
+// with a scanline riding the wipe edge. The dither image loads on first use only.
 import { prefersLessMotion } from './util';
 
 document.addEventListener('astro:page-load', () => {
   const fig = document.querySelector<HTMLElement>('[data-portrait]');
   const btn = fig?.querySelector<HTMLButtonElement>('[data-portrait-toggle]');
-  const img = fig?.querySelector<HTMLImageElement>('.portrait__real');
+  const bits = fig?.querySelector<HTMLElement>('.portrait__dither');
   const scan = fig?.querySelector<HTMLElement>('.portrait__scan');
-  if (!fig || !btn || !img || !scan || btn.dataset.ready) return;
+  if (!fig || !btn || !bits || !scan || btn.dataset.ready) return;
   btn.dataset.ready = '';
 
-  btn.addEventListener('click', async () => {
-    const on = !fig.classList.contains('is-color');
-    if (on && !img.getAttribute('src')) {
-      img.src = img.dataset.src ?? '';
-      img.hidden = false;
-      await img.decode().catch(() => {});
-    }
-    img.hidden = false;
+  btn.addEventListener('click', () => {
+    const on = !fig.classList.contains('is-bits');
+    if (on && !bits.style.getPropertyValue('--src')) bits.style.setProperty('--src', bits.dataset.src ?? '');
     // next frame so the clip-path transition runs from its start state
-    requestAnimationFrame(() => fig.classList.toggle('is-color', on));
+    requestAnimationFrame(() => fig.classList.toggle('is-bits', on));
     btn.setAttribute('aria-pressed', String(on));
-    btn.textContent = on ? (btn.dataset.labelDither ?? '') : (btn.dataset.labelColor ?? '');
+    btn.textContent = on ? (btn.dataset.labelOn ?? '') : (btn.dataset.labelOff ?? '');
     if (prefersLessMotion()) return;
     const h = fig.clientHeight;
     scan.animate(

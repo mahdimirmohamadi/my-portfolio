@@ -1,0 +1,104 @@
+---
+/** Skills: grouped tool lists with their marks. Compact, scannable, no fake percentages. */
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { stack } from '../../data/profile';
+import SectionHead from '../ui/SectionHead.astro';
+import Logo from '../ui/Logo.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="section wrap" id="skills" aria-labelledby="skills-title">
+  <SectionHead cmd="ls ~/.config" title={t('skills.title')} id="skills-title" />
+  <dl class="skills rise">
+    {
+      stack.map((g) => (
+        <div class="group">
+          <dt>{g.label[lang]}</dt>
+          <dd>
+            <ul role="list">
+              {g.items.map((name) => (
+                <li class="tool">
+                  <Logo name={name} size={16} />
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<style>
+  .skills {
+    display: grid;
+    border: var(--bw) solid var(--edge);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    overflow: clip;
+  }
+  @media (min-width: 900px) {
+    .skills {
+      grid-template-columns: 1fr 1fr;
+    }
+    /* a hairline between the two columns */
+    .group:nth-child(odd) {
+      border-inline-end: 1.5px solid var(--edge-soft);
+    }
+    .group:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      border-inline-end: 0;
+    }
+  }
+  .group:last-child {
+    border-block-end: 0;
+  }
+  .group {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.85rem var(--space-m);
+    border-block-end: 1.5px solid var(--edge-soft);
+  }
+  @media (min-width: 560px) {
+    .group {
+      grid-template-columns: 7.5rem 1fr;
+      align-items: baseline;
+      gap: var(--space-s);
+    }
+  }
+  dt {
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--lime-ink);
+  }
+  :global(:root[dir='rtl']) dt {
+    font-family: var(--ff-body);
+    font-size: 0.9rem;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.1rem;
+  }
+  .tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.92rem;
+    color: var(--text);
+    white-space: nowrap;
+    direction: ltr;
+  }
+  .tool :global(.logo) {
+    color: var(--text-soft);
+  }
+</style>

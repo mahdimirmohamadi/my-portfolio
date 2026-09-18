@@ -1,9 +1,6 @@
 // Desktop-session chrome that survives page turns: theme toggle (circle reveal),
 // Tehran clock + CPU sparkline, workspace scroll-spy, Nix's eyes, idle pausing, copy.
 import { prefersLessMotion, finePointer } from './util';
-import { initDecrypt } from './fx/decrypt';
-import { initSpotlight, initMagnet } from './fx/spotlight';
-import { initCountUp } from './fx/countup';
 
 const root = document.documentElement;
 
@@ -159,8 +156,4 @@ document.addEventListener('astro:page-load', () => {
   initEyes();
   initIdle();
   initCopy();
-  initDecrypt();
-  initSpotlight();
-  initMagnet();
-  initCountUp();
 });
