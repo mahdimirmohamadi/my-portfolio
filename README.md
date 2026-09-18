@@ -1,6 +1,6 @@
 # mahdi@workstation
 
-Mahdi MirMohamadi's portfolio as a modern Linux desktop session: a live terminal, `git log` for experience, `htop` for skills, a 1-bit dithered portrait, and Nix, a tiny CRT daemon. English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
+Mahdi MirMohamadi's portfolio as a modern Linux desktop session: a tiled hero (nvim buffer + live terminal), `git log` for experience, grouped skill logos, a photo with an optional 1-bit mode, and Nix, a tiny CRT daemon. English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
 
 > The manga edition (*The Saffron Chronicle*) lives on the `main` branch. This is the `theme/workstation` branch.
 
@@ -34,13 +34,13 @@ Mahdi MirMohamadi's portfolio as a modern Linux desktop session: a live terminal
 
 ```
 src/
-  data/profile.ts          resume data: neofetch facts, jobs (git log), AI, htop rows, tech marquee
+  data/profile.ts          resume data: neofetch facts, jobs (git log), AI, skill groups
   content/blog/{en,fa}/    posts          content/projects/{en,fa}/  project READMEs
   i18n/                    UI strings (EN + FA), locale paths, Persian digits & Jalali dates
   layouts/BaseLayout.astro head, fonts, theme pre-paint, router, top panel, dock, status line
   components/
     chrome/                TopPanel (workspaces, CPU, Tehran clock), Dock (phones), StatusLine
-    home/                  Hero, Terminal, Whoami, GitLog, AiLoop, Projects, Htop, Marquee, BlogTeaser, Contact
+    home/                  Hero, Terminal, Whoami, GitLog, AiLoop, Projects, Skills, BlogTeaser, Contact
     art/Nix.astro          the mascot (moods: happy, panic, sleep)
     ui/ mdx/ blog/
   scripts/
