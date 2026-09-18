@@ -1,0 +1,254 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { workspaces } from './workspaces';
+import face from '../../assets/photo/mahdi-dither-face.png';
+
+interface Props {
+  lang: Lang;
+  altHref: string;
+}
+const { lang, altHref } = Astro.props;
+const t = useT(lang);
+const home = lp(lang, '/');
+const path = Astro.url.pathname.replace(/\/$/, '');
+const isHome = path === '' || path === '/fa';
+const hrefOf = (w: (typeof workspaces)[number]) => (w.path && !isHome ? lp(lang, w.path) : w.hash ? `${home}#${w.hash}` : lp(lang, w.path));
+const activeOf = (w: (typeof workspaces)[number]) => !isHome && !!w.path && path.startsWith(lp(lang, w.path).replace(/\/$/, ''));
+const nf = new Intl.NumberFormat(lang === 'fa' ? 'fa-IR' : 'en');
+---
+
+<header class="panel">
+  <div class="panel__inner">
+    <a class="brand" href={home}>
+      <span class="brand__face" style={`--face:url(${face.src})`} aria-hidden="true"></span>
+      <span class="brand__handle mono">mahdi<span class="brand__at">@</span>workstation</span>
+      <span class="sr-only"> · {t('site.name')} · {t('nav.home')}</span>
+    </a>
+
+    <nav class="ws" aria-label={t('nav.menu')}>
+      <ol role="list">
+        {
+          workspaces.map((w, i) => (
+            <li>
+              <a href={hrefOf(w)} data-ws={w.hash ?? ''} aria-current={activeOf(w) ? 'page' : undefined}>
+                <span class="ws__n tabular">{nf.format(i + 1)}</span>
+                <span class="ws__label">{t(w.key)}</span>
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={lp(lang, '/lab')} class="ws__soon" aria-current={path.endsWith('/lab') ? 'page' : undefined}>
+            <span class="ws__label">{t('nav.lab')}</span>
+          </a>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="tray">
+      <svg class="tray__cpu" viewBox="0 0 60 20" width="60" height="20" aria-hidden="true" data-cpu><polyline points="" /></svg>
+      <span class="tray__clock mono tabular" data-clock aria-hidden="true">TEH --:--</span>
+      <a class="tray__btn tray__lang" href={altHref} hreflang={lang === 'fa' ? 'en' : 'fa'} lang={lang === 'fa' ? 'en' : 'fa'} aria-label={t('lang.switch.label')}>{t('lang.switch')}</a>
+      <button class="tray__btn" type="button" data-theme-toggle aria-label={t('theme.toggle')} title={t('theme.toggle')}>
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <g class="sun" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4.2" />
+            <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" />
+          </g>
+          <path class="moon" d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .panel {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    border-block-end: 1.5px solid var(--edge-soft);
+  }
+  @supports (backdrop-filter: blur(8px)) {
+    .panel {
+      background: color-mix(in srgb, var(--bg) 78%, transparent);
+      backdrop-filter: blur(10px) saturate(1.2);
+    }
+  }
+  .panel__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    min-height: 56px;
+    padding-inline: var(--page-gutter);
+    max-width: calc(var(--page-max) + 2 * var(--page-gutter) + 120px);
+    margin-inline: auto;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 44px;
+    color: var(--text);
+    text-decoration: none;
+    flex: none;
+  }
+  .brand__face {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1.5px solid var(--edge);
+    background-color: var(--surface-2);
+    position: relative;
+    overflow: hidden;
+  }
+  .brand__face::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--lime-ink);
+    mask: var(--face) center / cover no-repeat;
+  }
+  .brand__handle {
+    font-size: 0.86rem;
+    font-weight: 600;
+    direction: ltr;
+  }
+  .brand__at {
+    color: var(--lime-ink);
+  }
+
+  .ws {
+    display: none;
+    margin-inline: auto;
+  }
+  .ws ol {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border: 1.5px solid var(--edge-soft);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+  }
+  .ws a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-height: 34px;
+    padding-inline: 0.8em;
+    border-radius: var(--radius-pill);
+    color: var(--text-soft);
+    text-decoration: none;
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    transition:
+      background-color var(--dur-hover) var(--ease-out),
+      color var(--dur-hover) var(--ease-out);
+  }
+  :global(:root[dir='rtl']) .ws a {
+    font-family: var(--ff-body);
+    font-size: 0.86rem;
+  }
+  .ws__n {
+    color: var(--text-faint);
+  }
+  .ws a:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
+  .ws a[aria-current='page'],
+  .ws a.is-active {
+    background: var(--lime);
+    color: var(--on-accent);
+  }
+  .ws a[aria-current='page'] .ws__n,
+  .ws a.is-active .ws__n {
+    color: var(--on-accent);
+  }
+  :global(:root[data-theme='light']) .ws a:is([aria-current='page'], .is-active) {
+    color: #121410;
+  }
+  .ws__soon {
+    opacity: 0.65;
+  }
+
+  .tray {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-inline-start: auto;
+    flex: none;
+  }
+  .tray__cpu {
+    display: none;
+    color: var(--lime-ink);
+  }
+  .tray__cpu polyline {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+  }
+  .tray__clock {
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    padding-inline: 0.3rem;
+    direction: ltr;
+  }
+  .tray__btn {
+    display: inline-grid;
+    place-items: center;
+    min-width: 40px;
+    min-height: 40px;
+    padding-inline: 0.5rem;
+    border: 1.5px solid var(--edge-soft);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color var(--dur-hover) var(--ease-out), scale var(--dur-press) var(--ease-out);
+  }
+  .tray__btn:hover {
+    border-color: var(--lime-ink);
+  }
+  .tray__btn:active {
+    scale: 0.94;
+  }
+  .tray__lang {
+    font-family: var(--font-fa);
+    font-size: 0.95rem;
+  }
+  :global(:root[dir='rtl']) .tray__lang {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .moon {
+    display: none;
+  }
+  :global(:root[data-theme='light']) .sun {
+    display: none;
+  }
+  :global(:root[data-theme='light']) .moon {
+    display: block;
+  }
+
+  @media (min-width: 1040px) {
+    .ws {
+      display: block;
+    }
+    .tray {
+      margin-inline-start: 0;
+    }
+    .tray__cpu {
+      display: block;
+    }
+  }
+  @media (max-width: 380px) {
+    .brand__handle {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,56 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { getProjects } from '../../lib/content';
+import SectionHead from '../ui/SectionHead.astro';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  lang: Lang;
+  standalone?: boolean;
+}
+const { lang, standalone = false } = Astro.props;
+const t = useT(lang);
+const items = await getProjects(lang);
+---
+
+<section class="section wrap" id="projects" aria-labelledby="projects-title">
+  <SectionHead cmd="ls -la ~/projects" path="~" title={t('projects.title')} lead={t('projects.lead')} id="projects-title" />
+  <div class="bento">
+    {items.map((item, i) => <ProjectCard lang={lang} item={item} feature={i === 0 || i === 1} />)}
+  </div>
+  {
+    !standalone && (
+      <p class="more">
+        <a class="btn btn--ghost" href={lp(lang, '/projects')}>{t('projects.all')} →</a>
+      </p>
+    )
+  }
+</section>
+
+<style>
+  .bento {
+    display: grid;
+    gap: var(--space-m);
+  }
+  @media (min-width: 640px) {
+    .bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  /* 6 columns: two featured cards (3 + 3), then three regular ones (2 + 2 + 2) */
+  @media (min-width: 900px) {
+    .bento {
+      grid-template-columns: repeat(6, 1fr);
+    }
+    .bento > :global(.proj) {
+      grid-column: span 2;
+    }
+    .bento > :global(.proj--feature) {
+      grid-column: span 3;
+    }
+  }
+  .more {
+    margin-block-start: var(--space-l);
+  }
+</style>

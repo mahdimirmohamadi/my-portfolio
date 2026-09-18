@@ -1,0 +1,55 @@
+---
+/** A looping ticker of the stack (ReactBits "LogoLoop"-style). Pauses on hover and off-screen. */
+import { tech } from '../../data/profile';
+---
+
+<div class="marquee-clip">
+  <div class="marquee" aria-label="Tech I work with" data-idle>
+    <div class="marquee__track">
+      <ul role="list">{tech.map((t) => <li>{t}</li>)}</ul>
+      <ul role="list" aria-hidden="true">{tech.map((t) => <li>{t}</li>)}</ul>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* the tilted strip is wider than the page; clip it here, not on the body */
+  .marquee-clip {
+    overflow-x: clip;
+    padding-block: 12px;
+    margin-block: var(--space-2xl) 0;
+  }
+  .marquee {
+    border-block: var(--bw) solid var(--edge);
+    background: var(--lime);
+    color: #0b0c09;
+    overflow: hidden;
+    rotate: -1.2deg;
+    width: calc(100% + 40px);
+    margin-inline: -20px;
+  }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    direction: ltr;
+  }
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+  .marquee ul {
+    display: flex;
+    flex: none;
+  }
+  .marquee li {
+    padding: 0.7rem 1.4rem;
+    font-family: var(--ff-mono);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .marquee li::after {
+    content: '✦';
+    margin-inline-start: 2.8rem;
+    font-size: 0.8em;
+  }
+</style>

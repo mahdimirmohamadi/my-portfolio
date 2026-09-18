@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHead from '../../../components/ui/SectionHead.astro';
+import PostRow from '../../../components/blog/PostRow.astro';
+import Nix from '../../../components/art/Nix.astro';
+import { getPosts, tagSlug } from '../../../lib/content';
+import { langPaths, langFromParam, useT, lp } from '../../../i18n/utils';
+
+export const getStaticPaths = langPaths;
+const lang = langFromParam(Astro.params.lang);
+const t = useT(lang);
+const posts = await getPosts(lang);
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+---
+
+<BaseLayout lang={lang} title={t('blog.title')}>
+  <section class="wrap blog" aria-labelledby="blog-title">
+    <SectionHead cmd="ls -lt ~/blog" title={t('blog.title')} lead={t('blog.lead')} id="blog-title" />
+    {
+      tags.length > 0 && (
+        <ul class="blog__tags" role="list" aria-label={t('blog.tagged')}>
+          {tags.map((tag) => (
+            <li>
+              <a class="chip" href={lp(lang, `/blog/tags/${tagSlug(tag)}`)}>
+                #{tag}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    {
+      posts.length ? (
+        <div class="blog__list">
+          {posts.map((post) => (
+            <PostRow lang={lang} post={post} headingLevel="h2" />
+          ))}
+        </div>
+      ) : (
+        <div class="blog__empty">
+          <Nix mood="sleep" size={100} bob={false} />
+          <p class="mono">{t('blog.empty')}</p>
+        </div>
+      )
+    }
+    <p class="blog__rss mono"><a href={lang === 'fa' ? '/fa/rss.xml' : '/rss.xml'}>{t('blog.rss')}</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog {
+    padding-block-start: var(--space-xl);
+  }
+  .blog__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block-end: var(--space-l);
+  }
+  .blog__list {
+    display: grid;
+    gap: var(--space-m);
+  }
+  .blog__empty {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+  }
+  .blog__rss {
+    margin-block-start: var(--space-l);
+  }
+</style>

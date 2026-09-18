@@ -2,10 +2,9 @@
 import '../styles/global.css';
 import { Font } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
-import InkDefs from '../components/art/InkDefs.astro';
-import Masthead from '../components/nav/Masthead.astro';
-import ChapterBar from '../components/nav/ChapterBar.astro';
-import Footer from '../components/nav/Footer.astro';
+import TopPanel from '../components/chrome/TopPanel.astro';
+import Dock from '../components/chrome/Dock.astro';
+import StatusLine from '../components/chrome/StatusLine.astro';
 import type { Lang } from '../i18n/ui';
 import { useT, dirOf, switchLangPath } from '../i18n/utils';
 import ogDefault from '../assets/og/og-default.png';
@@ -19,14 +18,14 @@ interface Props {
   noindex?: boolean;
   progress?: boolean;
   ogType?: 'website' | 'article';
-  /** preload the display face (big titles are the LCP); off on the cover, where the photo is */
+  /** preload the display face (big titles are the LCP) */
   preloadDisplay?: boolean;
 }
 
 const { lang, title, description, altHref, noindex = false, progress = false, ogType = 'website', preloadDisplay = true } = Astro.props;
 const t = useT(lang);
 const other: Lang = lang === 'fa' ? 'en' : 'fa';
-const pageTitle = title ? `${title} · ${t('site.name')}` : `${t('site.name')} · ${t('site.title')}`;
+const pageTitle = title ? `${title} · ${t('site.name')}` : `${t('site.name')} · ${t('site.role')}`;
 const desc = description ?? t('site.description');
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const altPath = altHref ?? switchLangPath(Astro.url.pathname, other);
@@ -46,12 +45,11 @@ const ogImage = new URL(ogDefault.src, Astro.site);
     <link rel="alternate" hreflang="en" href={enHref} />
     <link rel="alternate" hreflang="fa" href={faHref} />
     <link rel="alternate" hreflang="x-default" href={enHref} />
-    <link rel="alternate" type="application/rss+xml" title={`${t('ch.omake')} · ${t('site.name')}`} href={lang === 'fa' ? '/fa/rss.xml' : '/rss.xml'} />
+    <link rel="alternate" type="application/rss+xml" title={`${t('blog.title')} · ${t('site.name')}`} href={lang === 'fa' ? '/fa/rss.xml' : '/rss.xml'} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta name="theme-color" content="#f4ecda" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#17130f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#0b0c09" />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={pageTitle} />
@@ -63,24 +61,28 @@ const ogImage = new URL(ogDefault.src, Astro.site);
     <meta property="og:locale" content={lang === 'fa' ? 'fa_IR' : 'en_US'} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- fonts: this locale's body + display faces are preloaded (display = the big titles, often the LCP) -->
-    <Font cssVariable="--font-body" preload={[{ subset: lang === 'fa' ? 'arabic' : 'latin' }]} />
+    <!-- fonts: this locale's body (+ display on content pages) preloaded; the rest swap in -->
+    {
+      lang === 'fa' ? (
+        <Font cssVariable="--font-fa" preload={[{ subset: 'arabic' }]} />
+      ) : (
+        <Font cssVariable="--font-body" preload={[{ subset: 'latin', weight: '400' }]} />
+      )
+    }
+    {lang === 'fa' ? <Font cssVariable="--font-body" /> : <Font cssVariable="--font-fa" />}
     <Font cssVariable="--font-display" preload={preloadDisplay && lang === 'en' ? [{ subset: 'latin' }] : false} />
-    <Font cssVariable="--font-fa-display" preload={preloadDisplay && lang === 'fa' ? [{ subset: 'arabic' }] : false} />
-    <Font cssVariable="--font-hand" />
-    <Font cssVariable="--font-fa-sfx" />
     <Font cssVariable="--font-mono" />
 
-    <!-- edition + low-end detection before first paint (no flash); re-applied after page turns -->
+    <!-- theme (dark-first) + low-end detection before first paint; re-applied on page turns -->
     <script is:inline>
       (() => {
         const apply = (root) => {
-          let e = null;
+          let theme = null;
           try {
-            e = localStorage.getItem('edition');
+            theme = localStorage.getItem('theme');
           } catch {}
-          if (e === 'night' || (!e && matchMedia('(prefers-color-scheme: dark)').matches)) root.dataset.edition = 'night';
-          else delete root.dataset.edition;
+          if (theme === 'light') root.dataset.theme = 'light';
+          else delete root.dataset.theme;
           const c = navigator.connection;
           if ((c && c.saveData) || (navigator.hardwareConcurrency || 8) <= 4) root.dataset.lite = '';
         };
@@ -94,22 +96,22 @@ const ogImage = new URL(ogDefault.src, Astro.site);
   </head>
   <body>
     <a class="skip" href="#main">{t('skip')}</a>
-    <InkDefs />
     {progress && <div class="read-progress" aria-hidden="true" />}
-    <Masthead lang={lang} altHref={altPath} />
+    <TopPanel lang={lang} altHref={altPath} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer lang={lang} />
-    <ChapterBar lang={lang} />
-    <!-- reserved: the Chaikhaneh comfort dock (lofi radio + pomodoro) mounts here later,
-         as <ComfortDock client:idle transition:persist="comfort-dock" /> -->
-    <div class="dock-slot" transition:persist="comfort-dock"><slot name="dock" /></div>
+    <StatusLine lang={lang} />
+    <Dock lang={lang} />
+    <!-- reserved: the ~/lab dock (lofi radio + pomodoro) mounts here later,
+         as <LabDock client:idle transition:persist="lab-dock" /> -->
+    <div class="dock-slot" transition:persist="lab-dock"><slot name="dock" /></div>
   </body>
 </html>
 
 <script>
   import '../scripts/chrome';
+  import '../scripts/fx/spark';
 </script>
 
 <style>
@@ -119,9 +121,10 @@ const ogImage = new URL(ogDefault.src, Astro.site);
     inset-inline-start: 8px;
     z-index: 100;
     padding: 0.6em 1em;
-    background: var(--saffron);
-    color: #16130f;
-    border: var(--line) solid #16130f;
+    background: var(--lime);
+    color: #0b0c09;
+    border: var(--bw) solid #0b0c09;
+    border-radius: var(--radius-sm);
     font-weight: 700;
     translate: 0 -200%;
     transition: translate var(--dur-ui) var(--ease-out);
@@ -135,14 +138,5 @@ const ogImage = new URL(ogDefault.src, Astro.site);
   }
   .dock-slot:empty {
     display: none;
-  }
-  body {
-    /* room for the thumb-reach chapter bar on phones */
-    padding-block-end: calc(72px + env(safe-area-inset-bottom));
-  }
-  @media (min-width: 900px) {
-    body {
-      padding-block-end: 0;
-    }
   }
 </style>

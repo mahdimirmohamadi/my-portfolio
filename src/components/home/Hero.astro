@@ -1,0 +1,144 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, lp, formatNum } from '../../i18n/utils';
+import Terminal from './Terminal.astro';
+import { getProjects } from '../../lib/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const projectCount = (await getProjects(lang)).length;
+const stats = [
+  { n: 4, suffix: '', label: t('stat.years') },
+  { n: 30, suffix: lang === 'fa' ? '٪' : '%', label: t('stat.faster') },
+  { n: projectCount, suffix: '', label: t('stat.projects') },
+];
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <canvas class="hero__grid" data-dotgrid aria-hidden="true"></canvas>
+  <div class="hero__inner wrap">
+    <div class="hero__copy">
+      <ul class="hero__stickers" role="list">
+        <li class="sticker sticker--lime"><span class="sticker__dot"></span>{t('hero.kicker')}</li>
+        <li class="sticker" style="--tilt:-3deg">λ Linux</li>
+        <li class="sticker sticker--amber" style="--tilt:2.5deg">✦ AI-native</li>
+      </ul>
+      <h1 class="hero__title" id="hero-title">
+        <span class="hero__line" data-decrypt>{t('hero.title.1')}</span>
+        <span class="hero__line hero__line--accent" data-decrypt>{t('hero.title.2')}</span>
+      </h1>
+      <p class="hero__lead">{t('hero.lead')}</p>
+      <div class="hero__ctas">
+        <a class="btn" href="#terminal" data-magnet data-focus-term>
+          <span aria-hidden="true">&gt;_</span>
+          {t('hero.cta.terminal')}
+        </a>
+        <a class="btn btn--ghost" href={lp(lang, '/blog')} data-magnet>{t('hero.cta.blog')}</a>
+      </div>
+      <dl class="hero__stats">
+        {
+          stats.map((s) => (
+            <div class="stat">
+              <dt class="sr-only">{s.label}</dt>
+              <dd>
+                <span class="stat__n tabular">
+                  <span data-count={s.n}>{formatNum(lang, s.n)}</span>
+                  {s.suffix}
+                </span>
+                <span class="stat__label" aria-hidden="true">{s.label}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+    <Terminal lang={lang} />
+  </div>
+</section>
+
+<script>
+  import '../../scripts/fx/dotgrid';
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: var(--space-xl) var(--space-2xl);
+    overflow: clip;
+  }
+  .hero__grid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .hero__inner {
+    position: relative;
+    display: grid;
+    gap: calc(var(--space-xl) + 20px);
+    align-items: center;
+  }
+  @media (min-width: 1040px) {
+    .hero {
+      padding-block-start: var(--space-2xl);
+    }
+    .hero__inner {
+      grid-template-columns: 1.05fr 1fr;
+      gap: var(--space-xl);
+    }
+  }
+  .hero__stickers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-block-end: var(--space-m);
+  }
+  .hero__title {
+    display: grid;
+    font-size: clamp(2.5rem, 1.7rem + 3.1vw, 4.5rem);
+    margin-block-end: var(--space-m);
+  }
+  :global(:root[dir='rtl']) .hero__title {
+    font-size: clamp(2.2rem, 1.5rem + 2.6vw, 3.8rem);
+  }
+  .hero__line--accent {
+    color: var(--lime-ink);
+  }
+  .hero__lead {
+    max-width: 56ch;
+    font-size: var(--step-1);
+    color: var(--text-soft);
+  }
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin-block: var(--space-l);
+  }
+  .hero__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-m) var(--space-l);
+  }
+  .stat dd {
+    display: grid;
+  }
+  .stat__n {
+    font-family: var(--ff-display);
+    font-size: var(--step-3);
+    line-height: 1;
+  }
+  .stat__label {
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+  }
+  :global(:root[dir='rtl']) .stat__label {
+    font-family: var(--ff-body);
+    font-size: 0.85rem;
+  }
+</style>

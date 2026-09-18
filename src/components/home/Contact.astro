@@ -1,0 +1,92 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { person } from '../../data/profile';
+import SectionHead from '../ui/SectionHead.astro';
+import Window from '../ui/Window.astro';
+import Nix from '../art/Nix.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const rows = [
+  ...person.links.map((l) => ({ cmd: 'open', arg: l.handle, href: l.href, ext: true, copy: l.href })),
+  { cmd: 'wget', arg: 'resume-en.pdf', href: person.resume.en, ext: false, copy: null },
+  { cmd: 'wget', arg: 'resume-fa.pdf', href: person.resume.fa, ext: false, copy: null },
+];
+---
+
+<section class="section wrap" id="contact" aria-labelledby="contact-title">
+  <SectionHead cmd="ssh mahdi@mahdimirmo.ir" title={t('contact.title')} lead={t('contact.lead')} id="contact-title" />
+  <div class="contact">
+    <Window title="ssh — mahdi@mahdimirmo.ir" meta="connected" shadow="lime" class="ssh rise">
+      <div class="ssh__mail">
+        <p class="mono ssh__line"><span class="ps1">$</span> mail <a href={`mailto:${person.email}`}>{person.email}</a></p>
+        <div class="ssh__actions">
+          <a class="btn" href={`mailto:${person.email}`} data-magnet>✉ Email</a>
+          <button type="button" class="btn btn--ghost" data-copy={person.email} data-copied={t('contact.copied')}>
+            <span data-copy-label>{t('contact.copy')}</span>
+          </button>
+        </div>
+      </div>
+      <ul class="ssh__rows" role="list">
+        {
+          rows.map((r) => (
+            <li class="mono ssh__line">
+              <span class="ps1">$</span> {r.cmd}{' '}
+              <a href={r.href} {...(r.ext ? { target: '_blank', rel: 'me noopener' } : { download: '' })}>
+                {r.arg}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </Window>
+    <div class="contact__nix" aria-hidden="true"><Nix size={150} wave /></div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--space-l);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .contact {
+      grid-template-columns: 1fr auto;
+    }
+  }
+  .contact__nix {
+    justify-self: center;
+  }
+  :global(.ssh .win__body) {
+    background: var(--bg-2);
+    display: grid;
+    gap: var(--space-m);
+  }
+  .ssh__line {
+    direction: ltr;
+    text-align: left;
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+  }
+  .ssh__line a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+  }
+  .ssh__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin-block-start: var(--space-s);
+  }
+  .ssh__rows {
+    display: grid;
+    padding-block-start: var(--space-s);
+    border-block-start: 1.5px dashed var(--edge-soft);
+  }
+</style>

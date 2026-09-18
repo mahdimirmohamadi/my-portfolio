@@ -1,0 +1,17 @@
+---
+/** Section heading: a shell prompt line + a big title that decrypts on first view. */
+interface Props {
+  cmd: string;
+  path?: string;
+  title: string;
+  lead?: string;
+  id?: string;
+}
+const { cmd, path = '~', title, lead, id } = Astro.props;
+---
+
+<header class="sec-head rise">
+  <p class="sec-head__prompt" aria-hidden="true"><b>mahdi@workstation</b>:{path}$ {cmd}</p>
+  <h2 class="sec-head__title" id={id} data-decrypt>{title}</h2>
+  {lead && <p class="sec-head__lead">{lead}</p>}
+</header>

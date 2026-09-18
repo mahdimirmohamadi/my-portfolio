@@ -1,0 +1,180 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { splitId, slugOf, tagSlug, getPosts, type Post } from '../../../lib/content';
+import { useT, lp, formatDate, formatNum, readingMinutes } from '../../../i18n/utils';
+import type { Lang } from '../../../i18n/ui';
+import face from '../../../assets/photo/mahdi-dither-face.png';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', (p) => import.meta.env.DEV || !p.data.draft);
+  return all.map((post) => {
+    const { lang, slug } = splitId(post.id);
+    return { params: { lang: lang === 'en' ? undefined : lang, slug }, props: { post, lang } };
+  });
+}
+
+const { post, lang } = Astro.props as { post: Post; lang: Lang };
+const t = useT(lang);
+const slug = slugOf(post);
+const { Content } = await render(post);
+const other: Lang = lang === 'fa' ? 'en' : 'fa';
+
+let altHref = lp(other, '/blog');
+if (post.data.translationKey) {
+  const twin = (await getPosts(other)).find((p) => p.data.translationKey === post.data.translationKey);
+  if (twin) altHref = lp(other, `/blog/${slugOf(twin)}`);
+}
+const posts = await getPosts(lang);
+const idx = posts.findIndex((p) => p.id === post.id);
+const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
+---
+
+<BaseLayout lang={lang} title={post.data.title} description={post.data.description} altHref={altHref} progress ogType="article">
+  <article class="post wrap">
+    <p class="crumb mono"><a href={lp(lang, '/blog')}>~/blog</a>/<b>{slug}.md</b></p>
+    <header class="post__head">
+      <h1 class="post__title" style={`view-transition-name: post-${slug}`}>{post.data.title}</h1>
+      <p class="post__desc">{post.data.description}</p>
+      <div class="post__byline">
+        <span class="post__face" style={`--face:url(${face.src})`} aria-hidden="true"></span>
+        <p>
+          <strong>{t('site.name')}</strong><br />
+          <span class="post__meta">
+            <time datetime={post.data.pubDate.toISOString()}>{formatDate(lang, post.data.pubDate)}</time>
+            <span aria-hidden="true"> / </span>
+            {formatNum(lang, readingMinutes(post.body))} {t('blog.min')}
+          </span>
+        </p>
+      </div>
+      {
+        post.data.tags.length > 0 && (
+          <ul class="post__tags" role="list" aria-label={t('blog.tagged')}>
+            {post.data.tags.map((tag) => (
+              <li>
+                <a class="chip" href={lp(lang, `/blog/tags/${tagSlug(tag)}`)}>
+                  #{tag}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    <footer class="post__end">
+      <p class="eof mono" aria-hidden="true">— {t('blog.eof')} —</p>
+      {
+        next && (
+          <a class="next" href={lp(lang, `/blog/${slugOf(next)}`)}>
+            <span class="next__label mono">{t('blog.next')} →</span>
+            <span class="next__title">{next.data.title}</span>
+          </a>
+        )
+      }
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    padding-block-start: var(--space-xl);
+  }
+  .crumb {
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    direction: ltr;
+    text-align: start;
+  }
+  .crumb b {
+    color: var(--text);
+  }
+  .post__head {
+    max-width: var(--measure);
+    margin-block: var(--space-m) var(--space-xl);
+    padding-block-end: var(--space-l);
+    border-block-end: 1.5px dashed var(--edge-soft);
+  }
+  .post__title {
+    font-size: var(--step-4);
+  }
+  .post__desc {
+    margin-block-start: var(--space-s);
+    font-size: var(--step-1);
+    color: var(--text-soft);
+  }
+  .post__byline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-block-start: var(--space-m);
+    font-size: var(--step--1);
+    line-height: 1.45;
+  }
+  .post__face {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border: var(--bw) solid var(--edge);
+    border-radius: 12px;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .post__face::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--lime-ink);
+    mask: var(--face) center / cover no-repeat;
+  }
+  .post__meta {
+    color: var(--text-faint);
+    font-family: var(--ff-mono);
+  }
+  :global(:root[dir='rtl']) .post__meta {
+    font-family: var(--ff-body);
+  }
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-block-start: var(--space-s);
+  }
+  .post__end {
+    max-width: var(--measure);
+    margin-block-start: var(--space-xl);
+    display: grid;
+    gap: var(--space-l);
+  }
+  .eof {
+    text-align: center;
+    color: var(--text-faint);
+    letter-spacing: 0.2em;
+  }
+  .next {
+    display: grid;
+    gap: 0.2rem;
+    padding: var(--space-m);
+    border: var(--bw) solid var(--edge);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow-lime);
+    text-decoration: none;
+    color: var(--text);
+    transition: translate var(--dur-hover) var(--ease-out);
+  }
+  .next:hover {
+    translate: calc(-2px * var(--dir)) -2px;
+  }
+  .next__label {
+    font-size: 0.8rem;
+    color: var(--lime-ink);
+  }
+  .next__title {
+    font-family: var(--ff-display);
+    font-weight: 700;
+    font-size: var(--step-2);
+  }
+</style>

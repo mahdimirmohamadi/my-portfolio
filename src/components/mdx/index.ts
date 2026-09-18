@@ -1,5 +1,4 @@
-// Components you can import inside .mdx side chapters.
-export { default as Bubble } from './Bubble.astro';
-export { default as SFX } from './SFX.astro';
-export { default as Panel } from './Panel.astro';
+// Components you can import inside .mdx posts.
+export { default as Term } from './Term.astro';
+export { default as Nix } from './Nix.astro';
 export { default as Callout } from './Callout.astro';

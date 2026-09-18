@@ -8,7 +8,7 @@ import { lp } from '../i18n/utils';
 export const feed = (lang: Lang) => async (context: APIContext) => {
   const posts = await getPosts(lang);
   return rss({
-    title: `${ui[lang]['ch.omake']} · ${ui[lang]['site.name']}`,
+    title: `${ui[lang]['blog.title']} · ${ui[lang]['site.name']}`,
     description: ui[lang]['site.description'],
     site: context.site!,
     items: posts.map((p) => ({
@@ -16,7 +16,7 @@ export const feed = (lang: Lang) => async (context: APIContext) => {
       description: p.data.description,
       pubDate: p.data.pubDate,
       categories: p.data.tags,
-      link: lp(lang, `/omake/${slugOf(p)}/`),
+      link: lp(lang, `/blog/${slugOf(p)}/`),
     })),
     customData: `<language>${lang === 'fa' ? 'fa-IR' : 'en'}</language>`,
   });

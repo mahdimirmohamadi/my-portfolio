@@ -1,0 +1,159 @@
+---
+import { getImage } from 'astro:assets';
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { fetch as facts } from '../../data/profile';
+import Window from '../ui/Window.astro';
+import SectionHead from '../ui/SectionHead.astro';
+import dither from '../../assets/photo/mahdi-dither.png';
+import original from '../../assets/photo/mahdi-original.png';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+// the colour photo is only fetched when someone asks for it
+const real = await getImage({ src: original, width: 640, format: 'webp', quality: 76 });
+---
+
+<section class="section wrap" id="whoami" aria-labelledby="whoami-title">
+  <SectionHead cmd="neofetch" title={t('whoami.title')} lead={t('whoami.lead')} id="whoami-title" />
+  <Window title="neofetch" meta="~" shadow="amber" class="fetch rise">
+    <div class="fetch__grid">
+      <figure class="portrait" data-portrait>
+        <div class="portrait__dither" role="img" aria-label={t('whoami.photo.alt')} style={`--src:url(${dither.src})`}></div>
+        <img class="portrait__real" data-src={real.src} width="640" height="640" alt={t('whoami.photo.real.alt')} hidden />
+        <span class="portrait__scan" aria-hidden="true"></span>
+        <button type="button" class="portrait__toggle chip" data-portrait-toggle data-label-color={t('whoami.color')} data-label-dither={t('whoami.dither')} aria-pressed="false">
+          {t('whoami.color')}
+        </button>
+      </figure>
+      <div class="fetch__info">
+        <p class="fetch__host mono"><b>mahdi</b>@<b>workstation</b></p>
+        <p class="fetch__rule mono" aria-hidden="true">-----------------</p>
+        <dl class="fetch__facts">
+          {
+            facts.map((f) => (
+              <div>
+                <dt class="mono">{f.k}</dt>
+                <dd>{f.v[lang]}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="fetch__palette" aria-hidden="true">
+          <span style="--c:var(--bg)"></span><span style="--c:var(--coral)"></span><span style="--c:var(--lime)"></span><span style="--c:var(--amber)"></span><span style="--c:var(--cream)"></span><span style="--c:var(--text-soft)"></span><span style="--c:var(--text)"></span>
+        </p>
+      </div>
+    </div>
+  </Window>
+</section>
+
+<script>
+  import '../../scripts/portrait';
+</script>
+
+<style>
+  .fetch__grid {
+    display: grid;
+    gap: var(--space-l);
+    align-items: center;
+  }
+  @media (min-width: 760px) {
+    .fetch__grid {
+      grid-template-columns: minmax(240px, 340px) 1fr;
+    }
+  }
+  .portrait {
+    position: relative;
+    aspect-ratio: 1;
+    border: var(--bw) solid var(--edge);
+    border-radius: var(--radius-sm);
+    background: var(--bg-2);
+    overflow: hidden;
+  }
+  .portrait__dither {
+    position: absolute;
+    inset: 0;
+    background: var(--lime-ink);
+    mask: var(--src) center / cover no-repeat;
+    image-rendering: pixelated;
+  }
+  .portrait__real {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 30% 35%;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 700ms var(--ease-in-out);
+  }
+  .portrait.is-color .portrait__real {
+    clip-path: inset(0 0 0 0);
+  }
+  /* the scanline rides the wipe edge (animated by scripts/portrait.ts) */
+  .portrait__scan {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 0;
+    height: 3px;
+    background: var(--lime);
+    box-shadow: 0 0 0 1px var(--bg);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .portrait__toggle {
+    position: absolute;
+    inset-block-end: 10px;
+    inset-inline-start: 10px;
+    min-height: 36px;
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--edge);
+    cursor: pointer;
+  }
+  .fetch__host {
+    font-size: var(--step-1);
+  }
+  .fetch__host b {
+    color: var(--lime-ink);
+  }
+  .fetch__rule {
+    color: var(--text-faint);
+  }
+  .fetch__facts {
+    display: grid;
+    gap: 0.25rem;
+    margin-block: var(--space-s);
+  }
+  .fetch__facts div {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: var(--space-s);
+  }
+  .fetch__facts dt {
+    color: var(--amber);
+    font-weight: 600;
+    font-size: 0.9rem;
+    direction: ltr;
+    text-align: start;
+  }
+  :global(:root[data-theme='light']) .fetch__facts dt {
+    color: #9a5b00;
+  }
+  .fetch__facts dd {
+    color: var(--text-soft);
+  }
+  .fetch__palette {
+    display: flex;
+    gap: 0;
+  }
+  .fetch__palette span {
+    width: 26px;
+    height: 16px;
+    background: var(--c);
+    border: 1px solid var(--edge-soft);
+  }
+</style>

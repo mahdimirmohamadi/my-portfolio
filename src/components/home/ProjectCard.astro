@@ -1,0 +1,154 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { slugOf, type Project } from '../../lib/content';
+
+interface Props {
+  lang: Lang;
+  item: Project;
+  feature?: boolean;
+}
+const { lang, item, feature = false } = Astro.props;
+const t = useT(lang);
+const slug = slugOf(item);
+const href = lp(lang, `/projects/${slug}`);
+const host = item.data.url ? new URL(item.data.url).host : null;
+---
+
+<article class:list={['proj', 'spotlight', 'rise', { 'proj--feature': feature }]} data-spotlight>
+  <div class="proj__top">
+    <span class="proj__glyph mono" aria-hidden="true">{item.data.glyph}</span>
+    <span class="proj__kind">{item.data.kind}</span>
+  </div>
+  <h3 class="proj__title">
+    <a href={href} class="proj__link" style={`view-transition-name: proj-${slug}`}>{item.data.title}</a>
+  </h3>
+  <p class="proj__summary">{item.data.summary}</p>
+  <ul class="proj__stack" role="list" aria-label={t('projects.stack')}>
+    {item.data.stack.slice(0, feature ? 6 : 4).map((s) => <li class="chip">{s}</li>)}
+  </ul>
+  <div class="proj__foot">
+    <span class="proj__readme mono" aria-hidden="true">README.md →</span>
+    {host && <a class="proj__ext mono" href={item.data.url} target="_blank" rel="noopener">{host} ↗</a>}
+  </div>
+</article>
+
+<style>
+  .proj {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-xs);
+    padding: var(--space-m);
+    border: var(--bw) solid var(--edge);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transition:
+      translate var(--dur-hover) var(--ease-out),
+      box-shadow var(--dur-hover) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .proj:hover {
+      translate: calc(-3px * var(--dir)) -3px;
+      box-shadow: var(--shadow-lime);
+    }
+  }
+  .proj:active {
+    translate: calc(2px * var(--dir)) 2px;
+    box-shadow: 0 0 0 var(--shadow-color);
+    transition-duration: var(--dur-press);
+  }
+  .proj__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  .proj__glyph {
+    display: grid;
+    place-items: center;
+    min-width: 56px;
+    height: 56px;
+    padding-inline: 0.5rem;
+    border: var(--bw) solid var(--edge);
+    border-radius: 12px;
+    background: var(--lime);
+    color: #0b0c09;
+    font-size: 1.25rem;
+    font-weight: 600;
+    direction: ltr;
+  }
+  .proj__kind {
+    font-family: var(--ff-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    text-align: end;
+  }
+  :global(:root[dir='rtl']) .proj__kind {
+    font-family: var(--ff-body);
+    font-size: 0.82rem;
+  }
+  .proj__title {
+    font-size: var(--step-2);
+    margin-block-start: var(--space-2xs);
+  }
+  .proj__link {
+    color: var(--text);
+    text-decoration: none;
+  }
+  /* the whole card is the click target; the title link carries the name */
+  .proj__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: var(--radius);
+  }
+  .proj__summary {
+    color: var(--text-soft);
+  }
+  .proj__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .proj__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-s);
+    margin-block-start: var(--space-2xs);
+    font-size: 0.8rem;
+  }
+  .proj__readme {
+    color: var(--lime-ink);
+  }
+  .proj__ext {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    color: var(--text-soft);
+  }
+  .proj__ext:hover {
+    color: var(--lime-ink);
+  }
+  @media (min-width: 640px) and (max-width: 899px) {
+    .proj--feature {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 900px) {
+    .proj--feature {
+      background: var(--surface-2);
+    }
+    .proj--feature .proj__title {
+      font-size: var(--step-3);
+    }
+    .proj--feature .proj__glyph {
+      background: var(--amber);
+    }
+  }
+</style>

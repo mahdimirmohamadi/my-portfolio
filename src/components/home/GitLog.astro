@@ -1,0 +1,249 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { jobs, education } from '../../data/profile';
+import SectionHead from '../ui/SectionHead.astro';
+import Window from '../ui/Window.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+// deterministic short "hashes" from the message
+const hash = (s: string) => {
+  let h = 2166136261;
+  for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+  return (h >>> 0).toString(16).padStart(8, '0').slice(0, 7);
+};
+const typeOf = (msg: string) => msg.match(/^(\w+)(\([^)]*\))?:/);
+---
+
+<section class="section wrap" id="work" aria-labelledby="work-title">
+  <SectionHead cmd="git log --graph --oneline" title={t('work.title')} lead={t('work.lead')} id="work-title" />
+  <Window title="git log — ~/career" meta="HEAD → main" class="gitlog rise">
+    <ol class="log" role="list">
+      {
+        jobs.map((j, ji) => (
+          <li class:list={['job', `job--${ji}`]}>
+            <div class="job__head">
+              <span class="lane" aria-hidden="true"><span class="node node--big" /></span>
+              <div class="job__meta">
+                <p class="job__refs mono">
+                  <span class="ref ref--head">HEAD</span>
+                  <span class="ref">{j.branch}</span>
+                </p>
+                <h3 class="job__company">
+                  {j.url ? <a href={j.url} target="_blank" rel="noopener">{j.company}</a> : j.company}
+                </h3>
+                <p class="job__where">
+                  {j.place[lang]} · {j.mode[lang]} · <span class="tabular">{j.since[lang]} – {t('work.now')}</span>
+                </p>
+                {j.lead && <p class="job__lead">{j.lead[lang]}</p>}
+              </div>
+            </div>
+            <ul class="commits" role="list">
+              {j.commits[lang].map((msg) => {
+                const m = typeOf(msg);
+                return (
+                  <li class="commit">
+                    <span class="lane" aria-hidden="true"><span class="node" /></span>
+                    <span class="commit__hash mono" aria-hidden="true">{hash(msg)}</span>
+                    <span class="commit__msg">
+                      {m ? (
+                        <>
+                          <b class:list={['ctype', `ctype--${m[1]}`]}>{m[0]}</b>
+                          {msg.slice(m[0].length)}
+                        </>
+                      ) : (
+                        msg
+                      )}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </li>
+        ))
+      }
+      {
+        education.map((e, i) => (
+          <li class="commit commit--tag">
+            <span class="lane" aria-hidden="true"><span class="node node--tag" /></span>
+            <span class="commit__hash mono" aria-hidden="true">{hash(e.title.en)}</span>
+            <span class="commit__msg">
+              <span class="ref ref--tag mono">tag: v0.{education.length - 1 - i}</span> <b>{e.title[lang]}</b> — {e.place[lang]} <span class="tabular">({e.years[lang]})</span>
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </Window>
+</section>
+
+<style>
+  :global(.gitlog .win__body) {
+    padding-block: var(--space-m);
+  }
+  .log {
+    display: grid;
+    gap: var(--space-m);
+  }
+  .job {
+    --lane-c: var(--lime);
+  }
+  .job--0 {
+    --lane-c: var(--amber);
+  }
+  .lane {
+    position: relative;
+    flex: none;
+    width: 22px;
+    align-self: stretch;
+    display: grid;
+    justify-items: center;
+  }
+  .lane::before {
+    content: '';
+    position: absolute;
+    inset-block: -0.9rem;
+    width: 3px;
+    background: var(--lane-c, var(--edge-soft));
+    border-radius: 3px;
+    transform-origin: top;
+  }
+  .node {
+    position: relative;
+    margin-block-start: 0.45em;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg-2);
+    border: 3px solid var(--lane-c, var(--edge-soft));
+  }
+  .node--big {
+    width: 18px;
+    height: 18px;
+    background: var(--lane-c);
+    border-color: var(--edge);
+    border-width: 2px;
+  }
+  .node--tag {
+    border-radius: 3px;
+    rotate: 45deg;
+    background: var(--cream);
+    border-color: var(--edge);
+    border-width: 2px;
+  }
+  .job__head {
+    display: flex;
+    gap: var(--space-s);
+  }
+  .job__refs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: 0.74rem;
+    direction: ltr;
+  }
+  .ref {
+    padding: 0.05em 0.55em;
+    border: 1.5px solid var(--lane-c, var(--edge-soft));
+    border-radius: var(--radius-pill);
+    color: var(--lane-c, var(--text-soft));
+  }
+  :global(:root[data-theme='light']) .ref {
+    color: var(--text);
+  }
+  .ref--head {
+    background: var(--lane-c);
+    color: #0b0c09;
+    border-color: var(--lane-c);
+  }
+  .ref--tag {
+    border-color: var(--edge-soft);
+    color: var(--text-soft);
+  }
+  .job__company {
+    font-size: var(--step-3);
+    margin-block: 0.25rem 0.2rem;
+  }
+  .job__company a {
+    color: var(--text);
+    text-decoration-color: var(--lane-c);
+  }
+  .job__where {
+    color: var(--text-soft);
+    font-size: var(--step--1);
+  }
+  .job__lead {
+    margin-block-start: var(--space-2xs);
+    max-width: 60ch;
+  }
+  .commits {
+    display: grid;
+    gap: 0.2rem;
+    margin-block-start: var(--space-s);
+  }
+  .commit {
+    display: flex;
+    gap: var(--space-s);
+    align-items: flex-start;
+    font-size: 0.95rem;
+  }
+  .commit__hash {
+    flex: none;
+    padding-block-start: 0.15em;
+    font-size: 0.78rem;
+    color: var(--amber);
+    direction: ltr;
+  }
+  :global(:root[data-theme='light']) .commit__hash {
+    color: #9a5b00;
+  }
+  .commit__msg {
+    min-width: 0;
+    color: var(--text-soft);
+  }
+  .ctype {
+    font-family: var(--ff-mono);
+    font-weight: 600;
+    font-size: 0.88em;
+    color: var(--lime-ink);
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+  .ctype--perf {
+    color: var(--amber);
+  }
+  :global(:root[data-theme='light']) .ctype--perf {
+    color: #9a5b00;
+  }
+  .ctype--chore,
+  .ctype--ci {
+    color: var(--text-faint);
+  }
+  .commit--tag .commit__msg b {
+    color: var(--text);
+  }
+  @media (max-width: 560px) {
+    .commit__hash {
+      display: none;
+    }
+  }
+  /* the graph lines draw as you scroll */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      :global(html:not([data-lite])) .lane::before {
+        animation: lane-draw linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%;
+      }
+    }
+  }
+  @keyframes lane-draw {
+    from {
+      scale: 1 0;
+    }
+  }
+</style>

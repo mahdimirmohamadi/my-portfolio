@@ -1,68 +1,64 @@
-/* ─── The Saffron Chronicle · design tokens ───────────────────────────────
-   Flat newsprint palette. One spot colour (saffron). No blue, no purple.   */
+/* ─── workstation · design tokens ────────────────────────────────────────
+   Dark-first. Warm black, phosphor lime, amber, coral. No blue, no purple.
+   Cartoon edge: 2px outlines + hard (unblurred) offset shadows.          */
 
 @layer tokens {
   :root {
-    color-scheme: light;
+    color-scheme: dark;
 
-    /* paper & ink */
-    --paper: #f4ecda;
-    --paper-shade: #e6dbc3;
-    --paper-deep: #d9ccb0;
-    --ink: #16130f;
-    --ink-soft: #4a443c;
-    --ink-faint: #8a8174;
+    /* neutrals (warm, slightly green-tinted black) */
+    --bg: #0b0c09;
+    --bg-2: #0f110c;
+    --surface: #14170f;
+    --surface-2: #1b1f15;
+    --surface-3: #242a1c;
+    --text: #eef1e6;
+    --text-soft: #a4ac96;
+    --text-faint: #8a927c;
+    --edge: #e9eedf; /* cartoon outline */
+    --edge-soft: #2d3325;
+    --grid-dot: #2a3021;
 
-    /* spot colours */
-    --saffron: #f2b705;
-    --saffron-deep: #b87a00;
-    --pomegranate: #b3261e;
-    --pistachio: #8db255;
-    --pistachio-ink: #4e6b26;
-    --tea: #7a4a2a;
+    /* signal colours */
+    --lime: #c6f432;
+    --lime-ink: #c6f432; /* lime used as text */
+    --amber: #ffb224;
+    --coral: #ff6a4d;
+    --cream: #f5efd9;
+    --on-accent: #0b0c09;
 
     /* roles */
-    --bg: var(--paper);
-    --surface: var(--paper);
-    --surface-well: var(--paper-shade);
-    --text: var(--ink);
-    --text-soft: var(--ink-soft);
-    --link: var(--pomegranate);
-    --line-color: var(--ink);
-    --shadow-color: var(--ink);
-    --on-saffron: #16130f;
-    --tone-color: var(--ink);
+    --accent: var(--lime);
+    --link: var(--lime-ink);
+    --shadow-color: #000;
+    --focus: var(--lime);
 
-    /* reading direction as a number, for transforms that must mirror in RTL */
+    /* reading direction as a number, for transforms that mirror in RTL */
     --dir: 1;
 
-    /* ink language */
-    --line: 3px;
-    --line-thin: 2px;
-    --shadow-x: calc(6px * var(--dir));
-    --shadow-y: 6px;
-    --shadow: var(--shadow-x) var(--shadow-y) 0 var(--shadow-color);
-    --shadow-sm: calc(3px * var(--dir)) 3px 0 var(--shadow-color);
-    --shadow-lg: calc(9px * var(--dir)) 9px 0 var(--shadow-color);
-    --gutter: 14px;
-    --misreg-x: calc(4px * var(--dir));
-    --misreg-y: 3px;
+    /* shape */
+    --radius: 14px;
+    --radius-sm: 9px;
+    --radius-pill: 999px;
+    --bw: 2px;
+    --shadow: calc(5px * var(--dir)) 5px 0 var(--shadow-color);
+    --shadow-lime: calc(6px * var(--dir)) 6px 0 var(--lime);
+    --shadow-amber: calc(6px * var(--dir)) 6px 0 var(--amber);
+    --shadow-coral: calc(6px * var(--dir)) 6px 0 var(--coral);
 
     /* type */
     --ff-body: var(--font-body);
     --ff-display: var(--font-display);
-    --ff-hand: var(--font-hand);
-    --ff-sfx: var(--font-display);
     --ff-mono: var(--font-mono);
-    --lh-body: 1.65;
+    --lh-body: 1.6;
 
-    --step--1: clamp(0.875rem, 0.85rem + 0.1vw, 0.94rem);
-    --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.09rem);
-    --step-1: clamp(1.2rem, 1.12rem + 0.35vw, 1.4rem);
-    --step-2: clamp(1.45rem, 1.3rem + 0.7vw, 1.9rem);
-    --step-3: clamp(1.8rem, 1.5rem + 1.4vw, 2.7rem);
-    --step-4: clamp(2.3rem, 1.8rem + 2.6vw, 4rem);
-    --step-5: clamp(2.9rem, 2rem + 4.4vw, 5.8rem);
+    --step--1: clamp(0.84rem, 0.82rem + 0.1vw, 0.9rem);
+    --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
+    --step-1: clamp(1.18rem, 1.1rem + 0.35vw, 1.38rem);
+    --step-2: clamp(1.42rem, 1.28rem + 0.7vw, 1.9rem);
+    --step-3: clamp(1.8rem, 1.5rem + 1.4vw, 2.75rem);
+    --step-4: clamp(2.3rem, 1.75rem + 2.8vw, 4.1rem);
+    --step-5: clamp(2.7rem, 1.8rem + 4.4vw, 5.6rem);
 
     /* space */
     --space-3xs: 0.25rem;
@@ -72,52 +68,51 @@
     --space-m: 1.5rem;
     --space-l: 2.25rem;
     --space-xl: 3.5rem;
-    --space-2xl: 5.5rem;
+    --space-2xl: 6rem;
     --page-gutter: 16px;
     --measure: 68ch;
-    --page-max: 1180px;
+    --page-max: 1200px;
 
     /* motion */
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
     --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-    /* spring with a little overshoot, as a linear() curve */
     --ease-spring: linear(
       0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121,
       1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%,
       0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1
     );
     --dur-press: 90ms;
-    --dur-hover: 140ms;
+    --dur-hover: 150ms;
     --dur-ui: 220ms;
+  }
+
+  /* daylight: paper and ink; lime stays as a fill but text uses a darker lime */
+  :root[data-theme='light'] {
+    color-scheme: light;
+    --bg: #f3f1ea;
+    --bg-2: #ecE9df;
+    --surface: #ffffff;
+    --surface-2: #f6f4ee;
+    --surface-3: #e9e6dc;
+    --text: #121410;
+    --text-soft: #4f5546;
+    --text-faint: #676c5b;
+    --edge: #121410;
+    --edge-soft: #d8d4c8;
+    --grid-dot: #d3cfc2;
+    --lime-ink: #4a6500;
+    --amber: #f0a010;
+    --coral: #e2472b;
+    --shadow-color: #121410;
+    --focus: #121410;
   }
 
   :root[dir='rtl'] {
     --dir: -1;
-    --ff-display: var(--font-fa-display);
-    --ff-sfx: var(--font-fa-sfx);
-    --ff-hand: var(--font-body);
-    --lh-body: 1.95;
-    --step-0: clamp(1.0625rem, 1.03rem + 0.15vw, 1.15rem);
-  }
-
-  /* Night edition: paper and ink swap, saffron stays. */
-  :root[data-edition='night'] {
-    color-scheme: dark;
-    --paper: #17130f;
-    --paper-shade: #221d17;
-    --paper-deep: #2d261e;
-    --ink: #efe6d2;
-    --ink-soft: #c2b8a6;
-    --ink-faint: #8a8174;
-    --pomegranate: #f07a5e;
-    --pistachio: #a9cc72;
-    --pistachio-ink: #a9cc72;
-    --tea: #d9a57c;
-    --saffron-deep: #d99a0b;
-    --shadow-color: #463b2f;
-    --line-color: #efe6d2;
-    --tone-color: #efe6d2;
+    --ff-body: var(--font-fa);
+    --ff-display: var(--font-fa);
+    --lh-body: 1.9;
   }
 
   @media (min-width: 768px) {

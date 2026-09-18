@@ -1,0 +1,180 @@
+---
+/**
+ * Nix — a tiny CRT daemon (a Linux daemon pun). Hand-authored SVG.
+ * The pixel eyes follow the pointer (scripts/chrome.ts, [data-nix-eyes]).
+ * mood: happy | panic | sleep
+ */
+interface Props {
+  mood?: 'happy' | 'panic' | 'sleep';
+  size?: number;
+  bob?: boolean;
+  wave?: boolean;
+  class?: string;
+  label?: string;
+}
+const { mood = 'happy', size = 96, bob = true, wave = false, class: cls = '', label } = Astro.props;
+---
+
+<svg
+  class:list={['nix', cls, { bob }]}
+  width={size}
+  height={size}
+  viewBox="0 0 120 120"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  data-idle={bob ? '' : undefined}
+>
+  <g class="nix__ink">
+    <!-- tail -->
+    <path class="tail" d="M100 76c14 2 17 12 10 20" />
+    <path class="tail-tip" d="M106 92l6 7 3-9Z" />
+    <!-- legs + feet -->
+    <path class="leg" d="M46 96v10M74 96v10" />
+    <rect class="foot" x="38" y="104" width="14" height="7" rx="3.5" />
+    <rect class="foot" x="68" y="104" width="14" height="7" rx="3.5" />
+    <!-- horns -->
+    <path class="horn" d="M32 26 25 8l17 14Z" />
+    <path class="horn" d="M88 26l7-18-17 14Z" />
+    <!-- arms -->
+    <path class="arm" d="M18 62c-8 2-12 8-10 14" />
+    <path class:list={['arm', { 'arm--wave': wave }]} d="M102 58c8-4 12-12 10-20" />
+    <!-- body -->
+    <rect class="body" x="16" y="20" width="88" height="78" rx="18" />
+    <!-- screen -->
+    <rect class="screen" x="27" y="31" width="66" height="48" rx="10" />
+    <!-- blush -->
+    <ellipse class="blush" cx="32" cy="88" rx="5" ry="3" />
+    <ellipse class="blush" cx="88" cy="88" rx="5" ry="3" />
+  </g>
+
+  {
+    mood === 'panic' ? (
+      <g class="face face--panic">
+        <path d="M40 46l10 10M50 46 40 56M70 46l10 10M80 46 70 56" />
+        <path d="M50 70q10-6 20 0" />
+      </g>
+    ) : mood === 'sleep' ? (
+      <g class="face face--sleep">
+        <path d="M40 54h11M69 54h11" />
+        <text x="84" y="16">z</text>
+        <text x="96" y="8" class="z-small">z</text>
+      </g>
+    ) : (
+      <g class="face" data-nix-eyes>
+        <g class="eyes">
+          <rect class="eye" x="41" y="45" width="9" height="13" rx="2" />
+          <rect class="eye" x="70" y="45" width="9" height="13" rx="2" />
+        </g>
+        <path class="mouth" d="M55 66q5 5 10 0" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .nix {
+    overflow: visible;
+    flex: none;
+  }
+  /* outline follows the theme edge: cream on dark, ink on daylight */
+  .nix__ink :is(path, rect, ellipse) {
+    stroke: var(--edge, #0b0c09);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .body {
+    fill: #f5efd9;
+  }
+  /* on dark, a cream outline would melt into the cream body: give it an inner ink line */
+  .screen {
+    stroke: #0b0c09 !important;
+  }
+  .screen {
+    fill: #11130e;
+  }
+  .horn {
+    fill: #ffb224;
+  }
+  .tail {
+    fill: none;
+  }
+  .tail-tip {
+    fill: #ff6a4d;
+  }
+  .leg,
+  .arm {
+    fill: none;
+  }
+  .foot {
+    fill: var(--edge, #0b0c09);
+  }
+  .blush {
+    fill: #ff6a4d;
+    stroke-width: 0 !important;
+    opacity: 0.8;
+  }
+  .eye {
+    fill: #c6f432;
+  }
+  .eyes {
+    transition: translate 120ms var(--ease-out);
+  }
+  .mouth,
+  .face--panic path,
+  .face--sleep path {
+    fill: none;
+    stroke: #c6f432;
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  .face--panic path {
+    stroke: #ff6a4d;
+  }
+  .face--sleep text {
+    font: 700 16px/1 var(--font-mono, monospace);
+    fill: var(--text-soft, #999);
+  }
+  .face--sleep .z-small {
+    font-size: 11px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html:not([data-lite])) .eye {
+      animation: nix-blink 5.2s linear infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    :global(html:not([data-lite])) .arm--wave {
+      animation: nix-wave 2.4s var(--ease-in-out) infinite;
+      transform-box: fill-box;
+      transform-origin: 0% 100%;
+    }
+  }
+  @keyframes nix-blink {
+    0%,
+    95%,
+    100% {
+      scale: 1 1;
+    }
+    97.5% {
+      scale: 1 0.1;
+    }
+  }
+  @keyframes nix-wave {
+    0%,
+    60%,
+    100% {
+      rotate: 0deg;
+    }
+    70% {
+      rotate: -24deg;
+    }
+    80% {
+      rotate: 8deg;
+    }
+    90% {
+      rotate: -16deg;
+    }
+  }
+</style>

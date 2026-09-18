@@ -1,81 +1,66 @@
 ---
-/* One static 404 for both languages: the story is told in both scripts. */
+/* One static 404 for both languages. */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Simo from '../components/art/Simo.astro';
+import Nix from '../components/art/Nix.astro';
+import Window from '../components/ui/Window.astro';
 import { ui } from '../i18n/ui';
 ---
 
 <BaseLayout lang="en" title="404" noindex>
-  <section class="lost wrap" aria-labelledby="lost-title">
-    <div class="lost__panel panel tone tone--mid">
-      <p class="lost__code" aria-hidden="true">404</p>
-      <Simo pose="spyglass" size={140} class="lost__simo" />
-    </div>
-    <div class="lost__text">
-      <h1 id="lost-title">{ui.en['404.title']}</h1>
+  <section class="panic wrap" aria-labelledby="panic-title">
+    <Nix mood="panic" size={130} bob={false} />
+    <Window title="dmesg | tail" shadow="coral" class="panic__win">
+      <pre class="panic__log mono">[    0.000000] Linux version 6.x (mahdi@workstation)
+[    4.200404] <b>Kernel panic - not syncing: VFS: Unable to mount path</b>
+[    4.200405] ---[ end Kernel panic ]---</pre>
+      <h1 id="panic-title" class="panic__title">{ui.en['404.title']}</h1>
       <p>{ui.en['404.body']}</p>
-      <div lang="fa" dir="rtl" class="lost__fa">
-        <p class="lost__fa-title">{ui.fa['404.title']}</p>
-        <p>{ui.fa['404.body']}</p>
-      </div>
-      <p class="lost__links">
-        <a class="btn misreg" href="/">{ui.en['404.home']}</a>
-        <a class="btn btn--ghost misreg" href="/fa/" lang="fa">{ui.fa['404.home']}</a>
+      <p lang="fa" dir="rtl" class="panic__fa">{ui.fa['404.body']}</p>
+      <p class="panic__links">
+        <a class="btn" href="/">{ui.en['404.home']}</a>
+        <a class="btn btn--ghost" href="/fa/" lang="fa">نسخهٔ فارسی</a>
       </p>
-    </div>
+    </Window>
   </section>
 </BaseLayout>
 
 <style>
-  .lost {
+  .panic {
     display: grid;
-    gap: var(--space-l);
-    padding-block-start: var(--space-l);
+    justify-items: center;
+    gap: var(--space-m);
+    padding-block-start: var(--space-xl);
+    max-width: 46rem;
   }
-  @media (min-width: 900px) {
-    .lost {
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-    }
+  :global(.panic__win) {
+    width: 100%;
   }
-  .lost__panel {
-    position: relative;
-    min-height: 300px;
+  :global(.panic__win .win__body) {
     display: grid;
-    place-items: center;
-    overflow: hidden;
-    rotate: -1.5deg;
+    gap: var(--space-s);
   }
-  .lost__code {
-    font-family: var(--font-display);
-    font-size: clamp(6rem, 4rem + 10vw, 11rem);
-    line-height: 1;
-    color: var(--saffron);
-    -webkit-text-stroke: 4px #16130f;
-    paint-order: stroke fill;
-    text-shadow: 8px 8px 0 #16130f;
+  .panic__log {
+    margin: 0;
+    padding: var(--space-s);
+    border-radius: var(--radius-sm);
+    background: var(--bg-2);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: var(--text-soft);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
-  :global(.lost__simo) {
-    position: absolute;
-    inset-block-end: 12px;
-    inset-inline-end: 12px;
+  .panic__log b {
+    color: var(--coral);
   }
-  .lost__text h1 {
-    font-size: var(--step-4);
-  }
-  .lost__text > * + * {
-    margin-block-start: var(--space-s);
-  }
-  .lost__fa {
-    font-family: var(--font-body);
-    padding-block-start: var(--space-s);
-    border-block-start: var(--line-thin) dashed var(--line-color);
-  }
-  .lost__fa-title {
-    font-family: var(--font-fa-display);
+  .panic__title {
     font-size: var(--step-3);
   }
-  .lost__links {
+  .panic__fa {
+    font-family: var(--font-fa);
+    color: var(--text-soft);
+  }
+  .panic__links {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-s);

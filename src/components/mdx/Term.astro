@@ -1,0 +1,48 @@
+---
+/** MDX: <Term lines={[{ cmd: 'ls' }, { out: 'a  b' }]} /> — a static terminal block. */
+import Window from '../ui/Window.astro';
+interface Props {
+  lines: { cmd?: string; out?: string }[];
+  title?: string;
+}
+const { lines, title = 'zsh' } = Astro.props;
+---
+
+<Window title={title} class="mdx-term not-prose">
+  <pre class="mdx-term__pre">{
+    lines.map((l) =>
+      l.cmd ? (
+        <span class="line"><span class="ps1">$</span> {l.cmd}{'\n'}</span>
+      ) : (
+        <span class="line out">{l.out}{'\n'}</span>
+      ),
+    )
+  }</pre>
+</Window>
+
+<style>
+  :global(.mdx-term) {
+    margin-block: var(--space-l) !important;
+  }
+  :global(.mdx-term .win__body) {
+    padding: var(--space-s) var(--space-m);
+    background: var(--bg-2);
+  }
+  /* not a prose code block: undo the .prose pre frame */
+  .mdx-term__pre {
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    background: none;
+    margin: 0;
+    font-family: var(--ff-mono);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    direction: ltr;
+    text-align: left;
+  }
+  .out {
+    color: var(--text-soft);
+  }
+</style>

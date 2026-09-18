@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Projects from '../../../components/home/Projects.astro';
+import { langPaths, langFromParam, useT } from '../../../i18n/utils';
+
+export const getStaticPaths = langPaths;
+const lang = langFromParam(Astro.params.lang);
+const t = useT(lang);
+---
+
+<BaseLayout lang={lang} title={t('projects.title')}>
+  <div class="page-top">
+    <Projects lang={lang} standalone />
+  </div>
+</BaseLayout>
+
+<style>
+  .page-top :global(.section) {
+    padding-block-start: var(--space-xl);
+  }
+</style>

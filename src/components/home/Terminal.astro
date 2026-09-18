@@ -1,0 +1,167 @@
+---
+/**
+ * The live terminal. Server-renders a static boot transcript (so it's never empty and
+ * works without JS); scripts/terminal.ts takes over and makes it interactive.
+ */
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import Window from '../ui/Window.astro';
+import Nix from '../art/Nix.astro';
+import { person, fetch as facts, procs, aiTools, aiBuilt } from '../../data/profile';
+import { getProjects, getPosts, slugOf } from '../../lib/content';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const projects = (await getProjects(lang)).map((p) => ({ slug: slugOf(p), title: p.data.title, href: lp(lang, `/projects/${slugOf(p)}`), url: p.data.url }));
+const posts = (await getPosts(lang)).slice(0, 5).map((p) => ({ title: p.data.title, href: lp(lang, `/blog/${slugOf(p)}`) }));
+const data = {
+  lang,
+  home: lp(lang, '/'),
+  blog: lp(lang, '/blog'),
+  other: lang === 'fa' ? '/' : '/fa/',
+  email: person.email,
+  links: person.links,
+  resume: person.resume,
+  facts: facts.map((f) => [f.k, f.v.en]),
+  projects,
+  posts,
+  skills: procs.map((p) => [p.cmd, p.tools.join(', ')]),
+  ai: { tools: aiTools, built: aiBuilt.map((b) => `${b.title.en} (${b.where})`) },
+};
+const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo hire-me', 'clear'];
+---
+
+<div class="term-wrap" id="terminal">
+  <div class="term-nix" aria-hidden="true"><Nix size={78} wave /></div>
+  <Window title="mahdi@workstation: ~ — zsh" meta="80×24" shadow="lime" class="term" data-term>
+    <div class="term__screen" data-term-screen>
+      <div class="term__log" role="log" aria-live="polite" data-term-log>
+        <p><span class="ps1">$</span> neofetch --short</p>
+        <p class="t-out"><b class="t-lime">mahdi</b>@<b class="t-lime">workstation</b></p>
+        <p class="t-out">front-end engineer · linux · ai-assisted</p>
+        <p class="t-out t-dim">type <b class="t-amber">help</b> to see what I can do</p>
+      </div>
+      <form class="term__prompt" data-term-form autocomplete="off">
+        <label class="ps1" for="term-input">$</label>
+        <input id="term-input" class="term__input" data-term-input type="text" spellcheck="false" autocapitalize="off" enterkeyhint="send" aria-label={t('hero.term.label')} />
+      </form>
+    </div>
+  </Window>
+  <div class="term-chips">
+    <span class="term-chips__hint">{t('hero.term.hint')}</span>
+    {chips.map((c) => <button type="button" class="chip" data-term-run={c}>{c}</button>)}
+  </div>
+  <script type="application/json" data-term-data set:html={JSON.stringify(data)} />
+</div>
+
+<script>
+  import '../../scripts/terminal';
+</script>
+
+<style>
+  .term-wrap {
+    position: relative;
+    min-width: 0;
+  }
+  .term-nix {
+    position: absolute;
+    inset-block-start: -62px;
+    inset-inline-end: 96px;
+    z-index: 2;
+  }
+  :global(.term .win__body) {
+    padding: 0;
+    background: var(--bg-2);
+  }
+  .term__screen {
+    display: flex;
+    flex-direction: column;
+    height: clamp(280px, 40vh, 340px);
+    padding: var(--space-s) var(--space-m);
+    font-family: var(--ff-mono);
+    font-size: 0.86rem;
+    line-height: 1.65;
+    direction: ltr;
+    text-align: left;
+    cursor: text;
+  }
+  .term__log {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  .term__log :global(p) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .term__log :global(.t-out) {
+    color: var(--text-soft);
+  }
+  .term__log :global(.t-dim) {
+    color: var(--text-faint);
+  }
+  .term__log :global(.t-lime) {
+    color: var(--lime-ink);
+    font-weight: 600;
+  }
+  .term__log :global(.t-amber) {
+    color: var(--amber);
+    font-weight: 600;
+  }
+  .term__log :global(.t-coral) {
+    color: var(--coral);
+    font-weight: 600;
+  }
+  .term__log :global(a) {
+    color: var(--lime-ink);
+  }
+  .term__prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.6ch;
+    padding-block-start: 0.3rem;
+  }
+  .term__input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: var(--text);
+    font: inherit;
+    caret-color: var(--lime);
+    /* ≥16px on phones: iOS won't zoom the page when the input is focused */
+    font-size: max(16px, 0.86rem);
+  }
+  .term-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    margin-block-start: var(--space-m);
+  }
+  .term-chips__hint {
+    font-size: var(--step--1);
+    color: var(--text-faint);
+    margin-inline-end: 0.2rem;
+  }
+  .term-chips .chip {
+    min-height: 36px;
+    cursor: pointer;
+    transition:
+      border-color var(--dur-hover) var(--ease-out),
+      color var(--dur-hover) var(--ease-out),
+      scale var(--dur-press) var(--ease-out);
+  }
+  .term-chips .chip:hover {
+    border-color: var(--lime-ink);
+    color: var(--lime-ink);
+  }
+  .term-chips .chip:active {
+    scale: 0.95;
+  }
+</style>

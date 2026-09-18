@@ -1,6 +1,6 @@
-@layer reset, tokens, base, tone, components, motion, utilities;
+@layer reset, tokens, base, components, motion, utilities;
 
 @import './tokens.css';
 @import './base.css';
-@import './tone.css';
+@import './ui.css';
 @import './motion.css';

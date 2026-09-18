@@ -1,0 +1,40 @@
+---
+title: Hello from the workstation
+description: My portfolio now looks like a Linux desktop session, with a live terminal, a dithered photo and a tiny daemon named Nix. Here's how it works.
+pubDate: 2026-09-18
+tags: [astro, linux, design]
+translationKey: hello-workstation
+---
+import { Term, Nix, Callout } from '../../../components/mdx';
+
+Most developer portfolios are the same landing page: gradient hero, three cards, a "Let's talk" button. I spend my days in a terminal and an editor, so I made my site look like where I actually work.
+
+<Term lines={[
+  { cmd: 'whoami' },
+  { out: 'mahdi, front-end engineer, Tehran' },
+  { cmd: 'cat ~/.plan' },
+  { out: 'build fast web apps · keep learning how things work' },
+]} />
+
+## What's on the desktop
+
+- **A live terminal.** It's a real little shell: type `help` and it answers. It's about 4KB of TypeScript, not a framework.
+- **A 1-bit portrait.** My photo is dithered at build time with an 8×8 Bayer matrix and used as a CSS mask, so it recolours with the theme and costs about 9KB.
+- **`git log` for my career**, `htop` for my skills, and `ssh` to get in touch.
+
+<Nix>Hi, I'm Nix, a tiny CRT daemon. I live in the corners of this site and I watch your cursor.</Nix>
+
+## Why it's fast
+
+Every page is static HTML from Astro. The effects (decrypted text, the dot grid, spotlights) are small scripts that load only where they're used, pause when they're off-screen, and switch off for people who prefer reduced motion.
+
+<Callout title="Tip">The site has a daylight theme too. Press the sun/moon button in the top bar and watch the new theme spread out from it.</Callout>
+
+```ts
+// the photo is a mask; the colour is just CSS
+.portrait { mask-image: url(dither.png); background: var(--lime); }
+```
+
+## What's next
+
+The **~/lab** workspace is reserved for a lofi radio and a pomodoro timer. They'll keep playing while you move between pages.

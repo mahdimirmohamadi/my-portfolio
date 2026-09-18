@@ -1,0 +1,125 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Window from '../../../components/ui/Window.astro';
+import { splitId, slugOf, type Project } from '../../../lib/content';
+import { useT, lp } from '../../../i18n/utils';
+import type { Lang } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const items = await getCollection('projects');
+  return items.map((item) => {
+    const { lang, slug } = splitId(item.id);
+    return { params: { lang: lang === 'en' ? undefined : lang, slug }, props: { item, lang } };
+  });
+}
+
+const { item, lang } = Astro.props as { item: Project; lang: Lang };
+const t = useT(lang);
+const slug = slugOf(item);
+const { Content } = await render(item);
+const other = lang === 'fa' ? 'en' : 'fa';
+---
+
+<BaseLayout lang={lang} title={item.data.title} description={item.data.summary} altHref={lp(other, `/projects/${slug}`)}>
+  <article class="readme wrap">
+    <p class="crumb mono"><a href={lp(lang, '/projects')}>~/projects</a>/{slug}/<b>README.md</b></p>
+    <header class="readme__head">
+      <span class="readme__glyph mono" aria-hidden="true">{item.data.glyph}</span>
+      <p class="readme__kind">{item.data.kind}</p>
+      <h1 class="readme__title" style={`view-transition-name: proj-${slug}`}>{item.data.title}</h1>
+      <p class="readme__summary">{item.data.summary}</p>
+      {
+        item.data.url && (
+          <p>
+            <a class="btn" href={item.data.url} target="_blank" rel="noopener" data-magnet>
+              {t('projects.visit')} ↗
+            </a>
+          </p>
+        )
+      }
+    </header>
+    <div class="readme__body">
+      <div class="prose">
+        <Content />
+      </div>
+      <Window title="package.json" class="stack" as="aside">
+        <pre class="stack__json mono">{'{\n  "dependencies": {\n'}{item.data.stack.map((s, i) => `    "${s}": "*"${i < item.data.stack.length - 1 ? ',' : ''}\n`).join('')}{'  }\n}'}</pre>
+      </Window>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .readme {
+    padding-block-start: var(--space-xl);
+  }
+  .crumb {
+    font-size: 0.85rem;
+    color: var(--text-faint);
+    direction: ltr;
+    text-align: start;
+  }
+  .crumb b {
+    color: var(--text);
+  }
+  .readme__head {
+    display: grid;
+    gap: var(--space-xs);
+    margin-block: var(--space-l) var(--space-xl);
+    padding-block-end: var(--space-l);
+    border-block-end: 1.5px dashed var(--edge-soft);
+  }
+  .readme__glyph {
+    justify-self: start;
+    display: grid;
+    place-items: center;
+    min-width: 72px;
+    height: 72px;
+    padding-inline: 0.7rem;
+    border: var(--bw) solid var(--edge);
+    border-radius: 16px;
+    background: var(--lime);
+    color: #0b0c09;
+    font-size: 1.6rem;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+    direction: ltr;
+  }
+  .readme__kind {
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    color: var(--text-faint);
+  }
+  .readme__title {
+    font-size: var(--step-5);
+  }
+  .readme__summary {
+    font-size: var(--step-1);
+    color: var(--text-soft);
+    max-width: 60ch;
+  }
+  .readme__body {
+    display: grid;
+    gap: var(--space-l);
+  }
+  @media (min-width: 900px) {
+    .readme__body {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      align-items: start;
+    }
+    :global(.stack) {
+      position: sticky;
+      inset-block-start: 80px;
+    }
+  }
+  .stack__json {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text-soft);
+    direction: ltr;
+    text-align: left;
+    white-space: pre-wrap;
+  }
+</style>

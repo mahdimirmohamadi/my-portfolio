@@ -1,0 +1,42 @@
+---
+/** MDX: <Nix>…</Nix> — the mascot says something. */
+import NixArt from '../art/Nix.astro';
+---
+
+<aside class="mdx-nix">
+  <NixArt size={72} bob={false} />
+  <div class="mdx-nix__say"><slot /></div>
+</aside>
+
+<style>
+  .mdx-nix {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    margin-block: var(--space-l) !important;
+  }
+  .mdx-nix__say {
+    position: relative;
+    flex: 1;
+    padding: var(--space-s) var(--space-m);
+    border: var(--bw) solid var(--edge);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .mdx-nix__say::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: -9px;
+    inset-block-start: calc(50% - 8px);
+    width: 14px;
+    height: 14px;
+    background: var(--surface);
+    border-inline-start: var(--bw) solid var(--edge);
+    border-block-end: var(--bw) solid var(--edge);
+    rotate: calc(45deg * var(--dir));
+  }
+  :global(:root[dir='rtl']) .mdx-nix__say::before {
+    rotate: -135deg;
+  }
+</style>

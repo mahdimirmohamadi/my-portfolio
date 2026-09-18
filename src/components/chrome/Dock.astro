@@ -1,0 +1,79 @@
+---
+/** Phones: a dock in thumb reach (the desktop uses the workspace pills in the top panel). */
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { workspaces } from './workspaces';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const home = lp(lang, '/');
+const items = workspaces.filter((w) => w.key !== 'nav.ai');
+---
+
+<nav class="dock" aria-label={t('nav.menu')}>
+  <ul role="list">
+    {
+      items.map((w) => (
+        <li>
+          <a href={w.path ? lp(lang, w.path) : `${home}#${w.hash}`} data-ws={w.hash ?? ''}>
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <path d={w.icon} fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+            </svg>
+            <span>{t(w.key)}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .dock {
+    position: fixed;
+    inset-inline: 10px;
+    inset-block-end: calc(10px + env(safe-area-inset-bottom));
+    z-index: 50;
+    border: var(--bw) solid var(--edge);
+    border-radius: 20px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .dock ul {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .dock a {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    padding-block: 8px 6px;
+    min-height: 56px;
+    color: var(--text-soft);
+    text-decoration: none;
+    font-family: var(--ff-mono);
+    font-size: 0.68rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :global(:root[dir='rtl']) .dock a {
+    font-family: var(--ff-body);
+    font-size: 0.74rem;
+  }
+  .dock a svg {
+    transition: scale var(--dur-press) var(--ease-out);
+  }
+  .dock a:active svg {
+    scale: 0.86;
+  }
+  .dock a.is-active,
+  .dock a[aria-current='page'] {
+    color: var(--lime-ink);
+  }
+  @media (min-width: 1040px) {
+    .dock {
+      display: none;
+    }
+  }
+</style>

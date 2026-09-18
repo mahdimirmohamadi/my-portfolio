@@ -1,0 +1,42 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { getPosts } from '../../lib/content';
+import SectionHead from '../ui/SectionHead.astro';
+import PostRow from '../blog/PostRow.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const posts = (await getPosts(lang)).slice(0, 3);
+---
+
+<section class="section wrap" id="blog" aria-labelledby="blog-title">
+  <SectionHead cmd="ls -lt ~/blog | head -3" title={t('blog.title')} lead={t('blog.lead')} id="blog-title" />
+  {
+    posts.length ? (
+      <div class="list">
+        {posts.map((post) => (
+          <PostRow lang={lang} post={post} />
+        ))}
+      </div>
+    ) : (
+      <p class="empty mono">{t('blog.empty')} <span class="caret" /></p>
+    )
+  }
+  <p class="more">
+    <a class="btn btn--ghost" href={lp(lang, '/blog')}>{t('blog.all')} →</a>
+  </p>
+</section>
+
+<style>
+  .list {
+    display: grid;
+    gap: var(--space-m);
+  }
+  .more {
+    margin-block-start: var(--space-l);
+  }
+</style>

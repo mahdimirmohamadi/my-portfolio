@@ -1,56 +1,45 @@
-// Builds the social card (1200×630): newsprint, the inked photo in a slanted panel,
-// a saffron title block with a hard ink shadow. Run: pnpm og  (after pnpm mangaize)
+// Social card (1200×630): a terminal window with the name + the lime dithered portrait.
+// Run: pnpm og   (after pnpm dither)
 import sharp from 'sharp';
-import { mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const outDir = root + 'src/assets/og/';
-mkdirSync(outDir, { recursive: true });
-
 const W = 1200;
 const H = 630;
-const photo = await sharp(root + 'src/assets/photo/mahdi-manga-800.png').resize(560, 560).toBuffer();
+const P = 440; // portrait size
 
-const slant = `M620 40 H1160 V590 H660 Z`;
-const bg = `
+// colour the 1-bit mask lime on the terminal background
+const mask = await sharp(root + 'src/assets/photo/mahdi-dither.png').resize(P, P, { kernel: 'nearest' }).ensureAlpha().extractChannel(3).toBuffer();
+const lime = await sharp({ create: { width: P, height: P, channels: 3, background: '#C6F432' } }).joinChannel(mask).png().toBuffer();
+
+const svg = `
 <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <pattern id="dots" width="8" height="8" patternUnits="userSpaceOnUse">
-      <circle cx="4" cy="4" r="1.2" fill="#16130f" fill-opacity="0.22"/>
-    </pattern>
-    <clipPath id="panel"><path d="${slant}"/></clipPath>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="1.3" fill="#2a3021"/></pattern>
   </defs>
-  <rect width="100%" height="100%" fill="#f4ecda"/>
-  <rect x="0" y="0" width="${W}" height="${H}" fill="url(#dots)" opacity="0.5"/>
-  <!-- hard ink shadows -->
-  <path d="${slant}" transform="translate(12 12)" fill="#16130f"/>
-  <rect x="52" y="132" width="540" height="300" transform="translate(10 10)" fill="#16130f"/>
-  <!-- title block with misregistered saffron plate -->
-  <rect x="58" y="138" width="540" height="300" fill="#f2b705"/>
-  <rect x="52" y="132" width="540" height="300" fill="none" stroke="#16130f" stroke-width="6"/>
-  <text x="84" y="206" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="23" fill="#16130f" letter-spacing="2">VOL. 1 · THE SAFFRON CHRONICLE</text>
-  <text x="84" y="298" font-family="DejaVu Sans, Arial Black, sans-serif" font-weight="900" font-size="66" fill="#16130f">Mahdi</text>
-  <text x="84" y="370" font-family="DejaVu Sans, Arial Black, sans-serif" font-weight="900" font-size="66" fill="#16130f">MirMohamadi</text>
-  <text x="84" y="414" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="26" fill="#16130f">Front-End Developer · Tehran</text>
-  <text x="56" y="560" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="28" fill="#b3261e">mahdimirmo.ir</text>
+  <rect width="100%" height="100%" fill="#0b0c09"/>
+  <rect width="100%" height="100%" fill="url(#dots)"/>
+  <!-- window -->
+  <rect x="68" y="72" width="1064" height="486" rx="22" fill="#c6f432"/>
+  <rect x="56" y="60" width="1064" height="486" rx="22" fill="#14170f" stroke="#e9eedf" stroke-width="4"/>
+  <path d="M58 118h1060" stroke="#e9eedf" stroke-width="4"/>
+  <circle cx="96" cy="89" r="10" fill="#ff6a4d" stroke="#e9eedf" stroke-width="3"/>
+  <circle cx="128" cy="89" r="10" fill="#ffb224" stroke="#e9eedf" stroke-width="3"/>
+  <circle cx="160" cy="89" r="10" fill="#c6f432" stroke="#e9eedf" stroke-width="3"/>
+  <text x="588" y="97" text-anchor="middle" font-family="DejaVu Sans Mono, monospace" font-size="22" fill="#a4ac96">mahdi@workstation: ~ — zsh</text>
+  <text x="100" y="200" font-family="DejaVu Sans Mono, monospace" font-size="30" fill="#c6f432">$ <tspan fill="#eef1e6">whoami</tspan></text>
+  <text x="100" y="292" font-family="DejaVu Sans, sans-serif" font-weight="700" font-size="68" fill="#eef1e6">Mahdi</text>
+  <text x="100" y="370" font-family="DejaVu Sans, sans-serif" font-weight="700" font-size="68" fill="#eef1e6">MirMohamadi</text>
+  <text x="100" y="430" font-family="DejaVu Sans Mono, monospace" font-size="27" fill="#a4ac96">front-end engineer · linux · ai</text>
+  <text x="100" y="505" font-family="DejaVu Sans Mono, monospace" font-size="27" fill="#c6f432">$ <tspan fill="#eef1e6">open mahdimirmo.ir</tspan><tspan fill="#c6f432"> █</tspan></text>
+  <!-- portrait frame -->
+  <rect x="652" y="138" width="${P - 40}" height="${P - 40}" rx="14" fill="#0f110c" stroke="#e9eedf" stroke-width="4"/>
 </svg>`;
 
-const frame = `
-<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
-  <path d="${slant}" fill="none" stroke="#16130f" stroke-width="8" stroke-linejoin="round"/>
-</svg>`;
-
-// photo clipped to the slanted panel
-const mask = Buffer.from(`<svg width="560" height="560"><path d="M0 0 H540 V550 H40 Z" fill="#000"/></svg>`);
-const clipped = await sharp(photo).ensureAlpha().composite([{ input: mask, blend: 'dest-in' }]).png().toBuffer();
-
-await sharp(Buffer.from(bg))
-  .composite([
-    { input: clipped, left: 620, top: 40 },
-    { input: Buffer.from(frame), left: 0, top: 0 },
-  ])
-  .png({ palette: true, colours: 32, compressionLevel: 9 })
-  .toFile(outDir + 'og-default.png');
-
+// crop the portrait to fit the frame
+const portrait = await sharp(lime).resize(P - 48, P - 48).png().toBuffer();
+await sharp(Buffer.from(svg))
+  .composite([{ input: portrait, left: 656, top: 142 }])
+  .png({ palette: true, colours: 24, compressionLevel: 9 })
+  .toFile(root + 'src/assets/og/og-default.png');
 console.log('og: wrote src/assets/og/og-default.png');

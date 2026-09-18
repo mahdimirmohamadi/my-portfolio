@@ -1,5 +1,5 @@
 {
-  "name": "portfolio2",
+  "name": "portfolio-workstation",
   "type": "module",
   "version": "0.0.1",
   "engines": {
@@ -11,10 +11,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "mangaize": "node scripts/mangaize.mjs",
-    "textures": "node scripts/textures.mjs",
+    "dither": "node scripts/dither.mjs",
     "og": "node scripts/og.mjs",
-    "art": "node scripts/mangaize.mjs && node scripts/textures.mjs && node scripts/og.mjs"
+    "art": "node scripts/dither.mjs && node scripts/og.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.1",

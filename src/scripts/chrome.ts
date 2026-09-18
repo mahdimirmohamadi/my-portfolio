@@ -1,84 +1,129 @@
-// Page chrome that must survive ClientRouter page turns: edition toggle, contents
-// sheet (swipe to dismiss), off-screen pausing of idle loops, language "edition flip",
-// copy-to-clipboard. Everything is (re)bound on astro:page-load.
+// Desktop-session chrome that survives page turns: theme toggle (circle reveal),
+// Tehran clock + CPU sparkline, workspace scroll-spy, Nix's eyes, idle pausing, copy.
+import { prefersLessMotion, finePointer } from './util';
+import { initDecrypt } from './fx/decrypt';
+import { initSpotlight, initMagnet } from './fx/spotlight';
+import { initCountUp } from './fx/countup';
 
 const root = document.documentElement;
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function initEdition() {
-  document.querySelectorAll<HTMLButtonElement>('[data-edition-toggle]').forEach((btn) => {
-    const sync = () => btn.setAttribute('aria-pressed', String(root.dataset.edition === 'night'));
+function initTheme() {
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
+    const sync = () => btn.setAttribute('aria-pressed', String(root.dataset.theme === 'light'));
     sync();
     btn.addEventListener('click', () => {
-      const night = root.dataset.edition !== 'night';
-      if (night) root.dataset.edition = 'night';
-      else delete root.dataset.edition;
-      try {
-        localStorage.setItem('edition', night ? 'night' : 'day');
-      } catch {}
-      sync();
+      const light = root.dataset.theme !== 'light';
+      const apply = () => {
+        if (light) root.dataset.theme = 'light';
+        else delete root.dataset.theme;
+        try {
+          localStorage.setItem('theme', light ? 'light' : 'dark');
+        } catch {}
+        sync();
+      };
+      if (!document.startViewTransition || prefersLessMotion()) return apply();
+      // origin-aware: the new theme grows out of the button
+      const r = btn.getBoundingClientRect();
+      const x = r.left + r.width / 2;
+      const y = r.top + r.height / 2;
+      const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+      root.dataset.themeSwitching = '';
+      const vt = document.startViewTransition(apply);
+      vt.ready.then(() =>
+        root.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
+          { duration: 560, easing: 'cubic-bezier(0.77, 0, 0.175, 1)', pseudoElement: '::view-transition-new(root)' },
+        ),
+      );
+      vt.finished.finally(() => delete root.dataset.themeSwitching);
     });
   });
 }
 
-function initSheet() {
-  const sheet = document.querySelector<HTMLDialogElement>('#contents-sheet');
-  if (!sheet) return;
-  const close = () => {
-    sheet.style.removeProperty('--sheet-y');
-    sheet.close();
+// ── tray: Tehran clock + a decorative CPU sparkline ──
+let trayTimer: number | undefined;
+function initTray() {
+  clearInterval(trayTimer);
+  const clock = document.querySelector<HTMLElement>('[data-clock]');
+  const cpu = document.querySelector<SVGPolylineElement>('[data-cpu] polyline');
+  const tf = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Tehran' });
+  const pts = Array.from({ length: 16 }, () => 8 + Math.random() * 8);
+  const draw = () => cpu?.setAttribute('points', pts.map((v, i) => `${(i * 60) / 15},${20 - v}`).join(' '));
+  const tick = () => {
+    if (clock) clock.textContent = `TEH ${tf.format(new Date())}`;
+    if (!document.hidden && !prefersLessMotion()) {
+      pts.shift();
+      const prev = pts[pts.length - 1];
+      pts.push(Math.max(2, Math.min(18, prev + (Math.random() - 0.5) * 7)));
+    }
+    draw();
   };
-  document.querySelectorAll('[data-sheet-open]').forEach((b) => b.addEventListener('click', () => sheet.showModal()));
-  sheet.querySelectorAll('[data-sheet-close], [data-sheet-link]').forEach((b) => b.addEventListener('click', close));
-  // click on the backdrop (outside the sheet box) closes
-  sheet.addEventListener('click', (e) => {
-    if (e.target !== sheet) return;
-    const r = sheet.getBoundingClientRect();
-    const { clientX: x, clientY: y } = e as MouseEvent;
-    if (y < r.top || y > r.bottom || x < r.left || x > r.right) close();
-  });
-
-  // swipe to dismiss: drag the grip/header down; dismiss on distance or flick velocity
-  const handles = sheet.querySelectorAll<HTMLElement>('[data-sheet-grip], .sheet__head');
-  let startY = 0;
-  let startT = 0;
-  let dy = 0;
-  let dragging = false;
-  handles.forEach((h) => {
-    h.addEventListener('pointerdown', (e) => {
-      if ((e.target as HTMLElement).closest('button')) return;
-      dragging = true;
-      startY = e.clientY;
-      startT = performance.now();
-      dy = 0;
-      sheet.classList.add('is-dragging');
-      h.setPointerCapture(e.pointerId);
-    });
-    h.addEventListener('pointermove', (e) => {
-      if (!dragging) return;
-      const raw = e.clientY - startY;
-      // rubber-band when dragging up past the top
-      dy = raw < 0 ? -Math.sqrt(-raw) * 2 : raw;
-      sheet.style.setProperty('--sheet-y', `${dy}px`);
-    });
-    const end = () => {
-      if (!dragging) return;
-      dragging = false;
-      sheet.classList.remove('is-dragging');
-      const velocity = dy / Math.max(1, performance.now() - startT);
-      if (dy > 110 || velocity > 0.11) close();
-      else sheet.style.setProperty('--sheet-y', '0px');
-    };
-    h.addEventListener('pointerup', end);
-    h.addEventListener('pointercancel', end);
-  });
+  tick();
+  trayTimer = window.setInterval(tick, 1200);
 }
 
-// idle loops (Simo floating, wings) pause when off-screen: no wasted frames
-let idleObserver: IntersectionObserver | undefined;
-function initOffscreen() {
-  idleObserver?.disconnect();
-  idleObserver = new IntersectionObserver(
+// ── workspace scroll-spy (home only) ──
+let spy: IntersectionObserver | undefined;
+function initSpy() {
+  spy?.disconnect();
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('a[data-ws]')].filter((a) => a.dataset.ws);
+  const ids = [...new Set(links.map((a) => a.dataset.ws!))];
+  const sections = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+  if (!sections.length) return;
+  // the band is the middle of the viewport; the active workspace is the section in it
+  const inBand = new Set<string>();
+  spy = new IntersectionObserver(
+    (entries) => {
+      for (const en of entries) {
+        if (en.isIntersecting) inBand.add(en.target.id);
+        else inBand.delete(en.target.id);
+      }
+      const current = sections.map((s) => s.id).filter((id) => inBand.has(id)).pop();
+      links.forEach((a) => a.classList.toggle('is-active', a.dataset.ws === current));
+    },
+    { rootMargin: '-45% 0px -50% 0px' },
+  );
+  sections.forEach((s) => spy!.observe(s));
+}
+
+// ── Nix's eyes follow the pointer ──
+let eyesBound = false;
+function initEyes() {
+  if (eyesBound || !finePointer() || prefersLessMotion()) return;
+  eyesBound = true;
+  let raf = 0;
+  let px = 0;
+  let py = 0;
+  window.addEventListener(
+    'pointermove',
+    (e) => {
+      px = e.clientX;
+      py = e.clientY;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        document.querySelectorAll<SVGGElement>('[data-nix-eyes] .eyes').forEach((g) => {
+          const svg = g.ownerSVGElement;
+          if (!svg) return;
+          const r = svg.getBoundingClientRect();
+          if (r.bottom < 0 || r.top > innerHeight) return;
+          const dx = px - (r.left + r.width / 2);
+          const dy = py - (r.top + r.height / 2);
+          const d = Math.hypot(dx, dy) || 1;
+          const k = Math.min(1, d / 300) * 4;
+          g.style.translate = `${((dx / d) * k).toFixed(2)}px ${((dy / d) * k).toFixed(2)}px`;
+        });
+      });
+    },
+    { passive: true },
+  );
+}
+
+// ── idle loops pause off-screen ──
+let idle: IntersectionObserver | undefined;
+function initIdle() {
+  idle?.disconnect();
+  idle = new IntersectionObserver(
     (entries) => {
       for (const en of entries) {
         if (en.isIntersecting) en.target.removeAttribute('data-offscreen');
@@ -87,53 +132,35 @@ function initOffscreen() {
     },
     { rootMargin: '80px' },
   );
-  document.querySelectorAll('[data-idle]').forEach((el) => idleObserver!.observe(el));
+  document.querySelectorAll('[data-idle]').forEach((el) => idle!.observe(el));
 }
-
-// language switch plays a page-flip view transition (rare moment #9)
-let flipping = false;
-function initLangFlip() {
-  document.querySelectorAll('[data-lang-flip]').forEach((a) =>
-    a.addEventListener('click', () => {
-      flipping = !reduced() && !('lite' in root.dataset);
-    }),
-  );
-}
-document.addEventListener('astro:after-swap', () => {
-  if (flipping) {
-    root.dataset.flip = '';
-    flipping = false;
-    setTimeout(() => delete root.dataset.flip, 600);
-  }
-});
 
 function initCopy() {
   document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
     btn.addEventListener('click', async () => {
-      const text = btn.dataset.copy ?? '';
       const label = btn.querySelector('[data-copy-label]');
       try {
-        await navigator.clipboard.writeText(text);
-        if (label) {
-          const was = label.textContent;
-          label.textContent = btn.dataset.copied ?? 'Copied!';
-          btn.classList.add('is-copied');
-          setTimeout(() => {
-            label.textContent = was;
-            btn.classList.remove('is-copied');
-          }, 1600);
-        }
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+        if (!label) return;
+        const was = label.textContent;
+        label.textContent = btn.dataset.copied ?? 'Copied!';
+        setTimeout(() => (label.textContent = was), 1500);
       } catch {
-        location.href = `mailto:${text}`;
+        location.href = `mailto:${btn.dataset.copy}`;
       }
     });
   });
 }
 
 document.addEventListener('astro:page-load', () => {
-  initEdition();
-  initSheet();
-  initOffscreen();
-  initLangFlip();
+  initTheme();
+  initTray();
+  initSpy();
+  initEyes();
+  initIdle();
   initCopy();
+  initDecrypt();
+  initSpotlight();
+  initMagnet();
+  initCountUp();
 });

@@ -1,0 +1,108 @@
+---
+/** A blog post as an `ls -l` row (used on home and /blog). */
+import type { Lang } from '../../i18n/ui';
+import { useT, lp, formatDate, formatNum, readingMinutes } from '../../i18n/utils';
+import { slugOf, tagSlug, type Post } from '../../lib/content';
+
+interface Props {
+  lang: Lang;
+  post: Post;
+  headingLevel?: 'h2' | 'h3';
+  showTags?: boolean;
+}
+const { lang, post, headingLevel: H = 'h3', showTags = true } = Astro.props;
+const t = useT(lang);
+const slug = slugOf(post);
+const size = `${(Math.max(1, (post.body?.length ?? 0) / 1024)).toFixed(1)}K`;
+---
+
+<article class="row spotlight" data-spotlight>
+  <p class="row__perm mono" aria-hidden="true">-rw-r--r-- mahdi {size}</p>
+  <div class="row__main">
+    <H class="row__title">
+      <a href={lp(lang, `/blog/${slug}`)} class="row__link" style={`view-transition-name: post-${slug}`}>{post.data.title}</a>
+    </H>
+    <p class="row__desc">{post.data.description}</p>
+    <p class="row__meta">
+      <time datetime={post.data.pubDate.toISOString()}>{formatDate(lang, post.data.pubDate)}</time>
+      <span aria-hidden="true"> / </span>
+      <span>{formatNum(lang, readingMinutes(post.body))} {t('blog.min')}</span>
+      {post.data.draft && <span class="sticker sticker--coral">draft</span>}
+    </p>
+    {
+      showTags && post.data.tags.length > 0 && (
+        <ul class="row__tags" role="list" aria-label={t('blog.tagged')}>
+          {post.data.tags.map((tag) => (
+            <li>
+              <a class="chip" href={lp(lang, `/blog/tags/${tagSlug(tag)}`)}>
+                #{tag}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .row {
+    position: relative;
+    display: grid;
+    gap: var(--space-2xs) var(--space-m);
+    padding: var(--space-m);
+    border: var(--bw) solid var(--edge);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  @media (min-width: 760px) {
+    .row {
+      grid-template-columns: 13rem 1fr;
+    }
+  }
+  .row__perm {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    padding-block-start: 0.4rem;
+    direction: ltr;
+    text-align: start;
+  }
+  .row__title {
+    font-size: var(--step-2);
+  }
+  .row__link {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .row__link:hover {
+    color: var(--lime-ink);
+  }
+  .row__desc {
+    margin-block-start: var(--space-2xs);
+    color: var(--text-soft);
+  }
+  .row__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-block-start: var(--space-xs);
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    color: var(--text-faint);
+  }
+  :global(:root[dir='rtl']) .row__meta {
+    font-family: var(--ff-body);
+  }
+  .row__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-block-start: var(--space-xs);
+  }
+  .row__tags .chip {
+    position: relative;
+    z-index: 2;
+  }
+</style>

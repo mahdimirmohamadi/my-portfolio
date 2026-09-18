@@ -1,8 +1,8 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Lang } from '../i18n/ui';
 
-export type Post = CollectionEntry<'omake'>;
-export type Artifact = CollectionEntry<'artifacts'>;
+export type Post = CollectionEntry<'blog'>;
+export type Project = CollectionEntry<'projects'>;
 
 /** "en/hello-world" → { lang: "en", slug: "hello-world" } */
 export function splitId(id: string) {
@@ -11,12 +11,12 @@ export function splitId(id: string) {
 }
 
 export async function getPosts(lang: Lang) {
-  const posts = await getCollection('omake', (p) => splitId(p.id).lang === lang && (import.meta.env.DEV || !p.data.draft));
+  const posts = await getCollection('blog', (p) => splitId(p.id).lang === lang && (import.meta.env.DEV || !p.data.draft));
   return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
-export async function getArtifacts(lang: Lang) {
-  const items = await getCollection('artifacts', (a) => splitId(a.id).lang === lang);
+export async function getProjects(lang: Lang) {
+  const items = await getCollection('projects', (a) => splitId(a.id).lang === lang);
   return items.sort((a, b) => a.data.order - b.data.order);
 }
 
