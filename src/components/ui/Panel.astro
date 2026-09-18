@@ -1,0 +1,31 @@
+---
+/** A manga panel. `slant` cuts one edge diagonally (keeps ink border + hard shadow). */
+import type { HTMLTag } from 'astro/types';
+interface Props {
+  as?: HTMLTag;
+  slant?: 'top' | 'bottom';
+  well?: boolean;
+  tone?: 'light' | 'mid' | 'dark';
+  flat?: boolean;
+  class?: string;
+  reveal?: boolean;
+  [key: string]: unknown;
+}
+const { as: Tag = 'div', slant, well, tone, flat, class: cls, reveal, ...rest } = Astro.props;
+---
+
+{
+  slant ? (
+    <div class:list={['slant-shadow', `slant--${slant}`, cls, { reveal }]}>
+      <Tag class:list={['slant', `slant--${slant}`]} {...rest}>
+        <div class:list={['slant__body', { 'panel--well': well, tone, [`tone--${tone}`]: tone }]}>
+          <slot />
+        </div>
+      </Tag>
+    </div>
+  ) : (
+    <Tag class:list={['panel', cls, { 'panel--well': well, 'panel--flat': flat, tone, [`tone--${tone}`]: tone, reveal }]} {...rest}>
+      <slot />
+    </Tag>
+  )
+}

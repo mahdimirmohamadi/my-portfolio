@@ -1,0 +1,27 @@
+---
+/** Speech / thought bubble. The tail mirrors in RTL. */
+interface Props {
+  kind?: 'speech' | 'thought';
+  up?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+const { kind = 'speech', up = false, class: cls, ...rest } = Astro.props;
+---
+
+<div class:list={['bubble', `bubble--${kind}`, { 'bubble--up': up }, cls]} {...rest}>
+  <slot />
+  {
+    kind === 'speech' ? (
+      <svg class="bubble__tail" viewBox="0 0 30 24" aria-hidden="true">
+        <path d="M0 2.5 H28" stroke="currentColor" stroke-width="5" />
+        <path d="M3 0 L6 22 L24 0" fill="currentColor" stroke="var(--line-color)" stroke-width="3" stroke-linejoin="round" />
+      </svg>
+    ) : (
+      <span class="thought-dots" aria-hidden="true">
+        <span />
+        <span />
+      </span>
+    )
+  }
+</div>

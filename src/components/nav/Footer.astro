@@ -1,0 +1,83 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { person } from '../../data/chronicle';
+import sticker from '../../assets/photo/mahdi-sticker.png';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const year = new Intl.NumberFormat(lang === 'fa' ? 'fa-IR' : 'en', { useGrouping: false }).format(new Date().getFullYear());
+---
+
+<footer class="footer">
+  <div class="footer__inner wrap">
+    <img class="footer__sticker" src={sticker.src} width="72" height="72" alt="" loading="lazy" decoding="async" />
+    <div class="footer__text">
+      <p class="footer__made">{t('footer.made')}</p>
+      <p class="footer__meta">
+        © {year} {t('site.name')}<span class="sep" aria-hidden="true"></span><a href={`mailto:${person.email}`} class="ltr">{person.email}</a>
+      </p>
+    </div>
+    <ul class="footer__links" role="list">
+      {
+        person.links.map((l) => (
+          <li>
+            <a href={l.href} rel="me noopener" target="_blank">
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+      <li><a href={lp(lang, '/omake')}>{t('nav.omake')}</a></li>
+      <li><a href={lang === 'fa' ? '/fa/rss.xml' : '/rss.xml'}>RSS</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-block-start: var(--space-2xl);
+    border-block-start: var(--line) solid var(--line-color);
+    padding-block: var(--space-l);
+    background-color: var(--paper-shade);
+  }
+  .footer__inner {
+    display: grid;
+    gap: var(--space-s);
+    align-items: center;
+  }
+  .footer__sticker {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: var(--line) solid var(--line-color);
+    box-shadow: var(--shadow-sm);
+  }
+  .footer__made {
+    font-family: var(--ff-hand);
+    font-weight: 700;
+  }
+  .footer__meta {
+    font-size: var(--step--1);
+    color: var(--text-soft);
+  }
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-s);
+  }
+  .footer__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 700;
+  }
+  @media (min-width: 768px) {
+    .footer__inner {
+      grid-template-columns: auto 1fr auto;
+    }
+  }
+</style>

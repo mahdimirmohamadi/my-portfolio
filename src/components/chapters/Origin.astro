@@ -1,0 +1,80 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, formatNum } from '../../i18n/utils';
+import { origin } from '../../data/chronicle';
+import ChapterHead from '../ui/ChapterHead.astro';
+import Panel from '../ui/Panel.astro';
+import Simo from '../art/Simo.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="chapter wrap" id="origin" aria-labelledby="origin-title">
+  <ChapterHead no={`${t('ch')} ${formatNum(lang, 1)}`} title={t('ch.origin')} plain={t('ch.origin.plain')} id="origin-title" />
+  <div class="origin">
+    {
+      origin.map((o, i) => (
+        <Panel as="article" slant={i === 1 ? 'top' : undefined} reveal class={`origin__panel origin__panel--${o.id}`}>
+          <p class="origin__years tabular">{o.years[lang]}</p>
+          <h3 class="origin__title">{o.title[lang]}</h3>
+          <p class="origin__place">{o.place[lang]}</p>
+          <p class="origin__line">{o.line[lang]}</p>
+        </Panel>
+      ))
+    }
+    <div class="origin__simo" aria-hidden="true">
+      <Simo pose="read" size={92} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .origin {
+    position: relative;
+    display: grid;
+    gap: var(--gutter);
+  }
+  @media (min-width: 768px) {
+    .origin {
+      grid-template-columns: 1fr 1.25fr;
+      align-items: end;
+    }
+  }
+  .origin__years {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: var(--step--1);
+    padding: 0.1em 0.5em;
+    background: var(--ink);
+    color: var(--paper);
+    margin-block-end: var(--space-xs);
+  }
+  .origin__title {
+    font-size: var(--step-3);
+  }
+  .origin__place {
+    margin-block-start: var(--space-2xs);
+    font-family: var(--ff-hand);
+    font-weight: 700;
+    color: var(--pomegranate);
+  }
+  .origin__line {
+    margin-block-start: var(--space-xs);
+    color: var(--text-soft);
+  }
+  .origin__simo {
+    position: absolute;
+    inset-block-start: -78px;
+    inset-inline-end: 8px;
+  }
+  @media (min-width: 768px) {
+    .origin__simo {
+      inset-inline-end: 24px;
+      inset-block-start: -92px;
+    }
+  }
+</style>

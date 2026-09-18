@@ -1,0 +1,364 @@
+---
+import { getImage } from 'astro:assets';
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import Simo from '../art/Simo.astro';
+import SpeedLines from '../art/SpeedLines.astro';
+import Bubble from '../ui/Bubble.astro';
+import SFX from '../ui/SFX.astro';
+import manga480 from '../../assets/photo/mahdi-manga-480.png';
+import manga800 from '../../assets/photo/mahdi-manga-800.png';
+import manga1040 from '../../assets/photo/mahdi-manga-1040.png';
+import original from '../../assets/photo/mahdi-original.png';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+// the unedited photo is only fetched when someone presses "Remove the ink"
+const real = await getImage({ src: original, width: 720, format: 'webp', quality: 76 });
+const [first, ...rest] = t('site.name').split(' ');
+---
+
+<section class="cover" aria-labelledby="cover-title">
+  <!-- arm the first-visit ink-in before these panels paint; 2.5s safety net if JS never runs -->
+  <script is:inline>
+    (() => {
+      const r = document.documentElement;
+      let seen = false;
+      try {
+        seen = !!sessionStorage.getItem('intro-seen');
+      } catch {}
+      if (seen || 'lite' in r.dataset || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      r.classList.add('intro-armed');
+      setTimeout(() => r.classList.remove('intro-armed'), 2500);
+    })();
+  </script>
+  <div class="cover__grid wrap">
+    <!-- title panel -->
+    <div class="panel cover__title intro-pop" data-intro="panel">
+      <SpeedLines class="cover__speed" />
+      <p class="spine">
+        <span class="spine__vol">{t('cover.vol')}</span>
+        <span class="spine__name">{t('cover.title')}</span>
+        <span class="spine__alt" lang={lang === 'fa' ? 'en' : 'fa'}>{t('cover.subtitle')}</span>
+      </p>
+      <h1 id="cover-title" class="cover__name">
+        <span>{first}</span>
+        <span class="cover__name-last">{rest.join(' ')}</span>
+      </h1>
+      <p class="cover__role">{t('site.role')}</p>
+      <SFX en="TA-DA!" fa="تادا!" lang={lang} class="cover__sfx par-fast" data-intro="sfx" />
+      <svg class="girih-strip" aria-hidden="true"><rect width="100%" height="100%" fill="url(#girih)"></rect></svg>
+    </div>
+
+    <!-- photo panel (LCP: visible from the first frame, never faded in) -->
+    <div class="cover__photo slant-shadow slant--bottom" data-intro="photo">
+      <div class="slant slant--bottom">
+        <div class="slant__body cover__photo-body">
+          <picture>
+            <img
+              class="cover__img"
+              src={manga1040.src}
+              srcset={`${manga480.src} 480w, ${manga800.src} 800w, ${manga1040.src} 1040w`}
+              sizes="(min-width: 900px) 46vw, (min-width: 600px) 80vw, 100vw"
+              width="1040"
+              height="1040"
+              alt={t('cover.photo.alt')}
+              fetchpriority="high"
+              decoding="async"
+            />
+          </picture>
+          <img class="cover__real" data-real-src={real.src} width="720" height="720" alt={t('cover.photo.real.alt')} hidden />
+          <Bubble kind="thought" class="cover__thought">
+            <span class="sr-only">{t('cover.thought')}</span>
+            <span aria-hidden="true" data-typewriter={t('cover.thought')}>{t('cover.thought')}</span>
+          </Bubble>
+          <button type="button" class="ink-stamp" data-ink-toggle data-label-remove={t('cover.ink.remove')} data-label-restore={t('cover.ink.restore')} aria-pressed="false">
+            {t('cover.ink.remove')}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simo narrates -->
+    <div class="panel panel--well cover__simo intro-pop tone tone--light" data-intro="panel">
+      <span class="par-fast"><Simo pose="point" size={96} /></span>
+      <Bubble class="cover__hello">{t('simo.hello')}</Bubble>
+    </div>
+
+    <!-- narration box -->
+    <div class="panel cover__intro intro-pop" data-intro="panel">
+      <p>{t('cover.intro')}</p>
+      <div class="cover__ctas">
+        <a class="btn misreg" href="#origin">{t('cover.cta.quests')}</a>
+        <a class="btn btn--ghost misreg" href={lp(lang, '/omake')}>{t('cover.cta.omake')}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/motion/cover';
+</script>
+
+<style>
+  .cover {
+    padding-block: var(--space-m) var(--space-xl);
+  }
+  .cover__grid {
+    display: grid;
+    gap: var(--gutter);
+    grid-template-areas:
+      'title'
+      'photo'
+      'simo'
+      'intro';
+  }
+  @media (min-width: 900px) {
+    .cover {
+      padding-block-start: var(--space-l);
+    }
+    .cover__grid {
+      grid-template-columns: 1.08fr 1fr;
+      grid-template-rows: auto 1fr auto;
+      grid-template-areas:
+        'title photo'
+        'intro photo'
+        'simo  simo';
+      gap: calc(var(--gutter) * 1.5);
+    }
+  }
+
+  /* title panel */
+  .cover__title {
+    grid-area: title;
+    container-type: inline-size;
+    overflow: hidden;
+    padding-block-end: calc(var(--space-m) + 30px);
+  }
+  :global(.cover__speed) {
+    opacity: 0;
+  }
+  .spine {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0;
+    margin-block-end: var(--space-m);
+    font-family: var(--ff-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .spine > span {
+    padding: 0.35em 0.7em;
+    border: var(--line-thin) solid var(--line-color);
+  }
+  .spine > span + span {
+    border-inline-start: 0;
+  }
+  .spine__vol {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .spine__name {
+    background: var(--saffron);
+    color: #16130f;
+  }
+  .spine__alt {
+    font-family: var(--font-fa-display);
+    font-size: 1.05em;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  :global(:root[dir='rtl']) .spine {
+    font-family: var(--font-fa-display);
+    font-size: 1rem;
+    letter-spacing: 0;
+  }
+  :global(:root[dir='rtl']) .spine__alt {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: grid;
+    place-items: center;
+  }
+  .cover__name {
+    position: relative;
+    /* never wider than the panel: "MirMohamadi" is ~9em in Dela Gothic */
+    font-size: min(var(--step-5), 10.4cqi);
+    line-height: 0.95;
+    display: grid;
+  }
+  :global(:root[dir='rtl']) .cover__name {
+    line-height: 1.25;
+  }
+  .cover__name-last {
+    color: var(--pomegranate);
+  }
+  .cover__role {
+    margin-block-start: var(--space-s);
+    font-family: var(--ff-hand);
+    font-size: var(--step-1);
+    font-weight: 700;
+  }
+  :global(.cover__sfx) {
+    position: absolute;
+    inset-block-end: 46px;
+    inset-inline-end: var(--space-s);
+    font-size: calc(var(--step-3) * var(--sfx-k, 1)) !important;
+  }
+  .girih-strip {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    width: 100%;
+    height: 30px;
+    color: var(--ink);
+    border-block-start: var(--line) solid var(--line-color);
+    background: var(--saffron);
+  }
+  :global(:root[data-edition='night']) .girih-strip {
+    color: #16130f;
+  }
+
+  /* photo panel */
+  .cover__photo {
+    grid-area: photo;
+    align-self: stretch;
+  }
+  .cover__photo-body {
+    position: relative;
+    padding: 0 !important;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+  @media (min-width: 900px) {
+    .cover__photo,
+    .cover__photo :global(.slant) {
+      height: 100%;
+    }
+    .cover__photo-body {
+      aspect-ratio: auto;
+      min-height: 100%;
+    }
+    .cover__img {
+      object-position: 42% 50%;
+    }
+  }
+  .cover__img,
+  .cover__real {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--paper-shade);
+  }
+  .cover__real {
+    opacity: 0;
+    transition: opacity 260ms var(--ease-out);
+  }
+  .cover__real.is-shown {
+    opacity: 1;
+  }
+  :global(.cover__thought) {
+    position: absolute !important;
+    inset-block-start: 5%;
+    inset-inline-start: 4%;
+    max-width: min(58%, 17rem) !important;
+    font-size: max(15px, var(--step--1)) !important;
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+  }
+  :global(.cover__thought .thought-dots) {
+    inset-inline-start: auto !important;
+    inset-inline-end: 1.2em;
+  }
+  .ink-stamp {
+    position: absolute;
+    inset-block-end: calc(var(--space-s) + 30px);
+    inset-inline-end: var(--space-s);
+    min-height: 44px;
+    padding: 0.35em 0.8em;
+    border: 3px double var(--pomegranate);
+    background: color-mix(in srgb, #f4ecda 88%, transparent);
+    color: #b3261e;
+    font-family: var(--ff-display);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    rotate: calc(-5deg * var(--dir));
+    transition:
+      rotate var(--dur-hover) var(--ease-out),
+      scale var(--dur-press) var(--ease-out);
+  }
+  :global(:root[dir='rtl']) .ink-stamp {
+    font-family: var(--font-fa-display);
+    font-size: 1rem;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .ink-stamp:hover {
+      rotate: calc(-1deg * var(--dir));
+    }
+  }
+  .ink-stamp:active {
+    scale: 0.95;
+  }
+
+  /* Simo panel */
+  .cover__simo {
+    grid-area: simo;
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-s);
+    padding-block-end: var(--space-l);
+  }
+  :global(.cover__hello) {
+    margin-block-end: 36px;
+    flex: 1;
+  }
+  :global(.cover__hello .bubble__tail) {
+    inset-inline-start: -4px !important;
+  }
+
+  /* narration box */
+  .cover__intro {
+    grid-area: intro;
+    align-self: stretch;
+    display: grid;
+    align-content: center;
+  }
+  .cover__intro p {
+    font-size: var(--step-1);
+    line-height: 1.5;
+  }
+  :global(:root[dir='rtl']) .cover__intro p {
+    line-height: 1.9;
+  }
+  .cover__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin-block-start: var(--space-m);
+  }
+
+  /* parallax (desktop, moment #6) */
+  @supports (animation-timeline: scroll()) {
+    @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+      @keyframes par-fast {
+        to {
+          translate: 0 -70px;
+        }
+      }
+      :global(html:not([data-lite]) .par-fast) {
+        animation: par-fast linear both;
+        animation-timeline: scroll(root block);
+        animation-range: 0 90vh;
+      }
+    }
+  }
+</style>

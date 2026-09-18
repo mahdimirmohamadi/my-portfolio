@@ -1,0 +1,141 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, formatNum } from '../../i18n/utils';
+import { person } from '../../data/chronicle';
+import ChapterHead from '../ui/ChapterHead.astro';
+import Simo from '../art/Simo.astro';
+import Bubble from '../ui/Bubble.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="chapter wrap" id="letters" aria-labelledby="letters-title">
+  <ChapterHead no={`${t('ch')} ${formatNum(lang, 6)}`} title={t('ch.letters')} plain={t('ch.letters.plain')} id="letters-title" />
+  <div class="letters panel tone tone--light reveal-rise">
+    <div class="letters__simo">
+      <Simo pose="fly" size={110} />
+      <Bubble class="letters__lead">{t('letters.lead')}</Bubble>
+    </div>
+    <div class="letters__main">
+      <div class="letters__email">
+        <a class="btn misreg letters__mail" href={`mailto:${person.email}`}>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18v12H3zM3 7l9 7 9-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" /></svg>
+          <span class="ltr">{person.email}</span>
+        </a>
+        <button type="button" class="btn btn--ghost misreg" data-copy={person.email} data-copied={t('letters.copied')}>
+          <span data-copy-label>{t('letters.copy')}</span>
+        </button>
+      </div>
+      <ul class="letters__links" role="list">
+        {
+          person.links.map((l) => (
+            <li>
+              <a href={l.href} rel="me noopener" target="_blank" class="messenger">
+                <span class="messenger__name">{l.label}</span>
+                <span class="messenger__handle ltr">{l.handle}</span>
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={person.resume.en} class="messenger" download hreflang="en">
+            <span class="messenger__name">{t('letters.resume.en')}</span>
+            <span class="messenger__handle">PDF</span>
+          </a>
+        </li>
+        <li>
+          <a href={person.resume.fa} class="messenger" download hreflang="fa">
+            <span class="messenger__name">{t('letters.resume.fa')}</span>
+            <span class="messenger__handle">PDF</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .letters {
+    display: grid;
+    gap: var(--space-l);
+  }
+  @media (min-width: 900px) {
+    .letters {
+      grid-template-columns: 0.9fr 1.3fr;
+      align-items: center;
+    }
+  }
+  .letters__simo {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+  :global(.letters__lead) {
+    margin-block-start: var(--space-m);
+  }
+  :global(.letters__lead .bubble__tail) {
+    inset-block-end: auto !important;
+    inset-block-start: 18px;
+    inset-inline-start: -24px !important;
+    rotate: calc(90deg * var(--dir));
+  }
+  .letters__email {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin-block-end: var(--space-m);
+  }
+  .letters__mail {
+    font-family: var(--ff-body);
+    overflow-wrap: anywhere;
+  }
+  .letters__links {
+    display: grid;
+    gap: var(--space-xs);
+  }
+  @media (min-width: 560px) {
+    .letters__links {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .messenger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-xs);
+    min-height: 56px;
+    padding: 0.6em 1em;
+    border: var(--line) solid var(--line-color);
+    background: var(--paper);
+    color: var(--text);
+    text-decoration: none;
+    box-shadow: var(--shadow-sm);
+    transition:
+      translate var(--dur-hover) var(--ease-out),
+      box-shadow var(--dur-hover) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .messenger:hover {
+      translate: calc(-2px * var(--dir)) -2px;
+      box-shadow: var(--shadow);
+    }
+  }
+  .messenger:active {
+    translate: calc(3px * var(--dir)) 3px;
+    box-shadow: none;
+    transition-duration: var(--dur-press);
+  }
+  .messenger__name {
+    font-family: var(--ff-display);
+    font-size: var(--step-1);
+  }
+  .messenger__handle {
+    font-size: var(--step--1);
+    color: var(--text-soft);
+    font-weight: 700;
+  }
+</style>

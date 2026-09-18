@@ -1,0 +1,12 @@
+---
+/** MDX: <Panel>…</Panel> — frame content in a manga panel. */
+import PanelBox from '../ui/Panel.astro';
+---
+
+<PanelBox class="mdx-panel"><slot /></PanelBox>
+
+<style>
+  :global(.mdx-panel) > :global(* + *) {
+    margin-block-start: 0.8em;
+  }
+</style>

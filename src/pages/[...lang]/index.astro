@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Cover from '../../components/cover/Cover.astro';
+import Origin from '../../components/chapters/Origin.astro';
+import Quests from '../../components/chapters/Quests.astro';
+import Treasury from '../../components/chapters/Treasury.astro';
+import Grimoire from '../../components/chapters/Grimoire.astro';
+import OmakeTeaser from '../../components/chapters/OmakeTeaser.astro';
+import Letters from '../../components/chapters/Letters.astro';
+import { langPaths, langFromParam } from '../../i18n/utils';
+
+export const getStaticPaths = langPaths;
+const lang = langFromParam(Astro.params.lang);
+---
+
+<BaseLayout lang={lang} preloadDisplay={false}>
+  <Cover lang={lang} />
+  <Origin lang={lang} />
+  <Quests lang={lang} />
+  <Treasury lang={lang} />
+  <Grimoire lang={lang} />
+  <OmakeTeaser lang={lang} />
+  <Letters lang={lang} />
+</BaseLayout>

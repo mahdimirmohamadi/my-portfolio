@@ -1,0 +1,148 @@
+---
+import '../styles/global.css';
+import { Font } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+import InkDefs from '../components/art/InkDefs.astro';
+import Masthead from '../components/nav/Masthead.astro';
+import ChapterBar from '../components/nav/ChapterBar.astro';
+import Footer from '../components/nav/Footer.astro';
+import type { Lang } from '../i18n/ui';
+import { useT, dirOf, switchLangPath } from '../i18n/utils';
+import ogDefault from '../assets/og/og-default.png';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** href of this page in the other language (defaults to the same path) */
+  altHref?: string;
+  noindex?: boolean;
+  progress?: boolean;
+  ogType?: 'website' | 'article';
+  /** preload the display face (big titles are the LCP); off on the cover, where the photo is */
+  preloadDisplay?: boolean;
+}
+
+const { lang, title, description, altHref, noindex = false, progress = false, ogType = 'website', preloadDisplay = true } = Astro.props;
+const t = useT(lang);
+const other: Lang = lang === 'fa' ? 'en' : 'fa';
+const pageTitle = title ? `${title} · ${t('site.name')}` : `${t('site.name')} · ${t('site.title')}`;
+const desc = description ?? t('site.description');
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const altPath = altHref ?? switchLangPath(Astro.url.pathname, other);
+const enHref = new URL(lang === 'en' ? Astro.url.pathname : altPath, Astro.site);
+const faHref = new URL(lang === 'fa' ? Astro.url.pathname : altPath, Astro.site);
+const ogImage = new URL(ogDefault.src, Astro.site);
+---
+
+<!doctype html>
+<html lang={lang === 'fa' ? 'fa-IR' : 'en'} dir={dirOf(lang)}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="fa" href={faHref} />
+    <link rel="alternate" hreflang="x-default" href={enHref} />
+    <link rel="alternate" type="application/rss+xml" title={`${t('ch.omake')} · ${t('site.name')}`} href={lang === 'fa' ? '/fa/rss.xml' : '/rss.xml'} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#f4ecda" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#17130f" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={lang === 'fa' ? 'fa_IR' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- fonts: this locale's body + display faces are preloaded (display = the big titles, often the LCP) -->
+    <Font cssVariable="--font-body" preload={[{ subset: lang === 'fa' ? 'arabic' : 'latin' }]} />
+    <Font cssVariable="--font-display" preload={preloadDisplay && lang === 'en' ? [{ subset: 'latin' }] : false} />
+    <Font cssVariable="--font-fa-display" preload={preloadDisplay && lang === 'fa' ? [{ subset: 'arabic' }] : false} />
+    <Font cssVariable="--font-hand" />
+    <Font cssVariable="--font-fa-sfx" />
+    <Font cssVariable="--font-mono" />
+
+    <!-- edition + low-end detection before first paint (no flash); re-applied after page turns -->
+    <script is:inline>
+      (() => {
+        const apply = (root) => {
+          let e = null;
+          try {
+            e = localStorage.getItem('edition');
+          } catch {}
+          if (e === 'night' || (!e && matchMedia('(prefers-color-scheme: dark)').matches)) root.dataset.edition = 'night';
+          else delete root.dataset.edition;
+          const c = navigator.connection;
+          if ((c && c.saveData) || (navigator.hardwareConcurrency || 8) <= 4) root.dataset.lite = '';
+        };
+        apply(document.documentElement);
+        document.addEventListener('astro:before-swap', (ev) => apply(ev.newDocument.documentElement));
+      })();
+    </script>
+
+    <ClientRouter fallback="none" />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#main">{t('skip')}</a>
+    <InkDefs />
+    {progress && <div class="read-progress" aria-hidden="true" />}
+    <Masthead lang={lang} altHref={altPath} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <ChapterBar lang={lang} />
+    <!-- reserved: the Chaikhaneh comfort dock (lofi radio + pomodoro) mounts here later,
+         as <ComfortDock client:idle transition:persist="comfort-dock" /> -->
+    <div class="dock-slot" transition:persist="comfort-dock"><slot name="dock" /></div>
+  </body>
+</html>
+
+<script>
+  import '../scripts/chrome';
+</script>
+
+<style>
+  .skip {
+    position: fixed;
+    inset-block-start: 8px;
+    inset-inline-start: 8px;
+    z-index: 100;
+    padding: 0.6em 1em;
+    background: var(--saffron);
+    color: #16130f;
+    border: var(--line) solid #16130f;
+    font-weight: 700;
+    translate: 0 -200%;
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  .skip:focus-visible {
+    translate: 0 0;
+  }
+  main {
+    display: block;
+    outline: none;
+  }
+  .dock-slot:empty {
+    display: none;
+  }
+  body {
+    /* room for the thumb-reach chapter bar on phones */
+    padding-block-end: calc(72px + env(safe-area-inset-bottom));
+  }
+  @media (min-width: 900px) {
+    body {
+      padding-block-end: 0;
+    }
+  }
+</style>

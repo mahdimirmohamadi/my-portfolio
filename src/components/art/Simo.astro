@@ -1,0 +1,161 @@
+---
+/**
+ * Simo — a pocket Simorgh, the narrator. Hand-authored SVG, ~12 primitives.
+ * Poses: rest | point | fly | read | sleep | spyglass. Faces inline-end; mirrors in RTL.
+ */
+interface Props {
+  pose?: 'rest' | 'point' | 'fly' | 'read' | 'sleep' | 'spyglass';
+  size?: number;
+  idle?: boolean;
+  class?: string;
+  label?: string;
+}
+const { pose = 'rest', size = 120, idle = true, class: cls = '', label } = Astro.props;
+---
+
+<svg
+  class:list={['simo', cls, { 'idle-float': idle }]}
+  width={size}
+  height={size}
+  viewBox="0 0 124 124"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  data-idle={idle ? '' : undefined}
+>
+  <g class="simo__ink" filter="url(#wobble)">
+    <!-- tail feathers -->
+    <path class="t1" d="M38 80C22 76 10 84 4 100c13-5 24-8 36-13Z" />
+    <path class="t2" d="M40 86c-11 10-15 22-12 34 8-9 14-18 18-30Z" />
+    <path class="t3" d="M36 73C23 63 11 62 3 70c11 3 21 6 33 10Z" />
+    <circle class="eye-spot" cx="14" cy="93" r="3.2" />
+    <circle class="eye-spot" cx="31" cy="108" r="3" />
+    <circle class="eye-spot" cx="13" cy="69" r="2.8" />
+
+    <!-- body -->
+    <path class="body" d="M64 25c24 0 32 25 28 45-4 20-24 28-42 24-14-3-20-14-18-28 2-16 14-41 32-41Z" />
+    <path class="belly" d="M67 58c12 0 18 10 16 20-2 10-12 14-22 12-8-2-11-9-9-17 2-9 7-15 15-15Z" />
+
+    <!-- boteh crest -->
+    <path class="crest" d="M61 27C53 12 62 3 71 6c7 3 5 12-1 12-4 0-5-4-2-5" />
+
+    <!-- beak -->
+    <path class="beak" d="M90 51l13 6-13 6Z" />
+
+    <!-- feet -->
+    <path class="feet" d="M58 94l-3 8M68 94l2 8M52 102h6M67 102h7" />
+  </g>
+
+  <!-- animated parts live outside the wobble filter so blinking/flapping never re-runs it -->
+  <g class="simo__ink">
+
+    {
+      pose === 'sleep' ? (
+        <>
+          <path class="lid" d="M68 49c3 3 8 3 11 0" />
+          <text class="zz" x="94" y="30">z</text>
+          <text class="zz zz--small" x="104" y="20">z</text>
+        </>
+      ) : (
+        <g class="idle-blink">
+          <circle class="eye" cx="74" cy="48" r="7" />
+          <circle class="glint" cx="76.6" cy="45.4" r="2.4" />
+          <circle class="glint" cx="71.6" cy="51" r="1.1" />
+        </g>
+      )
+    }
+
+    <!-- wing, by pose -->
+    {pose === 'rest' && <path class="wing idle-wing" d="M54 62c-12-2-18 10-14 20 8-2 16-10 14-20Z" />}
+    {pose === 'point' && <path class="wing" d="M56 64c14-4 28-6 42-14-6 12-20 22-38 24Z" />}
+    {pose === 'fly' && <path class="wing idle-wing" d="M52 60C42 40 46 24 56 14c4 16 6 32 4 48Z" />}
+    {
+      pose === 'read' && (
+        <>
+          <path class="book" d="M50 74l16 4 16-4v16l-16 4-16-4Z" />
+          <path class="book-spine" d="M66 78v16" />
+          <path class="wing" d="M52 66c-6 4-6 12 0 16" />
+        </>
+      )
+    }
+    {
+      pose === 'spyglass' && (
+        <>
+          <path class="glass" d="M80 42l30-10 4 11-30 10Z" />
+          <path class="glass-ring" d="M106 33l4 11" />
+          <path class="wing" d="M58 64c8-4 16-8 24-12-2 8-10 14-22 16Z" />
+        </>
+      )
+    }
+  </g>
+</svg>
+
+<style>
+  .simo {
+    overflow: visible;
+    flex: none;
+  }
+  :global(:root[dir='rtl']) .simo {
+    scale: -1 1;
+  }
+  .simo__ink :is(path, circle) {
+    stroke: #16130f;
+    stroke-width: 3;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .body {
+    fill: #b3261e;
+  }
+  .belly {
+    fill: #f4ecda;
+  }
+  .crest {
+    fill: #f2b705;
+  }
+  .beak {
+    fill: #b87a00;
+  }
+  .t1 {
+    fill: #8db255;
+  }
+  .t2 {
+    fill: #f2b705;
+  }
+  .t3 {
+    fill: #b3261e;
+  }
+  .eye-spot {
+    fill: #16130f;
+    stroke-width: 0 !important;
+  }
+  .eye {
+    fill: #16130f;
+  }
+  .glint {
+    fill: #f4ecda;
+    stroke-width: 0 !important;
+  }
+  .wing {
+    fill: #8a1c16;
+  }
+  .feet,
+  .lid,
+  .book-spine,
+  .glass-ring {
+    fill: none;
+  }
+  .book {
+    fill: #f4ecda;
+  }
+  .glass {
+    fill: #b87a00;
+  }
+  .zz {
+    font: 700 16px/1 var(--font-hand, cursive);
+    fill: #16130f;
+  }
+  .zz--small {
+    font-size: 11px;
+  }
+</style>

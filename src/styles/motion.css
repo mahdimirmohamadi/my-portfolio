@@ -1,0 +1,233 @@
+/* ─── motion: purposeful, compositor-only, reduced-motion aware ───
+   html[data-lite] is set on low-end devices / save-data: same path as reduced motion. */
+
+@layer motion {
+  /* ── Scroll reveal in reading direction (moment #3) ── */
+  @keyframes reveal-read {
+    from {
+      opacity: 0;
+      translate: calc(28px * var(--dir)) 0;
+    }
+  }
+  @keyframes reveal-rise {
+    from {
+      opacity: 0;
+      translate: 0 24px;
+    }
+  }
+
+  /* ── Route line drawing (moment #5): the mask path draws the dotted route ── */
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      html:not([data-lite]) .reveal {
+        animation: reveal-read linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 24%;
+      }
+      html:not([data-lite]) .reveal-rise {
+        animation: reveal-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 22%;
+      }
+      html:not([data-lite]) .draw-on-scroll {
+        stroke-dasharray: 1;
+        animation: draw linear both;
+        animation-timeline: view();
+        animation-range: entry 20% cover 55%;
+      }
+    }
+  }
+
+  /* ── Reading progress (moment #10 bar) ── */
+  @keyframes progress {
+    from {
+      scale: 0 1;
+    }
+    to {
+      scale: 1 1;
+    }
+  }
+  .read-progress {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    height: 6px;
+    background: var(--saffron);
+    border-block-end: var(--line-thin) solid var(--line-color);
+    transform-origin: var(--origin-start, left);
+    scale: 0 1;
+    z-index: 60;
+  }
+  :root[dir='rtl'] .read-progress {
+    --origin-start: right;
+  }
+  @supports (animation-timeline: scroll()) {
+    .read-progress {
+      animation: progress linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+  @supports not (animation-timeline: scroll()) {
+    .read-progress {
+      display: none;
+    }
+  }
+
+  /* ── Idle / ambient (moment #7) — paused when off-screen via [data-offscreen] ── */
+  @keyframes float {
+    from {
+      translate: 0 -4px;
+    }
+    to {
+      translate: 0 4px;
+    }
+  }
+  @keyframes wing {
+    0%,
+    86%,
+    100% {
+      rotate: 0deg;
+    }
+    89% {
+      rotate: 6deg; /* anticipation dip */
+    }
+    93% {
+      rotate: -22deg;
+    }
+    96% {
+      rotate: 4deg;
+    }
+  }
+  @keyframes blink {
+    0%,
+    94%,
+    100% {
+      scale: 1 1;
+    }
+    97% {
+      scale: 1 0.1;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-lite]) .idle-float {
+      animation: float 4.2s var(--ease-in-out) infinite alternate;
+    }
+    html:not([data-lite]) .idle-wing {
+      animation: wing 9s linear infinite;
+      transform-box: fill-box;
+      transform-origin: 20% 80%;
+    }
+    html:not([data-lite]) .idle-blink {
+      animation: blink 5.3s linear infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+  }
+  [data-offscreen] :is(.idle-float, .idle-wing, .idle-blink),
+  [data-offscreen]:is(.idle-float, .idle-wing, .idle-blink) {
+    animation-play-state: paused;
+  }
+
+  /* ── Intro sequence guard: JS adds .intro-armed only on first visit ── */
+  html.intro-armed .intro-pop {
+    opacity: 0;
+    scale: 0.94;
+  }
+  html.intro-armed .intro-draw {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  /* ── Page turn (moment #8): ink-wipe toward the reading direction ── */
+  @keyframes turn-out {
+    to {
+      opacity: 0.4;
+      translate: calc(-6% * var(--dir)) 0;
+    }
+  }
+  @keyframes turn-in-ltr {
+    from {
+      clip-path: inset(0 0 0 100%);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes turn-in-rtl {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-lite])::view-transition-old(root) {
+      animation: turn-out 260ms var(--ease-in-out) both;
+    }
+    html:not([data-lite])::view-transition-new(root) {
+      animation: turn-in-ltr 260ms var(--ease-in-out) both;
+    }
+    html[dir='rtl']:not([data-lite])::view-transition-new(root),
+    html[dir='ltr'][data-astro-transition='back']:not([data-lite])::view-transition-new(root) {
+      animation-name: turn-in-rtl;
+    }
+    html[dir='rtl'][data-astro-transition='back']:not([data-lite])::view-transition-new(root) {
+      animation-name: turn-in-ltr;
+    }
+  }
+  /* ── Language switch "edition flip" (moment #9, rare) ── */
+  @keyframes flip-out {
+    to {
+      transform: perspective(1600px) rotateY(88deg);
+      opacity: 0.5;
+    }
+  }
+  @keyframes flip-in {
+    from {
+      transform: perspective(1600px) rotateY(-88deg);
+      opacity: 0.5;
+    }
+  }
+  html[data-flip]::view-transition-old(root) {
+    animation: flip-out 220ms var(--ease-in-out) both;
+  }
+  html[data-flip]::view-transition-new(root) {
+    animation: flip-in 230ms var(--ease-out) 200ms both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root) {
+      animation: fade-out 150ms ease both;
+    }
+    ::view-transition-new(root) {
+      animation: fade-in 150ms ease both;
+    }
+  }
+  html[data-lite]::view-transition-old(root) {
+    animation: fade-out 150ms ease both;
+  }
+  html[data-lite]::view-transition-new(root) {
+    animation: fade-in 150ms ease both;
+  }
+}

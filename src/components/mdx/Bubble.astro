@@ -1,0 +1,30 @@
+---
+/** MDX: <Bubble speaker="simo">…</Bubble> — Simo (or you) says something in a speech bubble. */
+import Simo from '../art/Simo.astro';
+import BubbleBox from '../ui/Bubble.astro';
+interface Props {
+  speaker?: 'simo' | 'mahdi';
+}
+const { speaker = 'simo' } = Astro.props;
+---
+
+<div class="mdx-bubble not-prose">
+  {speaker === 'simo' && <Simo pose="point" size={84} idle={false} />}
+  <BubbleBox up={false}><slot /></BubbleBox>
+</div>
+
+<style>
+  .mdx-bubble {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-s);
+    margin-block: var(--space-l) !important;
+  }
+  .mdx-bubble :global(.bubble) {
+    margin-block-end: 64px;
+  }
+  .mdx-bubble :global(.bubble__tail) {
+    inset-inline-start: -2px;
+    inset-block-end: -22px;
+  }
+</style>

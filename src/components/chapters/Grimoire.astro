@@ -1,0 +1,84 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, formatNum } from '../../i18n/utils';
+import { grimoire } from '../../data/chronicle';
+import ChapterHead from '../ui/ChapterHead.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="chapter wrap" id="grimoire" aria-labelledby="grimoire-title">
+  <ChapterHead no={`${t('ch')} ${formatNum(lang, 4)}`} title={t('ch.grimoire')} plain={t('ch.grimoire.plain')} id="grimoire-title" />
+  <div class="grimoire">
+    {
+      grimoire.map((g, i) => (
+        <section class:list={['scroll', 'panel', 'reveal-rise', { 'tone tone--light': i % 3 === 1 }]} aria-labelledby={`school-${g.id}`}>
+          <h3 class="scroll__school" id={`school-${g.id}`}>
+            {g.school[lang]}
+          </h3>
+          <p class="scroll__plain">{g.plain[lang]}</p>
+          <ul class="scroll__spells" role="list">
+            {g.spells.map((s) => (
+              <li class="ltr">{s}</li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .grimoire {
+    display: grid;
+    gap: calc(var(--gutter) * 1.5);
+  }
+  @media (min-width: 640px) {
+    .grimoire {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1000px) {
+    .grimoire {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .scroll {
+    border-block-start-width: 10px;
+  }
+  .scroll:nth-child(3n + 1) {
+    border-block-start-color: var(--saffron);
+  }
+  .scroll:nth-child(3n + 2) {
+    border-block-start-color: var(--pomegranate);
+  }
+  .scroll:nth-child(3n) {
+    border-block-start-color: var(--pistachio);
+  }
+  .scroll__school {
+    font-size: var(--step-2);
+  }
+  .scroll__plain {
+    font-family: var(--ff-hand);
+    font-weight: 700;
+    font-size: var(--step--1);
+    color: var(--text-soft);
+    margin-block-end: var(--space-s);
+  }
+  .scroll__spells {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45em;
+  }
+  .scroll__spells li {
+    padding: 0.2em 0.65em;
+    border: var(--line-thin) solid var(--line-color);
+    background: var(--paper);
+    font-weight: 700;
+    font-size: var(--step--1);
+  }
+</style>

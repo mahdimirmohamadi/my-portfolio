@@ -1,0 +1,47 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, lp, formatNum } from '../../i18n/utils';
+import { getPosts } from '../../lib/content';
+import ChapterHead from '../ui/ChapterHead.astro';
+import PostCard from '../omake/PostCard.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const posts = (await getPosts(lang)).slice(0, 3);
+---
+
+<section class="chapter wrap" id="omake" aria-labelledby="omake-title">
+  <ChapterHead no={`${t('ch')} ${formatNum(lang, 5)}`} title={t('ch.omake')} plain={t('ch.omake.plain')} id="omake-title" />
+  {
+    posts.length ? (
+      <div class="teaser">
+        {posts.map((post) => (
+          <PostCard lang={lang} post={post} />
+        ))}
+      </div>
+    ) : (
+      <p class="panel">{t('omake.empty')}</p>
+    )
+  }
+  <p class="more">
+    <a class="btn btn--ghost misreg" href={lp(lang, '/omake')}>{t('omake.all')}</a>
+  </p>
+</section>
+
+<style>
+  .teaser {
+    display: grid;
+    gap: calc(var(--gutter) * 1.5);
+  }
+  @media (min-width: 900px) {
+    .teaser {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+  }
+  .more {
+    margin-block-start: var(--space-l);
+  }
+</style>

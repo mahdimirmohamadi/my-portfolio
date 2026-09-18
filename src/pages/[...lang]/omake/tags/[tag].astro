@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import PostCard from '../../../../components/omake/PostCard.astro';
+import { getPosts, tagSlug } from '../../../../lib/content';
+import { LANGS, useT, lp } from '../../../../i18n/utils';
+import type { Lang } from '../../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of LANGS) {
+    const posts = await getPosts(lang);
+    const tags = new Map<string, string>();
+    posts.forEach((p) => p.data.tags.forEach((tag) => tags.set(tagSlug(tag), tag)));
+    for (const [slug, tag] of tags) {
+      paths.push({
+        params: { lang: lang === 'en' ? undefined : lang, tag: slug },
+        props: { lang, tag, posts: posts.filter((p) => p.data.tags.some((x) => tagSlug(x) === slug)) },
+      });
+    }
+  }
+  return paths;
+}
+
+const { lang, tag, posts } = Astro.props as { lang: Lang; tag: string; posts: Awaited<ReturnType<typeof getPosts>> };
+const t = useT(lang);
+---
+
+<BaseLayout lang={lang} title={`#${tag} · ${t('ch.omake')}`} altHref={lp(lang === 'fa' ? 'en' : 'fa', '/omake')}>
+  <section class="wrap tagpage">
+    <a class="back" href={lp(lang, '/omake')}>{lang === 'fa' ? '→' : '←'} {t('omake.back')}</a>
+    <h1 class="tagpage__title"><span class="tag misreg">#{tag}</span></h1>
+    <div class="tagpage__list">
+      {posts.map((post) => <PostCard lang={lang} post={post} headingLevel="h2" />)}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tagpage {
+    padding-block-start: var(--space-l);
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 700;
+  }
+  .tagpage__title {
+    margin-block: var(--space-m) var(--space-l);
+  }
+  .tagpage__title .tag {
+    font-size: var(--step-3);
+    font-family: var(--ff-display);
+    padding: 0.1em 0.5em;
+  }
+  .tagpage__list {
+    display: grid;
+    gap: calc(var(--gutter) * 1.5);
+    max-width: 52rem;
+  }
+</style>

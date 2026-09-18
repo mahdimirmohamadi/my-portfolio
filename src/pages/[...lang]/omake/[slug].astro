@@ -1,0 +1,186 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Simo from '../../../components/art/Simo.astro';
+import SFX from '../../../components/ui/SFX.astro';
+import Bubble from '../../../components/ui/Bubble.astro';
+import { splitId, slugOf, tagSlug, getPosts, type Post } from '../../../lib/content';
+import { useT, lp, formatDate, formatNum, readingMinutes } from '../../../i18n/utils';
+import type { Lang } from '../../../i18n/ui';
+import sticker from '../../../assets/photo/mahdi-sticker.png';
+
+export async function getStaticPaths() {
+  const all = await getCollection('omake', (p) => import.meta.env.DEV || !p.data.draft);
+  return all.map((post) => {
+    const { lang, slug } = splitId(post.id);
+    return { params: { lang: lang === 'en' ? undefined : lang, slug }, props: { post, lang } };
+  });
+}
+
+const { post, lang } = Astro.props as { post: Post; lang: Lang };
+const t = useT(lang);
+const slug = slugOf(post);
+const { Content } = await render(post);
+const other: Lang = lang === 'fa' ? 'en' : 'fa';
+
+// language switch → the translated post if one shares the translationKey
+let altHref = lp(other, '/omake');
+if (post.data.translationKey) {
+  const twin = (await getPosts(other)).find((p) => p.data.translationKey === post.data.translationKey);
+  if (twin) altHref = lp(other, `/omake/${slugOf(twin)}`);
+}
+
+// "next side chapter": the next older post, else the newest other one
+const posts = await getPosts(lang);
+const idx = posts.findIndex((p) => p.id === post.id);
+const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
+---
+
+<BaseLayout lang={lang} title={post.data.title} description={post.data.description} altHref={altHref} progress ogType="article">
+  <article class="post wrap">
+    <a class="back" href={lp(lang, '/omake')}>{lang === 'fa' ? '→' : '←'} {t('omake.back')}</a>
+    <header class="post__head">
+      {post.data.sfx && <SFX en={post.data.sfx} fa={post.data.sfx} lang={lang} class="post__sfx" />}
+      <h1 class="post__title" style={`view-transition-name: post-${slug}`}>{post.data.title}</h1>
+      <p class="post__desc">{post.data.description}</p>
+      <div class="post__byline">
+        <img src={sticker.src} width="52" height="52" alt="" class="post__avatar" />
+        <p>
+          <strong>{t('site.name')}</strong><br />
+          <time datetime={post.data.pubDate.toISOString()}>{formatDate(lang, post.data.pubDate)}</time>
+          <span class="sep" aria-hidden="true"></span>
+          <span>{formatNum(lang, readingMinutes(post.body))} {t('omake.min')}</span>
+        </p>
+      </div>
+      {
+        post.data.tags.length > 0 && (
+          <ul class="post__tags" role="list" aria-label={t('omake.tagged')}>
+            {post.data.tags.map((tag) => (
+              <li>
+                <a class="tag misreg" href={lp(lang, `/omake/tags/${tagSlug(tag)}`)}>
+                  #{tag}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    <div class="prose post__body">
+      <Content />
+    </div>
+
+    <!-- moment #10: FIN stamp + Simo offers the next side chapter -->
+    <footer class="fin" data-fin>
+      <span class="stamp fin__stamp" data-fin-stamp>{t('omake.fin')}</span>
+      {
+        next && (
+          <div class="fin__next" data-fin-next>
+            <Bubble class="fin__bubble">
+              <span class="fin__label">{t('omake.next')}</span>
+              <a href={lp(lang, `/omake/${slugOf(next)}`)}>{next.data.title}</a>
+            </Bubble>
+            <Simo pose="point" size={88} idle={false} />
+          </div>
+        )
+      }
+    </footer>
+  </article>
+</BaseLayout>
+
+<script>
+  import '../../../scripts/motion/fin';
+</script>
+
+<style>
+  .post {
+    padding-block-start: var(--space-l);
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: 700;
+  }
+  .post__head {
+    position: relative;
+    max-width: var(--measure);
+    margin-block: var(--space-m) var(--space-xl);
+    padding-block-end: var(--space-l);
+    border-block-end: var(--line) solid var(--line-color);
+  }
+  :global(.post__sfx) {
+    display: block;
+    width: fit-content;
+    margin-inline-start: auto;
+    margin-block-end: -0.2em;
+    font-size: calc(var(--step-3) * var(--sfx-k, 1)) !important;
+  }
+  .post__title {
+    font-size: var(--step-4);
+    max-width: 22ch;
+  }
+  .post__desc {
+    margin-block-start: var(--space-s);
+    font-size: var(--step-1);
+    color: var(--text-soft);
+  }
+  .post__byline {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-block-start: var(--space-m);
+    font-size: var(--step--1);
+    line-height: 1.4;
+  }
+  .post__avatar {
+    border-radius: 50%;
+    border: var(--line-thin) solid var(--line-color);
+  }
+  .post__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6em;
+    margin-block-start: var(--space-s);
+  }
+  .fin {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-l);
+    max-width: var(--measure);
+    margin-block-start: var(--space-2xl);
+    padding-block-start: var(--space-l);
+    border-block-start: var(--line) solid var(--line-color);
+  }
+  .fin__stamp {
+    font-size: var(--step-3);
+  }
+  .fin__next {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-xs);
+    justify-self: end;
+  }
+  :global(.fin__bubble) {
+    margin-block-end: 40px;
+  }
+  :global(.fin__bubble .bubble__tail) {
+    inset-inline-start: auto !important;
+    inset-inline-end: 1.2em;
+    scale: -1 1;
+  }
+  :global(:root[dir='rtl'] .fin__bubble .bubble__tail) {
+    scale: 1 1;
+  }
+  .fin__label {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .fin__next a {
+    font-family: var(--ff-display);
+    font-size: var(--step-1);
+    line-height: 1.2;
+  }
+</style>

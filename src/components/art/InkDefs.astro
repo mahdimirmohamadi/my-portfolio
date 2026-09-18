@@ -1,0 +1,22 @@
+---
+/** Global SVG defs used by the art: hand-drawn wobble filter + girih tile. Rendered once per page. */
+---
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <!-- static wobble: slight displacement makes geometric strokes feel hand-inked -->
+    <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7" result="n" />
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <!-- girih: 8-point star + strapwork tile -->
+    <pattern id="girih" width="40" height="40" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+        <path d="M20 6l4 10 10 4-10 4-4 10-4-10-10-4 10-4Z" />
+        <path d="M20 12l2.4 5.6L28 20l-5.6 2.4L20 28l-2.4-5.6L12 20l5.6-2.4Z" />
+        <path d="M0 0l6 6M40 0l-6 6M0 40l6-6M40 40l-6-6" />
+      </g>
+    </pattern>
+  </defs>
+</svg>

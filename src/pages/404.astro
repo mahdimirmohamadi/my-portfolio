@@ -1,0 +1,83 @@
+---
+/* One static 404 for both languages: the story is told in both scripts. */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Simo from '../components/art/Simo.astro';
+import { ui } from '../i18n/ui';
+---
+
+<BaseLayout lang="en" title="404" noindex>
+  <section class="lost wrap" aria-labelledby="lost-title">
+    <div class="lost__panel panel tone tone--mid">
+      <p class="lost__code" aria-hidden="true">404</p>
+      <Simo pose="spyglass" size={140} class="lost__simo" />
+    </div>
+    <div class="lost__text">
+      <h1 id="lost-title">{ui.en['404.title']}</h1>
+      <p>{ui.en['404.body']}</p>
+      <div lang="fa" dir="rtl" class="lost__fa">
+        <p class="lost__fa-title">{ui.fa['404.title']}</p>
+        <p>{ui.fa['404.body']}</p>
+      </div>
+      <p class="lost__links">
+        <a class="btn misreg" href="/">{ui.en['404.home']}</a>
+        <a class="btn btn--ghost misreg" href="/fa/" lang="fa">{ui.fa['404.home']}</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lost {
+    display: grid;
+    gap: var(--space-l);
+    padding-block-start: var(--space-l);
+  }
+  @media (min-width: 900px) {
+    .lost {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+  .lost__panel {
+    position: relative;
+    min-height: 300px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    rotate: -1.5deg;
+  }
+  .lost__code {
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 4rem + 10vw, 11rem);
+    line-height: 1;
+    color: var(--saffron);
+    -webkit-text-stroke: 4px #16130f;
+    paint-order: stroke fill;
+    text-shadow: 8px 8px 0 #16130f;
+  }
+  :global(.lost__simo) {
+    position: absolute;
+    inset-block-end: 12px;
+    inset-inline-end: 12px;
+  }
+  .lost__text h1 {
+    font-size: var(--step-4);
+  }
+  .lost__text > * + * {
+    margin-block-start: var(--space-s);
+  }
+  .lost__fa {
+    font-family: var(--font-body);
+    padding-block-start: var(--space-s);
+    border-block-start: var(--line-thin) dashed var(--line-color);
+  }
+  .lost__fa-title {
+    font-family: var(--font-fa-display);
+    font-size: var(--step-3);
+  }
+  .lost__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+  }
+</style>
