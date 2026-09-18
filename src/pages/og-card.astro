@@ -1,0 +1,123 @@
+---
+// The social card, rendered by the site itself so it uses the real fonts and palette.
+// scripts/og.mjs screenshots this page at 1200×630. Not linked, not indexed.
+import '../styles/global.css';
+import { Font, Image } from 'astro:assets';
+import original from '../assets/photo/mahdi-original.png';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>og</title>
+    <Font cssVariable="--font-body" />
+    <Font cssVariable="--font-display" />
+    <Font cssVariable="--font-mono" />
+  </head>
+  <body>
+    <div class="card">
+      <div class="text">
+        <p class="name">Mahdi MirMohamadi</p>
+        <p class="role">Front-end engineer in Tehran. I make web apps fast, then faster.</p>
+        <p class="url">mahdimirmo.ir</p>
+      </div>
+      <div class="art">
+        <span class="rod"></span>
+        <Image class="photo" src={original} width={560} format="webp" quality={85} alt="" />
+      </div>
+      <svg class="branch" viewBox="0 0 300 300" aria-hidden="true">
+        <path d="M150 300C146 262 170 240 160 210 150 180 110 170 88 140 72 118 70 96 76 80" fill="none" stroke="oklch(0.36 0.03 78)" stroke-width="7" stroke-linecap="round" />
+        <path d="M160 210C190 200 214 184 226 160" fill="none" stroke="oklch(0.36 0.03 78)" stroke-width="4.5" stroke-linecap="round" />
+        <circle cx="76" cy="80" r="11" fill="oklch(0.905 0.2 124)" stroke="oklch(0.25 0.014 112)" stroke-width="2" />
+        <circle cx="226" cy="160" r="11" fill="oklch(0.905 0.2 124)" stroke="oklch(0.25 0.014 112)" stroke-width="2" />
+        <circle cx="160" cy="210" r="6" fill="oklch(0.936 0.013 128)" stroke="oklch(0.36 0.03 78)" stroke-width="2.5" />
+      </svg>
+      <div class="shelf"></div>
+    </div>
+  </body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+    background: var(--plaster);
+  }
+  .card {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: var(--plaster);
+  }
+  .text {
+    position: absolute;
+    left: 80px;
+    top: 150px;
+    width: 640px;
+  }
+  .name {
+    font-family: var(--font-display);
+    font-size: 84px;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .role {
+    margin-top: 28px;
+    font-family: var(--font-body);
+    font-size: 30px;
+    line-height: 1.35;
+    color: var(--ink-soft);
+  }
+  .url {
+    margin-top: 40px;
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1.5px solid var(--ink);
+    border-radius: 4px;
+    background: var(--lime);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 26px;
+    color: var(--on-lime);
+  }
+  .art {
+    position: absolute;
+    right: 80px;
+    top: 60px;
+    width: 280px;
+  }
+  .rod {
+    display: block;
+    height: 9px;
+    margin: 0 -22px;
+    border-radius: 5px;
+    background: oklch(0.3 0.025 78);
+  }
+  .photo {
+    display: block;
+    width: 280px;
+    height: 370px;
+    object-fit: cover;
+    object-position: 32% 40%;
+    border: 1.5px solid var(--rule-strong);
+    border-top: 0;
+  }
+  .branch {
+    position: absolute;
+    left: 700px;
+    bottom: 34px;
+    width: 300px;
+    height: 300px;
+  }
+  .shelf {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34px;
+    background: oklch(0.3 0.025 78);
+    border-top: 4px solid oklch(0.42 0.03 78);
+  }
+</style>

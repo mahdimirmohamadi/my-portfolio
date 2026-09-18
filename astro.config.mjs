@@ -24,7 +24,7 @@ export default defineConfig({
     react(),
     sitemap({
       i18n: { defaultLocale: 'en', locales: { en: 'en', fa: 'fa-IR' } },
-      filter: (page) => !page.includes('/lab'),
+      filter: (page) => !page.includes('/lab') && !page.includes('/og-card'),
     }),
   ],
 
