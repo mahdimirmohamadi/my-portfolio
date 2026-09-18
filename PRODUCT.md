@@ -23,7 +23,7 @@ The personal site of Mahdi MirMohamadi, a front-end engineer in Tehran with 4 ye
 
 ## Brand Personality
 
-**Professional, curious, playful.** Mostly modern and technical, with a light cartoonish edge (chunky outlines, hard offset shadows, a small mascot) that shows personality without looking childish. The voice is plain, specific and confident: short sentences, real numbers, no hype. It is Linux- and AI-native, speaking through real computer metaphors: a tiling desktop, a live terminal, an editor buffer, `git log`.
+**Professional, curious, playful.** Mostly modern and technical, with a light cartoonish edge (a chunky soft display serif and Nix, the small mascot) that shows personality without looking childish. The voice is first person, nerdy and specific: short sentences, real numbers, no hype. It is Linux- and AI-native: the career drawn as a git branch, a live terminal, real screenshots of shipped work.
 
 ## Anti-references
 

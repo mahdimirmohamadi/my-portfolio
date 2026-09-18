@@ -1,8 +1,10 @@
-# mahdi@workstation
+# Ma: mahdimirmo.ir
 
-Mahdi MirMohamadi's portfolio as a modern Linux desktop session: a tiled hero (nvim buffer + live terminal), `git log` for experience, grouped skill logos, a photo with an optional 1-bit mode, and Nix, a tiny CRT daemon. English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
+Mahdi MirMohamadi's portfolio as one quiet alcove: his photo hangs like a scroll, his career grows from a bowl as a git branch with three live buds, and Nix sits on the shelf. Below it: work as a dated ledger, projects as real screenshots, how he uses AI, skills with logos, a live terminal, notes (the blog) and a big "Say hi." English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
 
-> The manga edition (*The Saffron Chronicle*) lives on the `main` branch. This is the `theme/workstation` branch.
+The design system is written down in [DESIGN.md](DESIGN.md); product intent in [PRODUCT.md](PRODUCT.md).
+
+> Other editions: the manga (*The Saffron Chronicle*) on `main`, the Linux desktop on `theme/workstation`. This is `theme/ma`.
 
 ## Commands
 
