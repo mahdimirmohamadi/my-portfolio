@@ -26,7 +26,7 @@ const when = (j: (typeof jobs)[number]) =>
 <section class="section wrap" id="work" aria-labelledby="work-title">
   <div class="work__head">
     <SectionHead title={t('work.title')} id="work-title" />
-    <Nix mood="type" size={120} class="work__nix" />
+    <Nix mood="desk" size={130} class="work__nix" />
   </div>
   <ol class="stem" role="list">
     {
@@ -310,7 +310,7 @@ const when = (j: (typeof jobs)[number]) =>
   }
   /* Nix at his desk: the day job */
   .work__head :global(.work__nix) {
-    width: clamp(80px, 11vw, 120px);
+    width: clamp(84px, 11vw, 130px);
     margin-block-end: var(--space-s);
   }
   .school__list {

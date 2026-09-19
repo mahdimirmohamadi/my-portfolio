@@ -21,7 +21,10 @@ const lines = items.filter((p) => !shotOf(slugOf(p)));
 ---
 
 <section class="section wrap" id="projects" aria-labelledby="projects-title">
-  <SectionHead title={t('projects.title')} lead={t('projects.lead')} id="projects-title" />
+  <div class="projects__head">
+    <SectionHead title={t('projects.title')} lead={t('projects.lead')} id="projects-title" />
+    <Nix mood="window" size={150} class="projects__nix" />
+  </div>
   <div class="prints">
     {
       prints.map((item) => (
@@ -48,6 +51,23 @@ const lines = items.filter((p) => !shotOf(slugOf(p)));
 </section>
 
 <style>
+  .projects__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  /* Nix peeks out of an empty browser window, next to the real ones below */
+  .projects__head :global(.projects__nix) {
+    width: clamp(96px, 13vw, 150px);
+    margin-block-end: var(--space-m);
+    transform: scaleX(var(--dir));
+  }
+  @media (max-width: 599px) {
+    .projects__head :global(.projects__nix) {
+      display: none;
+    }
+  }
   .prints {
     display: grid;
     gap: var(--space-xl) var(--space-l);

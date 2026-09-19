@@ -12,6 +12,9 @@ const sheets = [
   // holes: seed points of white gaps enclosed by the drawing that are background, not paper
   // (the space between the headphone band and his head); the CV and envelope stay white
   { file: 'nix-sheet-3.jpg', poses: ['tea', 'music', 'search', 'point', 'think', 'bonsai'], holes: [[970, 195], [900, 170], [1050, 170]] },
+  { file: 'nix-sheet-4.jpg', poses: ['desk', 'plane', 'phone', 'notebook', 'hardhat', 'bigkey'] },
+  // the empty browser window he peeks into is background, not paper
+  { file: 'nix-sheet-5.jpg', poses: ['moon', 'sun', 'rocket', 'window', 'bow', 'bye'], holes: [[600, 1800], [700, 1500], [640, 1350]] },
 ];
 
 for (const sheet of sheets) {

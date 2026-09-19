@@ -15,7 +15,10 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 
 <BaseLayout lang={lang} title={t('blog.title')}>
   <section class="wrap blog" aria-labelledby="blog-title">
-    <SectionHead cmd="ls -lt ~/blog" title={t('blog.title')} lead={t('blog.lead')} id="blog-title" />
+    <div class="blog__head">
+      <SectionHead title={t('blog.title')} lead={t('blog.lead')} id="blog-title" />
+      <Nix mood="phone" size={110} class="blog__nix" />
+    </div>
     {
       tags.length > 0 && (
         <ul class="blog__tags" role="list" aria-label={t('blog.tagged')}>
@@ -49,6 +52,18 @@ const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 <style>
   .blog {
     padding-block-start: var(--space-xl);
+  }
+  .blog__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  /* people read these on a phone, so does Nix */
+  .blog__head :global(.blog__nix) {
+    width: clamp(76px, 10vw, 110px);
+    margin-block-end: var(--space-m);
+    transform: scaleX(var(--dir));
   }
   .blog__tags {
     display: flex;

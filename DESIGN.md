@@ -298,20 +298,16 @@ Copy on the open wall (inline-start), the arrangement on the other side: photo s
 
 ### Nix (mascot)
 
-A raster character cut with real alpha from the owner's generated sheets: sheet 1 by `scripts/nix.mjs` (waving, sleeping, panicked, typing), sheets 2 and 3 by `scripts/nix-sheets.mjs` (head, call, mail, cv, grad, thumbs, tea, music, search, point, think, bonsai), served as WebP through `src/components/art/Nix.astro` (`mood=…`). The front-facing head is the site's mark: the navbar logo and, via `scripts/icons.mjs`, the favicon/apple-touch badge (a plaster tile with an ink edge). One pose per place, each with a job:
-- waving: hero shelf, beside "Get in touch", end of every blog post, MDX `<Nix>` asides, the social card
-- bonsai (carrying the branch): beside the Experience title; grad: beside "Before that? I was studying"
-- point: pointing at "All projects"; thumbs (with confetti): the "Ship it" node of the AI loop
-- type: next to the terminal; think: beside the blog heading
-- call / mail: at the end of the phone and email lines in the close; cv: on top of the resume picker
-- sleep: footer; tea: empty blog; music (headphones): the lab; search (magnifier): the 404
-Directional poses mirror with `var(--dir)` so they keep facing what they point at. Always decorative (empty alt). By day he sits directly on the plaster; by night a 1px `--rule-strong` cut line (four stacked 0-blur drop-shadows) keeps his black outline from dissolving into the dark. His own colours (cream body, amber horns, coral tail and blush, lime face) are part of the character, not the page palette, and never leak into UI.
-
-### Experience timeline
-The hero's branch carried down the page: a 3px bronze stem on the inline-start edge. Each current employer is a 24px lime bud on the stem; school is a hollow bronze node under the funny line "Before that? I was studying, obviously!" with a napping Nix. Each job: company in Young Serif (step-3) with an out-arrow, a date pill ("Oct 2025 – now" / "از مهر ۱۴۰۴ تا الان") beside place and mode, the role in 600, a one-sentence summary at step-1. "What I built there" sits in a plaster-lift recess (1px hairline, 6px) whose items carry hollow bronze commit nodes.
-
-### AI workflow loop
-Five circular nodes (72px, plaster-lift, ink frame) joined by bronze stems: I plan (my photo), an agent drafts (Claude Code + Cursor marks), I review (my photo), tests and CI (the Actions mark), ship (Nix). A dashed bronze U runs under draft and review, "not right? again", with an arrowhead back into the agent. Horizontal at 900px+, a vertical stem on phones (where the loop becomes an inline dashed tag). Motion: when it scrolls into view, the nodes enter with a 260ms stagger and each stem draws toward the next (line drawing, scale from the inline-start); then a lime bud and an ink ring walk the loop in eight 1.1s beats, taking the retry lap once. It pauses off-screen; reduced motion shows the static diagram.
+A raster character cut with real alpha from the owner's generated sheets: sheet 1 by `scripts/nix.mjs`, sheets 2-5 by `scripts/nix-sheets.mjs` (a 3x2 grid on white per sheet; `holes` seeds any enclosed white that is background, like the gap under the headphone band or the empty browser window). Served as WebP through `src/components/art/Nix.astro` (`mood=…`), 28 poses in all. The front-facing head is the site's mark: the navbar logo and, via `scripts/icons.mjs`, the favicon/apple-touch badge. One pose per place, each with a job:
+- hero shelf: sunglasses-and-wave by day, asleep on the moon at night (swapped by `data-theme`)
+- desk (laptop + mug): Experience; grad: "Before that? I was studying"; hard hat + wrench: Skills
+- peeking out of an empty browser window: Projects; pointing: "All projects"
+- rocket: the "Ship it" node of the AI loop; pressing a giant keycap: the AI toolbox
+- notebook: the blog heading; phone: the blog index; bow: the end of a post; tea: an empty blog
+- paper plane: "Want more nerdy stuff?"; call / mail: the phone and email lines in the close
+- waving: beside "Get in touch", MDX `<Nix>` asides and the social card; cv: the resume picker
+- bye (suitcase): the footer; headphones: the lab; magnifier: the 404; type: the terminal
+Directional poses mirror with `var(--dir)` so they keep facing what they point at. Always decorative (empty alt). By day he sits directly on the plaster; by night a 1px `--rule-strong` cut line (four stacked 0-blur drop-shadows) keeps his black outline from dissolving into the dark. His own colours are part of the character, not the page palette, and never leak into UI.
 
 ### Browser frame (projects)
 Each project with a screenshot shows the whole live page (`<slug>-full.jpg`, from `scripts/shots.mjs`) inside a small browser window: `--radius-key` (12px) corners, an ink frame, a bar with three hollow dots and a pill URL (lock + host). The window is 16:10 onto the top of the page; hovering or focusing the project pans the page to its bottom at reading speed (duration scales with page length, 1.2-14s, ease-in-out) and it glides back in 700ms. Touch screens and reduced motion get a plain scrollable window instead. Used on the home projects and each project page.

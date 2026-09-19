@@ -1,7 +1,8 @@
 ---
 /**
  * The last word: where the technical posts live. Set like a chat list (the Telegram channel with
- * its own avatar, then X), because that's where people will actually read them. Nix has his tea.
+ * its own avatar, then X), because that's where people will actually read them. Nix flies over
+ * on a paper plane.
  */
 import { Image } from 'astro:assets';
 import type { Lang } from '../../i18n/ui';
@@ -26,7 +27,7 @@ const TgTag = tgHref ? 'a' : 'div';
   <div class="more__copy">
     <h2 class="more__title" id="more-title">{t('more.title')}</h2>
     <p class="more__lead">{t('more.lead')}</p>
-    <Nix mood="tea" size={130} class="more__nix" />
+    <Nix mood="plane" size={150} class="more__nix" />
   </div>
 
   <ul class="chats" role="list">
@@ -91,7 +92,7 @@ const TgTag = tgHref ? 'a' : 'div';
     max-width: 46ch;
   }
   .more__copy :global(.more__nix) {
-    width: clamp(96px, 12vw, 130px);
+    width: clamp(110px, 14vw, 160px);
     margin-block-start: var(--space-m);
   }
 

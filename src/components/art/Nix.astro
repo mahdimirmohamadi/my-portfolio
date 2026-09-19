@@ -1,7 +1,7 @@
 ---
 /**
  * Nix, the CRT daemon. Raster poses cut from the owner's generated sheets by
- * scripts/nix.mjs (sheet 1) and scripts/nix-sheets.mjs (sheets 2 and 3).
+ * scripts/nix.mjs (sheet 1) and scripts/nix-sheets.mjs (sheets 2-5).
  * `size` is the rendered width in px; the height follows each pose's own proportions.
  */
 import { Image } from 'astro:assets';
@@ -21,8 +21,26 @@ import search from '../../assets/nix/nix-search.png';
 import point from '../../assets/nix/nix-point.png';
 import think from '../../assets/nix/nix-think.png';
 import bonsai from '../../assets/nix/nix-bonsai.png';
+import desk from '../../assets/nix/nix-desk.png';
+import plane from '../../assets/nix/nix-plane.png';
+import phone from '../../assets/nix/nix-phone.png';
+import notebook from '../../assets/nix/nix-notebook.png';
+import hardhat from '../../assets/nix/nix-hardhat.png';
+import bigkey from '../../assets/nix/nix-bigkey.png';
+import moon from '../../assets/nix/nix-moon.png';
+import sun from '../../assets/nix/nix-sun.png';
+import rocket from '../../assets/nix/nix-rocket.png';
+import windowPeek from '../../assets/nix/nix-window.png';
+import bow from '../../assets/nix/nix-bow.png';
+import bye from '../../assets/nix/nix-bye.png';
 
-const poses = { happy: wave, sleep, panic, type: typing, head, call, mail, cv, grad, thumbs, tea, music, search, point, think, bonsai };
+const poses = {
+  happy: wave, sleep, panic, type: typing,
+  head, call, mail, cv, grad, thumbs,
+  tea, music, search, point, think, bonsai,
+  desk, plane, phone, notebook, hardhat, bigkey,
+  moon, sun, rocket, window: windowPeek, bow, bye,
+};
 
 interface Props {
   /** happy = waving */

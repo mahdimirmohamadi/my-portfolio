@@ -22,7 +22,7 @@ const t = useT(lang);
 <section class="section wrap" id="skills" aria-labelledby="skills-title">
   <div class="skills__head">
     <SectionHead title={t('skills.title')} lead={t('skills.lead')} id="skills-title" />
-    <Nix mood="search" size={96} class="skills__nix" />
+    <Nix mood="hardhat" size={104} class="skills__nix" />
   </div>
   <dl class="skills" dir="ltr">
     {
@@ -57,9 +57,9 @@ const t = useT(lang);
     justify-content: space-between;
     gap: var(--space-s);
   }
-  /* Nix inspects the toolbox */
+  /* Nix in his hard hat: these are the tools */
   .skills__head :global(.skills__nix) {
-    width: clamp(64px, 9vw, 96px);
+    width: clamp(70px, 9vw, 104px);
     margin-block-end: var(--space-m);
     transform: scaleX(calc(-1 * var(--dir)));
   }

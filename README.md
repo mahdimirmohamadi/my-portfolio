@@ -14,7 +14,7 @@ The design system is written down in [DESIGN.md](DESIGN.md); product intent in [
 | `pnpm build` | Static site in `dist/` |
 | `pnpm preview` | Serve `dist/` locally |
 | `pnpm check` | Type-check (needs TypeScript 6.x) |
-| `pnpm nix` | Re-cut Nix's poses from `src/assets/nix/nix-sheet*.jpg`, then rebuild the favicons |
+| `pnpm nix` | Re-cut Nix's 28 poses from `src/assets/nix/nix-sheet*.jpg`, then rebuild the favicons |
 | `pnpm icons` | Rebuild only the favicons from `nix-head.png` |
 | `pnpm shots` | Re-capture the full-page project screenshots (needs `PWC` and `CHROME_PATH`, see the script header) |
 | `pnpm og` | Rebuild the social card (needs `pnpm preview` running; see the script's header) |
@@ -46,7 +46,7 @@ src/
   components/
     chrome/                Navbar, Dock (phones), Footer, ResumeDialog
     home/                  Hero, Work (timeline), Projects, AiNote (workflow loop), Skills, Shell/Terminal, BlogTeaser, Contact
-    art/Nix.astro          the mascot (16 poses; see DESIGN.md)
+    art/Nix.astro          the mascot (28 poses; see DESIGN.md)
     ui/                    Icon, Logo, Arrow, SectionHead, Window
   scripts/
     terminal.ts            the shell: commands, history, tab completion

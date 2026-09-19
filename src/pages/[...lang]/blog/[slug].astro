@@ -71,7 +71,7 @@ const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
     </div>
     <footer class="post__end">
       <div class="eof">
-        <Nix size={72} class="eof__nix" />
+        <Nix mood="bow" size={80} class="eof__nix" />
         <p>{t('blog.eof')}</p>
       </div>
       {
@@ -148,7 +148,7 @@ const next = posts[idx + 1] ?? posts.find((p) => p.id !== post.id);
     display: grid;
     gap: var(--space-l);
   }
-  /* Nix waves you off at the end of every post */
+  /* Nix bows at the end of every post */
   .eof {
     display: flex;
     align-items: flex-end;

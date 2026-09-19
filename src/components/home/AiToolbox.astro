@@ -10,6 +10,7 @@ import type { Lang } from '../../i18n/ui';
 import { useT } from '../../i18n/utils';
 import { aiToolbox } from '../../data/profile';
 import Logo from '../ui/Logo.astro';
+import Nix from '../art/Nix.astro';
 
 interface Props {
   lang: Lang;
@@ -20,8 +21,11 @@ const t = useT(lang);
 
 <div class="toolbox">
   <div class="toolbox__head">
-    <h3 class="toolbox__title">{t('ai.tools')}</h3>
-    <p class="toolbox__lead">{t('ai.tools.lead')}</p>
+    <div>
+      <h3 class="toolbox__title">{t('ai.tools')}</h3>
+      <p class="toolbox__lead">{t('ai.tools.lead')}</p>
+    </div>
+    <Nix mood="bigkey" size={110} class="toolbox__nix" />
   </div>
   <ul class="plate" role="list" data-plate>
     {
@@ -71,6 +75,17 @@ const t = useT(lang);
 <style>
   .toolbox {
     margin-block-start: var(--space-l);
+  }
+  .toolbox__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  /* Nix presses a key of his own */
+  .toolbox__head :global(.toolbox__nix) {
+    width: clamp(76px, 10vw, 110px);
+    transform: scaleX(calc(-1 * var(--dir)));
   }
   .toolbox__title {
     font-size: var(--step-2);
