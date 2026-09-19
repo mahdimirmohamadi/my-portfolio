@@ -1,0 +1,211 @@
+---
+/**
+ * The last word: where the technical posts live. Set like a chat list (the Telegram channel with
+ * its own avatar, then X), because that's where people will actually read them. Nix has his tea.
+ */
+import { Image } from 'astro:assets';
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { person } from '../../data/profile';
+import Logo from '../ui/Logo.astro';
+import Arrow from '../ui/Arrow.astro';
+import Nix from '../art/Nix.astro';
+import channel from '../../assets/social/telegram-channel.png';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const tgHandle = person.social.telegramChannel;
+const tgHref = tgHandle ? `https://t.me/${tgHandle}` : undefined;
+const TgTag = tgHref ? 'a' : 'div';
+---
+
+<section class="section wrap more" id="more" aria-labelledby="more-title">
+  <div class="more__copy">
+    <h2 class="more__title" id="more-title">{t('more.title')}</h2>
+    <p class="more__lead">{t('more.lead')}</p>
+    <Nix mood="tea" size={130} class="more__nix" />
+  </div>
+
+  <ul class="chats" role="list">
+    <li>
+      <TgTag class="chat" href={tgHref} target={tgHref ? '_blank' : undefined} rel={tgHref ? 'noopener' : undefined}>
+        <span class="chat__avatar">
+          <Image src={channel} width={64} height={64} widths={[64, 128]} sizes="64px" format="webp" quality={80} alt="" />
+          <span class="chat__badge"><Logo name="Telegram" size={20} brand /></span>
+        </span>
+        <span class="chat__body">
+          <span class="chat__name">{t('more.tg.name')}</span>
+          {tgHandle && <span class="chat__handle" dir="ltr">@{tgHandle}</span>}
+          <span class="chat__preview">{t('more.tg.preview')}</span>
+        </span>
+        {
+          tgHref && (
+            <span class="chat__cta">
+              {t('more.tg.cta')}
+              <Arrow />
+            </span>
+          )
+        }
+      </TgTag>
+    </li>
+    <li>
+      <a class="chat" href={person.social.x.href} target="_blank" rel="me noopener">
+        <span class="chat__avatar chat__avatar--x">
+          <Logo name="X" size={26} />
+        </span>
+        <span class="chat__body">
+          <span class="chat__name">{t('more.x.name')}</span>
+          <span class="chat__handle" dir="ltr">{person.social.x.handle}</span>
+          <span class="chat__preview">{t('more.x.preview')}</span>
+        </span>
+        <span class="chat__cta">
+          {t('more.x.cta')}
+          <Arrow />
+        </span>
+      </a>
+    </li>
+  </ul>
+</section>
+
+<style>
+  .more {
+    display: grid;
+    gap: var(--space-l);
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .more {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: var(--space-xl);
+    }
+  }
+  .more__title {
+    font-size: var(--step-3);
+  }
+  .more__lead {
+    margin-block-start: var(--space-s);
+    color: var(--ink-soft);
+    max-width: 46ch;
+  }
+  .more__copy :global(.more__nix) {
+    width: clamp(96px, 12vw, 130px);
+    margin-block-start: var(--space-m);
+  }
+
+  /* a chat list, the way the posts are actually read */
+  .chats {
+    display: grid;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-key);
+    background: var(--plaster-lift);
+    overflow: hidden;
+  }
+  .chats li + li {
+    border-block-start: 1px solid var(--rule);
+  }
+  .chat {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.4rem var(--space-s);
+    padding: var(--space-s) var(--space-m);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background-color var(--dur-hover) var(--ease-out);
+  }
+  @media (min-width: 560px) {
+    .chat {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+  }
+  a.chat:hover {
+    background: var(--plaster);
+  }
+  .chat__avatar {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: var(--bw) solid var(--rule-strong);
+    background: var(--plaster-deep);
+  }
+  .chat__avatar :global(img) {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .chat__avatar--x {
+    color: var(--ink);
+  }
+  /* the network's mark, pinned to the avatar like an app badge */
+  .chat__badge {
+    position: absolute;
+    inset-block-end: -4px;
+    inset-inline-end: -4px;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: var(--bw) solid var(--plaster-lift);
+    background: var(--plaster-lift);
+  }
+  .chat__body {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+  .chat__name {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .chat__handle {
+    justify-self: start;
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+  .chat__preview {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  .chat__cta {
+    grid-column: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    justify-self: start;
+    min-height: 40px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 0.3em;
+    white-space: nowrap;
+  }
+  @media (min-width: 560px) {
+    .chat__cta {
+      grid-column: auto;
+    }
+  }
+  .chat__cta :global(svg) {
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  :global(:root[dir='rtl']) .chat__cta :global(svg) {
+    scale: -1 1;
+  }
+  a.chat:hover .chat__cta {
+    text-decoration-color: var(--lime-ink);
+  }
+  a.chat:hover .chat__cta :global(svg) {
+    translate: calc(4px * var(--dir)) 0;
+  }
+</style>

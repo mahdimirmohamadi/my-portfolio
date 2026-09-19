@@ -16,6 +16,7 @@ The design system is written down in [DESIGN.md](DESIGN.md); product intent in [
 | `pnpm check` | Type-check (needs TypeScript 6.x) |
 | `pnpm nix` | Re-cut Nix's poses from `src/assets/nix/nix-sheet*.jpg`, then rebuild the favicons |
 | `pnpm icons` | Rebuild only the favicons from `nix-head.png` |
+| `pnpm shots` | Re-capture the full-page project screenshots (needs `PWC` and `CHROME_PATH`, see the script header) |
 | `pnpm og` | Rebuild the social card (needs `pnpm preview` running; see the script's header) |
 
 ## Writing a blog post

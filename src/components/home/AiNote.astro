@@ -9,9 +9,9 @@
 import { Image } from 'astro:assets';
 import type { Lang, UIKey } from '../../i18n/ui';
 import { useT } from '../../i18n/utils';
-import { aiTools } from '../../data/profile';
 import SectionHead from '../ui/SectionHead.astro';
 import Logo from '../ui/Logo.astro';
+import AiToolbox from './AiToolbox.astro';
 import Nix from '../art/Nix.astro';
 import me from '../../assets/photo/mahdi-original.png';
 
@@ -62,19 +62,7 @@ const steps = [
     </div>
   </figure>
 
-  <div class="tools">
-    <h3 class="tools__title">{t('ai.tools')}</h3>
-    <ul role="list">
-      {
-        aiTools.map((tool) => (
-          <li>
-            <Logo name={tool} size={24} brand />
-            <span dir="ltr">{tool}</span>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
+  <AiToolbox lang={lang} />
 </section>
 
 <script>
@@ -455,37 +443,4 @@ const steps = [
     100% { opacity: 0; }
   }
 
-  /* the tools I actually use, in their own colours */
-  .tools {
-    display: grid;
-    gap: var(--space-s);
-    margin-block-start: var(--space-m);
-  }
-  @media (min-width: 760px) {
-    .tools {
-      grid-template-columns: 11rem 1fr;
-      align-items: center;
-    }
-  }
-  .tools__title {
-    font-size: var(--step-1);
-  }
-  .tools ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-    padding: 0;
-    list-style: none;
-  }
-  .tools li {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-height: 52px;
-    padding-inline: 0.9rem 1.1rem;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-sm);
-    background: var(--plaster-lift);
-    font-weight: 600;
-  }
 </style>

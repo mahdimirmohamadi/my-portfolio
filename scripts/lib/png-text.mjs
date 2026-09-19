@@ -24,3 +24,13 @@ export function setPngText(file, key, text) {
   const out = chunks.flatMap((c) => (c.type === 'IEND' ? [text_, c.raw] : [c.raw]));
   writeFileSync(file, Buffer.concat([buf.subarray(0, 8), ...out]));
 }
+
+/** Adds a JPEG comment (COM) segment right after SOI, the JPEG counterpart of setPngText. */
+export function setJpegComment(file, text) {
+  const buf = readFileSync(file);
+  const body = Buffer.from(`impeccable:prompt\0${text}`, 'latin1');
+  const seg = Buffer.alloc(4);
+  seg.writeUInt16BE(0xfffe, 0);
+  seg.writeUInt16BE(body.length + 2, 2);
+  writeFileSync(file, Buffer.concat([buf.subarray(0, 2), seg, body, buf.subarray(2)]));
+}

@@ -56,6 +56,8 @@
     /* shape: near-square, thin rules */
     --radius: 6px;
     --radius-sm: 4px;
+    /* keycaps (the AI toolbox) and the browser frame: objects, not panels */
+    --radius-key: 12px;
     --radius-pill: 999px;
     --bw: 1.5px;
 
@@ -96,22 +98,22 @@
     --dur-ui: 240ms;
   }
 
-  /* night: the same alcove after dark */
+  /* night: the same alcove after dark, under a navy sky */
   :root[data-theme='dark'] {
     color-scheme: dark;
-    --plaster: oklch(0.205 0.009 128);
-    --plaster-deep: oklch(0.175 0.009 128);
-    --plaster-lift: oklch(0.235 0.01 128);
-    --ink: oklch(0.93 0.012 115);
-    --ink-soft: oklch(0.78 0.012 115);
-    --ink-faint: oklch(0.68 0.012 115);
-    --rule: oklch(0.33 0.012 120);
-    --rule-strong: oklch(0.72 0.012 115);
+    --plaster: oklch(0.215 0.045 262);
+    --plaster-deep: oklch(0.185 0.045 262);
+    --plaster-lift: oklch(0.25 0.048 262);
+    --ink: oklch(0.94 0.012 250);
+    --ink-soft: oklch(0.8 0.022 252);
+    --ink-faint: oklch(0.71 0.025 252);
+    --rule: oklch(0.36 0.045 260);
+    --rule-strong: oklch(0.74 0.025 252);
     --bronze: oklch(0.13 0.012 80);
     --bronze-soft: oklch(0.72 0.05 80);
     --lime-ink: var(--lime);
     --oxblood: oklch(0.7 0.14 30);
-    --surface-3: oklch(0.28 0.01 124);
+    --surface-3: oklch(0.3 0.048 262);
   }
 
   :root[dir='rtl'] {

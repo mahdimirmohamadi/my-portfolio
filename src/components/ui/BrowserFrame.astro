@@ -1,0 +1,120 @@
+---
+/**
+ * A project's whole page inside a small browser window. The window shows the top of the page;
+ * hovering (or focusing) the project scrolls the page down inside it, at reading speed, and it
+ * glides back when you leave. On touch screens and with reduced motion the window is simply
+ * scrollable with a finger or wheel instead.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  url?: string;
+  href?: string;
+  sizes?: string;
+  eager?: boolean;
+}
+const { src, url, href, sizes = '(min-width: 900px) 560px, 100vw', eager = false } = Astro.props;
+const host = url ? new URL(url).host : '';
+// how many window-heights of page there are below the fold decides how long the scroll takes
+const ratio = src.height / src.width;
+const below = Math.max(0, ratio - 0.625);
+const dur = Math.min(14, Math.max(1.2, below * 3.2)).toFixed(2);
+const Tag = href ? 'a' : 'div';
+---
+
+<figure class="browser" style={`--scroll-dur:${dur}s`}>
+  <div class="browser__bar" aria-hidden="true">
+    <span class="browser__dots"><i></i><i></i><i></i></span>
+    {
+      host && (
+        <span class="browser__url" dir="ltr">
+          <svg viewBox="0 0 24 24" width="12" height="12"><path d="M6 11h12v9H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
+          {host}
+        </span>
+      )
+    }
+  </div>
+  <Tag class="browser__viewport" href={href} tabindex={href ? '-1' : undefined} aria-hidden={href ? 'true' : undefined}>
+    <Image class="browser__page" src={src} widths={[560, 900, 1280]} sizes={sizes} format="webp" quality={70} alt="" loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  </Tag>
+</figure>
+
+<style>
+  .browser {
+    margin: 0;
+    border: var(--bw) solid var(--rule-strong);
+    border-radius: var(--radius-key);
+    background: var(--plaster-lift);
+    overflow: hidden;
+  }
+  .browser__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-block-end: 1px solid var(--rule);
+    background: var(--plaster-deep);
+    direction: ltr;
+  }
+  .browser__dots {
+    display: flex;
+    gap: 6px;
+  }
+  .browser__dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rule-strong);
+  }
+  .browser__url {
+    flex: 1;
+    margin-inline-end: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 0;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-pill);
+    background: var(--plaster-lift);
+    font-family: var(--ff-mono);
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* the window onto the page */
+  .browser__viewport {
+    display: block;
+    container-type: inline-size;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--plaster-deep);
+  }
+  .browser__viewport :global(.browser__page) {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* back to the top: quicker than the way down */
+    transition: translate 700ms var(--ease-out);
+  }
+
+  /* hover or keyboard focus on the project pans the page to its bottom (16:10 window = 62.5cqi tall) */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    :global(:is(.proj, .readme__shot):is(:hover, :focus-within)) .browser__viewport :global(.browser__page) {
+      translate: 0 calc(-100% + 62.5cqi);
+      transition: translate var(--scroll-dur) cubic-bezier(0.45, 0, 0.55, 1) 150ms;
+    }
+  }
+  /* touch screens and reduced motion: scroll it yourself */
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .browser__viewport {
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+  }
+</style>

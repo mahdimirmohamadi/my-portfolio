@@ -18,7 +18,7 @@ const logo = logoOf(name);
 
 {
   logo?.kind === 'svg' && (
-    <svg class:list={['logo', cls, { 'logo--brand': brand, 'logo--dark': logo.dark }]} style={`--brand:${logo.hex}`} viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+    <svg class:list={['logo', cls, { 'logo--brand': brand, 'logo--dark': logo.dark }]} style={`--brand-hex:${logo.hex}`} viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
       <path d={logo.path} fill="currentColor" />
     </svg>
   )
@@ -38,7 +38,7 @@ const logo = logoOf(name);
     object-fit: contain;
   }
   .logo--brand {
-    color: var(--brand);
+    color: var(--brand-hex);
   }
   :global(:root[data-theme='dark']) .logo--brand.logo--dark {
     color: var(--ink);

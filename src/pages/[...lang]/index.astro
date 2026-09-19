@@ -8,6 +8,7 @@ import Skills from '../../components/home/Skills.astro';
 import Shell from '../../components/home/Shell.astro';
 import BlogTeaser from '../../components/home/BlogTeaser.astro';
 import Contact from '../../components/home/Contact.astro';
+import MoreNerdy from '../../components/home/MoreNerdy.astro';
 import { langPaths, langFromParam } from '../../i18n/utils';
 
 export const getStaticPaths = langPaths;
@@ -23,4 +24,5 @@ const lang = langFromParam(Astro.params.lang);
   <Shell lang={lang} />
   <BlogTeaser lang={lang} />
   <Contact lang={lang} />
+  <MoreNerdy lang={lang} />
 </BaseLayout>

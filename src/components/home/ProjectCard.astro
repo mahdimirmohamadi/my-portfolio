@@ -3,12 +3,12 @@
  * A project. With a screenshot it's a framed print beside its note;
  * without one it's a single index line.
  */
-import { Image } from 'astro:assets';
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
 import { slugOf, type Project } from '../../lib/content';
 import { shotOf } from '../../lib/shots';
 import Arrow from '../ui/Arrow.astro';
+import BrowserFrame from '../ui/BrowserFrame.astro';
 
 interface Props {
   lang: Lang;
@@ -25,9 +25,7 @@ const shot = shotOf(slug);
 {
   shot ? (
     <article class="proj">
-      <a class="proj__print" href={href} tabindex="-1" aria-hidden="true">
-        <Image src={shot} widths={[480, 800]} sizes="(min-width: 900px) 460px, 100vw" format="webp" quality={72} alt="" loading="lazy" />
-      </a>
+      <BrowserFrame src={shot} url={item.data.url} href={href} sizes="(min-width: 900px) 560px, 100vw" />
       <div class="proj__note">
         <h3 class="proj__title">
           <a href={href} style={`view-transition-name: proj-${slug}`}>
@@ -39,6 +37,7 @@ const shot = shotOf(slug);
         <p class="proj__links">
           <a class="arrow-link" href={href}>
             {t('projects.read')}
+            <span class="sr-only">: {item.data.title}</span>
             <Arrow />
           </a>
           {host && (
@@ -74,27 +73,6 @@ const shot = shotOf(slug);
     .proj {
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
       gap: var(--space-xl);
-    }
-  }
-  .proj__print {
-    display: block;
-    border: 1px solid var(--rule-strong);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    background: var(--plaster-deep);
-  }
-  .proj__print :global(img) {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-    object-position: top;
-    transition: scale 700ms var(--ease-out);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .proj:hover .proj__print :global(img) {
-      scale: 1.025;
     }
   }
   .proj__title {

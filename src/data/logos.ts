@@ -1,10 +1,12 @@
 // Tool name → brand mark. simple-icons marks are inlined at build time and drawn in currentColor
-// (their brand colour shows on hover). Antigravity and Hermes Agent have no simple-icons entry,
-// so their official site icons are used as images (sources in each PNG's metadata).
+// (their brand colour shows on hover). Antigravity, Hermes Agent, Zustand and Jotai have no
+// simple-icons entry, so their official icons are used as images (sources in each PNG's metadata).
 // Tools without a published mark are shown by name alone; no imitation marks.
 import type { ImageMetadata } from 'astro';
 import antigravity from '../assets/logos/antigravity.png';
 import hermesAgent from '../assets/logos/hermes-agent.png';
+import zustand from '../assets/logos/zustand.png';
+import jotai from '../assets/logos/jotai.png';
 import {
   siTypescript,
   siJavascript,
@@ -37,6 +39,7 @@ import {
   siGooglesearchconsole,
   siGmail,
   siTelegram,
+  siX,
 } from 'simple-icons';
 
 type Icon = { path: string; title: string; hex: string };
@@ -73,11 +76,14 @@ const marks: Record<string, Icon> = {
   'Technical SEO': siGooglesearchconsole,
   Email: siGmail,
   Telegram: siTelegram,
+  X: siX,
 };
 
 const images: Record<string, { src: ImageMetadata; hex: string }> = {
   Antigravity: { src: antigravity, hex: '#3b82f6' },
   'Hermes Agent': { src: hermesAgent, hex: '#8a8a8a' },
+  Zustand: { src: zustand, hex: '#9a6b4b' },
+  Jotai: { src: jotai, hex: '#8c8c8c' },
 };
 
 export type Logo =
@@ -95,11 +101,11 @@ function luminance(hex: string) {
 }
 
 /** A tool's published mark, or null: tools without one are shown by name alone.
- *  `dark` marks near-black brand colours, which fall back to ink at night. */
+ *  `dark` marks brand colours too dark to read on the navy night wall (under ~2.2:1); they fall back to ink at night. */
 export function logoOf(name: string): Logo {
   const img = images[name];
   if (img) return { kind: 'img', src: img.src, hex: img.hex, dark: false };
   const m = marks[name];
   if (!m) return null;
-  return { kind: 'svg', path: m.path, hex: `#${m.hex}`, dark: luminance(m.hex) < 0.05 };
+  return { kind: 'svg', path: m.path, hex: `#${m.hex}`, dark: luminance(m.hex) < 0.09 };
 }

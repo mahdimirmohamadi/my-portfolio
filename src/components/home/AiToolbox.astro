@@ -1,0 +1,221 @@
+---
+/**
+ * My AI toolbox: four keycaps on a small keyboard plate, one per tool, each with its real mark.
+ * A key presses down on hover/focus/tap (press feedback) and opens the tool's site; under each
+ * key, one line in my words about what I use it for (always visible, never hover-only).
+ * When the plate first scrolls into view the keys "type" once, left to right (a stagger),
+ * then sit still. Reduced motion: no typing, keys only change colour on hover.
+ */
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import { aiToolbox } from '../../data/profile';
+import Logo from '../ui/Logo.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<div class="toolbox">
+  <div class="toolbox__head">
+    <h3 class="toolbox__title">{t('ai.tools')}</h3>
+    <p class="toolbox__lead">{t('ai.tools.lead')}</p>
+  </div>
+  <ul class="plate" role="list" data-plate>
+    {
+      aiToolbox.map((tool, i) => (
+        <li class="slot" style={`--i:${i}`}>
+          <a class="key" href={tool.href} target="_blank" rel="noopener" aria-label={tool.name}>
+            <span class="key__skirt" aria-hidden="true" />
+            <span class="key__cap">
+              <span class="key__legend" aria-hidden="true">
+                {tool.key}
+              </span>
+              <Logo name={tool.name} size={40} brand />
+              <span class="key__name" dir="ltr">
+                {tool.name}
+              </span>
+              <span class="key__led" aria-hidden="true" />
+            </span>
+          </a>
+          <p class="slot__use">{tool.use[lang]}</p>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  import { prefersLessMotion } from '../../scripts/util';
+
+  // the keys type themselves once, the first time the plate is seen
+  document.addEventListener('astro:page-load', () => {
+    const plate = document.querySelector<HTMLElement>('[data-plate]');
+    if (!plate || plate.dataset.ready) return;
+    plate.dataset.ready = '';
+    if (prefersLessMotion()) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        plate.classList.add('is-typing');
+        io.disconnect();
+      },
+      { rootMargin: '0px 0px -25% 0px' },
+    );
+    io.observe(plate);
+  });
+</script>
+
+<style>
+  .toolbox {
+    margin-block-start: var(--space-l);
+  }
+  .toolbox__title {
+    font-size: var(--step-2);
+  }
+  .toolbox__lead {
+    margin-block-start: 0.3rem;
+    color: var(--ink-soft);
+  }
+
+  /* the plate: a recess the keys sit in */
+  .plate {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-m) var(--space-s);
+    margin-block-start: var(--space-m);
+    padding: var(--space-m);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--plaster-deep);
+    list-style: none;
+  }
+  @media (min-width: 820px) {
+    .plate {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--space-m);
+    }
+  }
+  .slot {
+    display: grid;
+    gap: var(--space-xs);
+    align-content: start;
+  }
+
+  /* a keycap: the cap sits on its skirt; pressing slides the cap down over it */
+  .key {
+    --press: 6px;
+    position: relative;
+    display: block;
+    padding-block-end: var(--press);
+    color: var(--ink);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    outline-offset: 4px;
+  }
+  .key__skirt {
+    position: absolute;
+    inset: var(--press) 0 0;
+    border-radius: var(--radius-key);
+    background: var(--rule-strong);
+  }
+  .key__cap {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 0.55rem;
+    aspect-ratio: 5 / 4;
+    padding: 0.8rem;
+    border: var(--bw) solid var(--rule-strong);
+    border-radius: var(--radius-key);
+    background: var(--plaster-lift);
+    transition:
+      translate 140ms var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out);
+  }
+  .key__legend {
+    position: absolute;
+    inset-block-start: 0.45rem;
+    inset-inline-start: 0.6rem;
+    font-family: var(--ff-mono);
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+  }
+  .key__name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+  /* the LED: a small bud that lights while the key is down */
+  .key__led {
+    position: absolute;
+    inset-block-start: 0.55rem;
+    inset-inline-end: 0.6rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rule-strong);
+    background: transparent;
+    transition: background-color 140ms var(--ease-out);
+  }
+  .key :global(.logo) {
+    width: 40px;
+    height: 40px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .key:hover .key__cap {
+      translate: 0 calc(var(--press) - 2px);
+      background: var(--plaster);
+    }
+    .key:hover .key__led {
+      background: var(--lime);
+      border-color: var(--ink);
+    }
+  }
+  .key:focus-visible .key__cap {
+    translate: 0 calc(var(--press) - 2px);
+  }
+  .key:focus-visible .key__led,
+  .key:active .key__led {
+    background: var(--lime);
+    border-color: var(--ink);
+  }
+  .key:active .key__cap {
+    translate: 0 var(--press);
+    transition-duration: 60ms;
+  }
+
+  .slot__use {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  /* the first look: the four keys are typed once, left to right */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html:not([data-lite])) .plate.is-typing .key__cap {
+      animation: keystroke 260ms var(--ease-out) both;
+      animation-delay: calc(var(--i) * 170ms + 150ms);
+    }
+    :global(html:not([data-lite])) .plate.is-typing .key__led {
+      animation: led 260ms var(--ease-out) both;
+      animation-delay: calc(var(--i) * 170ms + 150ms);
+    }
+  }
+  @keyframes keystroke {
+    40% {
+      translate: 0 var(--press);
+    }
+  }
+  @keyframes led {
+    30%,
+    60% {
+      background: var(--lime);
+      border-color: var(--ink);
+    }
+  }
+</style>

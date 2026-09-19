@@ -5,9 +5,9 @@ import Window from '../../../components/ui/Window.astro';
 import { splitId, slugOf, type Project } from '../../../lib/content';
 import { useT, lp } from '../../../i18n/utils';
 import type { Lang } from '../../../i18n/ui';
-import { Image } from 'astro:assets';
 import { shotOf } from '../../../lib/shots';
 import Arrow from '../../../components/ui/Arrow.astro';
+import BrowserFrame from '../../../components/ui/BrowserFrame.astro';
 
 export async function getStaticPaths() {
   const items = await getCollection('projects');
@@ -47,9 +47,9 @@ const shot = shotOf(slug);
     </header>
     {
       shot && (
-        <figure class="readme__shot">
-          <Image src={shot} widths={[640, 1280]} sizes="(min-width: 1040px) 900px, 100vw" format="webp" quality={76} alt="" />
-        </figure>
+        <div class="readme__shot">
+          <BrowserFrame src={shot} url={item.data.url} sizes="(min-width: 1040px) 1000px, 100vw" eager />
+        </div>
       )
     }
     <div class="readme__body">
@@ -90,14 +90,6 @@ const shot = shotOf(slug);
   }
   .readme__shot {
     margin: 0 0 var(--space-xl);
-    border: 1px solid var(--rule-strong);
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-  }
-  .readme__shot :global(img) {
-    display: block;
-    width: 100%;
-    height: auto;
   }
   .readme__title {
     font-size: var(--step-4);

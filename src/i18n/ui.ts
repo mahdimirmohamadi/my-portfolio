@@ -46,12 +46,14 @@ export const ui = {
     'work.now': 'now',
     'work.since': 'since',
     'work.shipped': 'What I built there',
+    'work.stack': 'Stack',
     'work.edu': 'Before that? I was studying, obviously!',
 
     'ai.title': 'How AI changed my workflow',
     'ai.lead':
       'Most of my first drafts aren’t typed by me anymore. I plan, an agent writes, and I read the diff like a stranger wrote it, because one did. The loop looks like this:',
-    'ai.tools': 'In my editor every day',
+    'ai.tools': 'My AI toolbox',
+    'ai.tools.lead': 'Four keys I press every day. Tap one to meet the tool.',
     'ai.flow.label': 'My workflow with AI, as a loop: plan, the agent drafts, I review, tests run, it ships.',
     'ai.flow.plan': 'I plan it',
     'ai.flow.plan.sub': 'the what and the why',
@@ -76,7 +78,7 @@ export const ui = {
     'skills.lead': 'What I actually use, grouped. No made-up percentages.',
 
     'term.title': 'Or ask the terminal',
-    'term.lead': 'It’s a real little shell, about 4KB of TypeScript. Type help, or tap a command.',
+    'term.lead': 'A real little shell I wrote in about 4KB of TypeScript. Type the command «help» to see what it can do, or just tap one of the buttons under it.',
 
     'blog.title': 'Blog',
     'blog.lead': 'Things I figured out and wrote down, mostly about the web, Linux and AI.',
@@ -95,6 +97,15 @@ export const ui = {
     'contact.phone.label': 'Phone',
     'contact.email.label': 'Email',
     'contact.elsewhere': 'Elsewhere',
+
+    'more.title': 'Want more nerdy stuff?',
+    'more.lead': 'I post the technical bits on my Telegram channel and on X: web tricks, Linux, AI tools, and the things I broke and then fixed. Come hang out there.',
+    'more.tg.name': 'My Telegram channel',
+    'more.tg.preview': 'Technical posts and notes, as I learn things.',
+    'more.tg.cta': 'Join the channel',
+    'more.x.name': 'Mahdi on X',
+    'more.x.preview': 'Short thoughts, links, and the occasional rant.',
+    'more.x.cta': 'Follow on X',
 
     'resume.title': 'Which one do you want?',
     'resume.lead': 'Same me, two languages.',
@@ -153,12 +164,14 @@ export const ui = {
     'work.now': 'تا الان',
     'work.since': 'از',
     'work.shipped': 'اونجا چی ساختم',
+    'work.stack': 'تکنولوژی‌ها',
     'work.edu': 'قبل از اون؟ داشتم درس می‌خوندم دیگه!',
 
     'ai.title': 'تاثیر AI روی workflow من',
     'ai.lead':
       'این روزها پیش‌نویس اول بیشتر کدهام رو من تایپ نمی‌کنم. من نقشه می‌کشم، ایجنت می‌نویسه، بعد diff رو جوری می‌خونم انگار یه غریبه نوشته؛ چون واقعاً یه غریبه نوشته! چرخه‌ش این شکلیه:',
-    'ai.tools': 'هر روز توی ادیتورم',
+    'ai.tools': 'جعبه‌ابزار AI من',
+    'ai.tools.lead': 'چهارتا کلیدی که هر روز فشارشون می‌دم. روی هر کدوم بزنید تا با ابزارش آشنا بشید.',
     'ai.flow.label': 'workflow من با AI به شکل یه چرخه: نقشه، پیش‌نویس ایجنت، بازبینی من، تست، و ship.',
     'ai.flow.plan': 'نقشه می‌کشم',
     'ai.flow.plan.sub': 'چی بسازیم و چرا',
@@ -183,7 +196,7 @@ export const ui = {
     'skills.lead': 'چیزهایی که واقعاً باهاشون کار می‌کنم، دسته‌بندی‌شده. بدون درصدهای الکی.',
 
     'term.title': 'یا از ترمینال بپرسید',
-    'term.lead': 'یه شل کوچیک واقعیه، حدود ۴ کیلوبایت TypeScript. help رو بزنید یا روی یکی از دستورها کلیک کنید.',
+    'term.lead': 'یه شل کوچیک و واقعی که با حدود ۴ کیلوبایت کد TypeScript نوشتمش. دستور «help» رو تایپ کنید تا ببینید چی بلده، یا خیلی راحت روی یکی از دکمه‌های زیرش بزنید.',
 
     'blog.title': 'وبلاگ',
     'blog.lead': 'چیزهایی که فهمیدم و نوشتم؛ بیشتر درباره‌ی وب، لینوکس و AI.',
@@ -202,6 +215,15 @@ export const ui = {
     'contact.phone.label': 'تلفن',
     'contact.email.label': 'ایمیل',
     'contact.elsewhere': 'جاهای دیگه',
+
+    'more.title': 'چیزای فنی بیشتر می‌خواید؟',
+    'more.lead': 'نکته‌های فنی رو توی کانال تلگرامم و توی X می‌ذارم: ترفندهای وب، لینوکس، ابزارهای AI، و چیزایی که خراب کردم و بعد درستشون کردم. اونجا هم بیاید پیشم.',
+    'more.tg.name': 'کانال تلگرامم',
+    'more.tg.preview': 'پست‌ها و یادداشت‌های فنی، همون‌طور که یاد می‌گیرم.',
+    'more.tg.cta': 'عضو کانال بشید',
+    'more.x.name': 'مهدی توی X',
+    'more.x.preview': 'فکرهای کوتاه، لینک‌ها و گاهی هم یه غر کوچولو.',
+    'more.x.cta': 'توی X دنبالم کنید',
 
     'resume.title': 'کدوم نسخه رو می‌خواید؟',
     'resume.lead': 'همون آدم، دو تا زبون.',

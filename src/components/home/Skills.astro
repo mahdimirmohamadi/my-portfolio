@@ -10,6 +10,7 @@ import { stack } from '../../data/profile';
 import { logoOf } from '../../data/logos';
 import SectionHead from '../ui/SectionHead.astro';
 import Logo from '../ui/Logo.astro';
+import Nix from '../art/Nix.astro';
 
 interface Props {
   lang: Lang;
@@ -19,7 +20,10 @@ const t = useT(lang);
 ---
 
 <section class="section wrap" id="skills" aria-labelledby="skills-title">
-  <SectionHead title={t('skills.title')} lead={t('skills.lead')} id="skills-title" />
+  <div class="skills__head">
+    <SectionHead title={t('skills.title')} lead={t('skills.lead')} id="skills-title" />
+    <Nix mood="search" size={96} class="skills__nix" />
+  </div>
   <dl class="skills" dir="ltr">
     {
       stack.map((g) => (
@@ -32,7 +36,7 @@ const t = useT(lang);
               {g.items.map((name) => {
                 const logo = logoOf(name);
                 return (
-                  <li class:list={['tool', { 'tool--dark': logo?.dark }]} style={logo ? `--brand:${logo.hex}` : undefined}>
+                  <li class:list={['tool', { 'tool--dark': logo?.dark }]} style={logo ? `--brand-hex:${logo.hex}` : undefined}>
                     <Logo name={name} size={16} />
                     {name}
                   </li>
@@ -47,6 +51,18 @@ const t = useT(lang);
 </section>
 
 <style>
+  .skills__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  /* Nix inspects the toolbox */
+  .skills__head :global(.skills__nix) {
+    width: clamp(64px, 9vw, 96px);
+    margin-block-end: var(--space-m);
+    transform: scaleX(calc(-1 * var(--dir)));
+  }
   .skills {
     display: grid;
     border-block-start: 1px solid var(--rule);
@@ -90,8 +106,9 @@ const t = useT(lang);
     list-style: none;
     padding: 0;
   }
+  /* the brand colour arrives as --brand-hex (inline); --brand is derived here so night can override it */
   .tool {
-    --brand: var(--ink);
+    --brand: var(--brand-hex, var(--ink));
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;

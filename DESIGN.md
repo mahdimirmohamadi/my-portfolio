@@ -96,6 +96,7 @@ rounded:
   tag: "3px"
   sm: "4px"
   md: "6px"
+  key: "12px"
   pill: "999px"
 spacing:
   3xs: "0.25rem"
@@ -219,7 +220,7 @@ A near-monochrome sage-and-ink wall with a warm bronze ground line and one satur
 
 **The Brand-on-Hover Exception.** Tool marks sit in ink until touched: hovering a skill lights its logo, border and a 12% tint in the tool's own brand colour (simple-icons hex; near-black brands fall back to ink at night). The AI tools row and the AI workflow nodes show their real colours at rest because they are the subject there. These third-party colours are the only blues and purples on the site, and they never become UI chrome.
 
-**The Plaster, Not Cream Rule.** The ground is cool sage (hue 128). No warm cream, no pure white, no pure black; night plaster keeps the same hue at L 0.205.
+**The Plaster, Not Cream Rule.** The day ground is cool sage (hue 128). No warm cream, no pure white, no pure black. Night is the same alcove under a navy sky: plaster oklch(0.215 0.045 262), deep 0.185, lift 0.25, rules at hue 260, cool ink; lime and the bronze shelf stay as they are.
 
 **The No Gradient Rule.** Every fill is a flat token. No colour gradients, no blue or purple anywhere.
 
@@ -249,7 +250,7 @@ A near-monochrome sage-and-ink wall with a warm bronze ground line and one satur
 
 ## Layout
 
-A sticky 60px navbar spans the top, closed by a 1px ink rule; content sits in a centred column (max 1200px, gutters 32px, 18px under 768px). At 900px+ the navbar carries the section links; below that they move to a floating five-item dock at the bottom (the footer reserves 80px for it) and the navbar keeps the brand, the call button and the switches.
+Scrolling to an anchor is smooth (off under reduced motion), and anchors land with the heading just under the navbar (`scroll-padding` 72px; each section cancels its own top padding via `scroll-margin`, plus `--anchor-extra` where a shelf or Nix sits above the heading). A sticky 60px navbar spans the top, closed by a 1px ink rule; content sits in a centred column (max 1200px, gutters 32px, 18px under 768px). At 900px+ the navbar carries the section links; below that they move to a floating five-item dock at the bottom (the footer reserves 80px for it) and the navbar keeps the brand, the call button and the switches.
 
 The hero alcove is a two-column grid at 900px+ (1.15fr copy / 0.85fr arrangement, min-height ~100svh capped at 860px) closed by a full-bleed 22px shelf. On phones the arrangement moves above the words (the person leads) at up to 380px wide. The photo takes 58% of the arrangement's width.
 
@@ -312,6 +313,15 @@ The hero's branch carried down the page: a 3px bronze stem on the inline-start e
 ### AI workflow loop
 Five circular nodes (72px, plaster-lift, ink frame) joined by bronze stems: I plan (my photo), an agent drafts (Claude Code + Cursor marks), I review (my photo), tests and CI (the Actions mark), ship (Nix). A dashed bronze U runs under draft and review, "not right? again", with an arrowhead back into the agent. Horizontal at 900px+, a vertical stem on phones (where the loop becomes an inline dashed tag). Motion: when it scrolls into view, the nodes enter with a 260ms stagger and each stem draws toward the next (line drawing, scale from the inline-start); then a lime bud and an ink ring walk the loop in eight 1.1s beats, taking the retry lap once. It pauses off-screen; reduced motion shows the static diagram.
 
+### Browser frame (projects)
+Each project with a screenshot shows the whole live page (`<slug>-full.jpg`, from `scripts/shots.mjs`) inside a small browser window: `--radius-key` (12px) corners, an ink frame, a bar with three hollow dots and a pill URL (lock + host). The window is 16:10 onto the top of the page; hovering or focusing the project pans the page to its bottom at reading speed (duration scales with page length, 1.2-14s, ease-in-out) and it glides back in 700ms. Touch screens and reduced motion get a plain scrollable window instead. Used on the home projects and each project page.
+
+### AI toolbox
+Four keycaps (the real tool marks, the tool name, a mono number legend, an LED dot) sit on a plaster-deep plate. A key is a cap over a darker skirt; hover or focus presses the cap 4px, click 6px, and its LED lights lime. Each key opens the tool's site; one line under it says what I use it for, always visible. The first time the plate is seen the keys type themselves once, left to right (170ms stagger).
+
+### More nerdy stuff (last section)
+Where the technical posts live, set like a chat list inside a plaster-lift panel: the Telegram channel with its own avatar (the owner's channel photo) and a Telegram badge, then X (@mahdimirmo). Each row: 64px round avatar, name, mono handle, a one-line preview, and an arrow CTA. Nix with his tea beside the heading.
+
 ### Resume picker
 A native `<dialog>` (plaster-lift, ink rule, 6px) opened by any `[data-resume]`. Nix stands on its top edge with a speech bubble ("Pick one. I'll fetch it!"), then the question and two 64px choices (file icon, language, PDF meta, download icon) that fill lime on hover. It rises 14px and fades in (220-320ms ease-out, `@starting-style`), Nix hops in a beat later (scale and a small turn, ease-out), and it closes on Esc, the close button, the backdrop or a choice.
 
@@ -346,5 +356,5 @@ A 10px bronze bar with a 2px lighter rim, 2px corners. Closes a passage (end of 
 - **Don't** build card grids; use ruled ledgers, framed prints and index lines.
 - **Don't** draw imitation logos or placeholder marks.
 - **Don't** set headings, nav or buttons in monospace to look technical.
-- **Don't** fill surfaces with lime or use it for decoration; don't introduce blue or purple outside third-party brand marks.
+- **Don't** fill surfaces with lime or use it for decoration; don't introduce blue or purple outside the navy night wall and third-party brand marks.
 - **Don't** give a section more than one authored animation (the growing branch in the hero, the loop in the AI section); everything else is feedback-sized.

@@ -56,7 +56,13 @@
     font-family: var(--ff-body);
     line-height: var(--lh-body);
     scrollbar-color: var(--rule) var(--bg);
-    scroll-padding-block-start: 24px;
+    /* anchors land just under the sticky navbar (60px) */
+    scroll-padding-block-start: 72px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-lite]) {
+      scroll-behavior: smooth;
+    }
   }
 
   body {
@@ -149,16 +155,12 @@
 
 /* long-form reading (blog posts, project write-ups) */
 @layer components {
+  /* a jump to a section skips its top padding, so the heading lands right under the navbar.
+     (No content-visibility here: its estimated heights made anchor jumps land in the wrong place.) */
   .section {
     padding-block-start: var(--space-2xl);
-    scroll-margin-block-start: 16px;
-  }
-  /* below-the-fold sections skip rendering work until they approach the viewport */
-  main > .section {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 900px;
-    /* paint containment would clip the hard shadows at the edges */
-    overflow-clip-margin: 32px;
+    /* --anchor-extra: sections with something above their heading (a shelf, a Nix) pull it in */
+    scroll-margin-block-start: calc(-1 * var(--space-2xl) + 1rem + var(--anchor-extra, 0px));
   }
 
   .prose {

@@ -1,7 +1,7 @@
 ---
 /**
  * Experience: the hero's branch carried down the page. One bronze stem, a lime bud for each
- * team I'm still with, hollow commit nodes for school. Nix walks in carrying the bonsai;
+ * team I'm still with, hollow commit nodes for school. Nix is at his desk by the title;
  * the graduate Nix sits by school. What I built at each place sits in its
  * own recess beside the story, so the eye can skim either column.
  */
@@ -11,6 +11,7 @@ import { jobs, education } from '../../data/profile';
 import SectionHead from '../ui/SectionHead.astro';
 import Arrow from '../ui/Arrow.astro';
 import Nix from '../art/Nix.astro';
+import Logo from '../ui/Logo.astro';
 
 interface Props {
   lang: Lang;
@@ -25,7 +26,7 @@ const when = (j: (typeof jobs)[number]) =>
 <section class="section wrap" id="work" aria-labelledby="work-title">
   <div class="work__head">
     <SectionHead title={t('work.title')} id="work-title" />
-    <Nix mood="bonsai" size={92} class="work__nix" />
+    <Nix mood="type" size={120} class="work__nix" />
   </div>
   <ol class="stem" role="list">
     {
@@ -52,7 +53,23 @@ const when = (j: (typeof jobs)[number]) =>
               </span>
             </p>
             <p class="job__role">{j.role[lang]}</p>
-            <p class="job__summary">{j.summary[lang]}</p>
+            <p class="job__about">{j.about[lang]}</p>
+            <p class="job__products">
+              {j.products.map((p) => (
+                <a href={p.href} target="_blank" rel="noopener" dir="ltr">
+                  {p.label}
+                  <Arrow kind="out" size={13} />
+                </a>
+              ))}
+            </p>
+            <ul class="job__stack" role="list" aria-label={t('work.stack')} dir="ltr">
+              {j.stack.map((name) => (
+                <li>
+                  <Logo name={name} size={14} />
+                  {name}
+                </li>
+              ))}
+            </ul>
           </div>
           <div class="built">
             <h4 class="built__title">{t('work.shipped')}</h4>
@@ -129,7 +146,7 @@ const when = (j: (typeof jobs)[number]) =>
     position: relative;
     margin-inline-start: -2.6rem;
     padding-inline-start: 2.6rem;
-    scroll-margin-block-start: 80px;
+    scroll-margin-block-start: 1rem;
   }
   .job {
     display: grid;
@@ -137,7 +154,7 @@ const when = (j: (typeof jobs)[number]) =>
   }
   @media (min-width: 960px) {
     .job {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
       gap: var(--space-xl);
       align-items: start;
     }
@@ -186,12 +203,50 @@ const when = (j: (typeof jobs)[number]) =>
     margin-block-start: var(--space-s);
     font-weight: 600;
   }
-  .job__summary {
+  .job__about {
     margin-block-start: 0.35rem;
-    font-size: var(--step-1);
-    line-height: 1.5;
+    line-height: 1.65;
     color: var(--ink);
-    max-width: 44ch;
+    max-width: 48ch;
+  }
+  .job__products {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-m);
+    margin-block-start: 0.4rem;
+  }
+  .job__products a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+    min-height: 40px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration-color: var(--rule);
+    text-underline-offset: 0.25em;
+  }
+  .job__products a:hover {
+    text-decoration-color: var(--lime-ink);
+  }
+  .job__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-block-start: var(--space-xs);
+    padding: 0;
+    list-style: none;
+  }
+  .job__stack li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.84rem;
+    color: var(--ink-soft);
   }
 
   /* what I built there: a recess in the wall, not a floating card */
@@ -244,18 +299,19 @@ const when = (j: (typeof jobs)[number]) =>
     width: 64px;
     margin-block-end: -0.2rem;
   }
+  #work {
+    --anchor-extra: -64px;
+  }
   .work__head {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: var(--space-s);
   }
-  /* Nix carries the branch down from the hero */
+  /* Nix at his desk: the day job */
   .work__head :global(.work__nix) {
-    width: clamp(64px, 9vw, 92px);
+    width: clamp(80px, 11vw, 120px);
     margin-block-end: var(--space-s);
-    /* he walks toward the title */
-    transform: scaleX(var(--dir));
   }
   .school__list {
     display: grid;

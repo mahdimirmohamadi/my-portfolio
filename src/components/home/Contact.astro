@@ -12,7 +12,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useT(lang);
-const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn', telegram: 'Telegram' };
+const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn', telegram: 'Telegram', x: 'X' };
 ---
 
 <section class="section wrap close" id="contact" aria-labelledby="contact-title">
@@ -73,6 +73,9 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
 </section>
 
 <style>
+  #contact {
+    --anchor-extra: -103px;
+  }
   .close__shelf {
     margin-block-end: var(--space-xl);
   }
@@ -125,6 +128,15 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
     translate: 0 -50%;
     width: clamp(52px, 7vw, 68px);
     transform: scaleX(var(--dir));
+  }
+  /* small phones: the address needs the whole row */
+  @media (max-width: 479px) {
+    .lines > div {
+      padding-inline-end: 0;
+    }
+    .lines :global(.lines__nix) {
+      display: none;
+    }
   }
   .lines dt {
     font-size: 0.9rem;
