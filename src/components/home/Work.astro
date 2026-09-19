@@ -1,7 +1,8 @@
 ---
 /**
  * Experience: the hero's branch carried down the page. One bronze stem, a lime bud for each
- * team I'm still with, hollow commit nodes for school. What I built at each place sits in its
+ * team I'm still with, hollow commit nodes for school. Nix walks in carrying the bonsai;
+ * the graduate Nix sits by school. What I built at each place sits in its
  * own recess beside the story, so the eye can skim either column.
  */
 import type { Lang } from '../../i18n/ui';
@@ -22,7 +23,10 @@ const when = (j: (typeof jobs)[number]) =>
 ---
 
 <section class="section wrap" id="work" aria-labelledby="work-title">
-  <SectionHead title={t('work.title')} id="work-title" />
+  <div class="work__head">
+    <SectionHead title={t('work.title')} id="work-title" />
+    <Nix mood="bonsai" size={92} class="work__nix" />
+  </div>
   <ol class="stem" role="list">
     {
       jobs.map((j) => (
@@ -65,7 +69,7 @@ const when = (j: (typeof jobs)[number]) =>
       <span class="node" aria-hidden="true"></span>
       <div class="school__head">
         <h3 class="school__title">{t('work.edu')}</h3>
-        <Nix mood="sleep" size={64} class="school__nix" />
+        <Nix mood="grad" size={72} class="school__nix" />
       </div>
       <ul class="school__list" role="list">
         {
@@ -237,8 +241,21 @@ const when = (j: (typeof jobs)[number]) =>
     font-size: var(--step-2);
   }
   .school__head :global(.school__nix) {
-    width: 56px;
+    width: 64px;
     margin-block-end: -0.2rem;
+  }
+  .work__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  /* Nix carries the branch down from the hero */
+  .work__head :global(.work__nix) {
+    width: clamp(64px, 9vw, 92px);
+    margin-block-end: var(--space-s);
+    /* he walks toward the title */
+    transform: scaleX(var(--dir));
   }
   .school__list {
     display: grid;

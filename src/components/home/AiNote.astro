@@ -46,7 +46,7 @@ const steps = [
                 </span>
               )}
               {s.who === 'ci' && <Logo name="CI/CD" size={26} brand />}
-              {s.who === 'nix' && <Nix size={50} class="step__nix" />}
+              {s.who === 'nix' && <Nix mood="thumbs" size={54} class="step__nix" />}
               <span class="step__bud" aria-hidden="true" />
             </span>
             <span class="step__title">{t(`ai.flow.${s.id}` as UIKey)}</span>
@@ -160,8 +160,8 @@ const steps = [
     gap: 6px;
   }
   .step__node :global(.step__nix) {
-    width: 50px;
-    translate: 0 -4px;
+    width: 54px;
+    translate: 0 -2px;
   }
   .step__bud {
     position: absolute;

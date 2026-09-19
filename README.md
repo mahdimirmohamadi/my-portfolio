@@ -14,8 +14,8 @@ The design system is written down in [DESIGN.md](DESIGN.md); product intent in [
 | `pnpm build` | Static site in `dist/` |
 | `pnpm preview` | Serve `dist/` locally |
 | `pnpm check` | Type-check (needs TypeScript 6.x) |
-| `pnpm nix` | Re-cut Nix's poses from `src/assets/nix/nix-sheet.jpg`, then rebuild the logo and favicons |
-| `pnpm icons` | Rebuild only the logo (`nix-head.png`) and favicons from the waving pose |
+| `pnpm nix` | Re-cut Nix's poses from `src/assets/nix/nix-sheet*.jpg`, then rebuild the favicons |
+| `pnpm icons` | Rebuild only the favicons from `nix-head.png` |
 | `pnpm og` | Rebuild the social card (needs `pnpm preview` running; see the script's header) |
 
 ## Writing a blog post
@@ -45,12 +45,12 @@ src/
   components/
     chrome/                Navbar, Dock (phones), Footer, ResumeDialog
     home/                  Hero, Work (timeline), Projects, AiNote (workflow loop), Skills, Shell/Terminal, BlogTeaser, Contact
-    art/Nix.astro          the mascot (moods: happy, sleep, panic, type)
+    art/Nix.astro          the mascot (16 poses; see DESIGN.md)
     ui/                    Icon, Logo, Arrow, SectionHead, Window
   scripts/
     terminal.ts            the shell: commands, history, tab completion
     chrome.ts              theme circle-reveal, scroll-spy, idle pausing, resume picker
-scripts/                   build-time: nix.mjs (cut the poses), icons.mjs (logo + favicons), og.mjs (social card)
+scripts/                   build-time: nix.mjs + nix-sheets.mjs (cut the poses), icons.mjs (favicons), og.mjs (social card)
 ```
 
 ## Design rules

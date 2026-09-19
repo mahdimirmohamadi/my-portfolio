@@ -7,6 +7,7 @@ import { shotOf } from '../../lib/shots';
 import SectionHead from '../ui/SectionHead.astro';
 import ProjectCard from './ProjectCard.astro';
 import Arrow from '../ui/Arrow.astro';
+import Nix from '../art/Nix.astro';
 
 interface Props {
   lang: Lang;
@@ -36,6 +37,7 @@ const lines = items.filter((p) => !shotOf(slugOf(p)));
   {
     !standalone && (
       <p class="more">
+        <Nix mood="point" size={76} class="more__nix" />
         <a class="arrow-link" href={lp(lang, '/projects')}>
           {t('projects.all')}
           <Arrow />
@@ -67,6 +69,14 @@ const lines = items.filter((p) => !shotOf(slugOf(p)));
     border-block-end: 1px solid var(--rule);
   }
   .more {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
     margin-block-start: var(--space-m);
+  }
+  /* Nix points at the link (mirrored in Persian so he still points at it) */
+  .more :global(.more__nix) {
+    width: 68px;
+    transform: scaleX(var(--dir));
   }
 </style>

@@ -1,7 +1,7 @@
 ---
 /**
- * Nix, the CRT daemon. Raster poses cut from the owner's generated sheet by scripts/nix.mjs.
- * mood: happy (waving) | sleep | panic | type
+ * Nix, the CRT daemon. Raster poses cut from the owner's generated sheets by
+ * scripts/nix.mjs (sheet 1) and scripts/nix-sheets.mjs (sheets 2 and 3).
  * `size` is the rendered width in px; the height follows each pose's own proportions.
  */
 import { Image } from 'astro:assets';
@@ -9,9 +9,24 @@ import wave from '../../assets/nix/nix-wave.png';
 import sleep from '../../assets/nix/nix-sleep.png';
 import panic from '../../assets/nix/nix-panic.png';
 import typing from '../../assets/nix/nix-type.png';
+import head from '../../assets/nix/nix-head.png';
+import call from '../../assets/nix/nix-call.png';
+import mail from '../../assets/nix/nix-mail.png';
+import cv from '../../assets/nix/nix-cv.png';
+import grad from '../../assets/nix/nix-grad.png';
+import thumbs from '../../assets/nix/nix-thumbs.png';
+import tea from '../../assets/nix/nix-tea.png';
+import music from '../../assets/nix/nix-music.png';
+import search from '../../assets/nix/nix-search.png';
+import point from '../../assets/nix/nix-point.png';
+import think from '../../assets/nix/nix-think.png';
+import bonsai from '../../assets/nix/nix-bonsai.png';
+
+const poses = { happy: wave, sleep, panic, type: typing, head, call, mail, cv, grad, thumbs, tea, music, search, point, think, bonsai };
 
 interface Props {
-  mood?: 'happy' | 'panic' | 'sleep' | 'type';
+  /** happy = waving */
+  mood?: keyof typeof poses;
   size?: number;
   class?: string;
   /** an accessible name; omit when Nix is decoration */
@@ -22,7 +37,7 @@ interface Props {
   wave?: boolean;
 }
 const { mood = 'happy', size = 96, class: cls, label, eager = false } = Astro.props;
-const src = { happy: wave, sleep, panic, type: typing }[mood];
+const src = poses[mood];
 ---
 
 <Image

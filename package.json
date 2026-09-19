@@ -12,7 +12,7 @@
     "astro": "astro",
     "check": "astro check",
     "og": "node scripts/og.mjs",
-    "nix": "node scripts/nix.mjs && node scripts/icons.mjs",
+    "nix": "node scripts/nix.mjs && node scripts/nix-sheets.mjs && node scripts/icons.mjs",
     "icons": "node scripts/icons.mjs"
   },
   "dependencies": {

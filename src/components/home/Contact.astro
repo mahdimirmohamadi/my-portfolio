@@ -27,10 +27,12 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
     <div>
       <dt>{t('contact.phone.label')}</dt>
       <dd><a href={`tel:${person.phone.tel}`} dir="ltr">{person.phone.display[lang]}</a></dd>
+      <Nix mood="call" size={72} class="lines__nix" />
     </div>
     <div>
       <dt>{t('contact.email.label')}</dt>
       <dd><a href={`mailto:${person.email}`} dir="ltr">{person.email}</a></dd>
+      <Nix mood="mail" size={72} class="lines__nix" />
     </div>
   </dl>
 
@@ -99,16 +101,30 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
     border-block-start: 1px solid var(--rule-strong);
   }
   .lines > div {
+    position: relative;
     display: grid;
     gap: 0.1rem var(--space-m);
+    align-content: center;
+    min-height: 88px;
     padding-block: var(--space-s);
+    padding-inline-end: 72px;
     border-block-end: 1px solid var(--rule-strong);
   }
   @media (min-width: 700px) {
     .lines > div {
       grid-template-columns: 7rem 1fr;
       align-items: baseline;
+      padding-inline-end: 96px;
     }
+  }
+  /* each line has its Nix: on the phone, holding the envelope */
+  .lines :global(.lines__nix) {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 0;
+    translate: 0 -50%;
+    width: clamp(52px, 7vw, 68px);
+    transform: scaleX(var(--dir));
   }
   .lines dt {
     font-size: 0.9rem;

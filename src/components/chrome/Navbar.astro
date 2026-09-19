@@ -1,6 +1,6 @@
 ---
 /**
- * The top bar: Nix (the site's mark) peeking up from the bar's bottom rule, the name,
+ * The top bar: Nix's head (the site's mark), the name,
  * the sections, then the phone number, language and day/night. On phones the sections
  * move to the Dock; the call button stays up here, one tap away.
  */
@@ -30,7 +30,7 @@ const other = lang === 'fa' ? 'en' : 'fa';
 <header class="bar">
   <div class="bar__inner">
     <a class="brand" href={home} aria-label={`${t('site.name')}, ${t('nav.home')}`}>
-      <Image class="brand__nix" src={nixHead} width={50} widths={[50, 100]} sizes="50px" format="webp" alt="" loading="eager" />
+      <Image class="brand__nix" src={nixHead} width={46} widths={[46, 92]} sizes="46px" format="webp" alt="" loading="eager" />
       <span class="brand__name">{t('site.name')}</span>
     </a>
 
@@ -82,7 +82,7 @@ const other = lang === 'fa' ? 'en' : 'fa';
     margin-inline: auto;
   }
 
-  /* Nix rises out of the bar's bottom rule: the cut edge of the head sits on the line */
+  /* Nix's head is the mark */
   .brand {
     display: flex;
     align-items: center;
@@ -92,11 +92,8 @@ const other = lang === 'fa' ? 'en' : 'fa';
     text-decoration: none;
   }
   .brand :global(.brand__nix) {
-    align-self: flex-end;
-    width: 50px;
+    width: 46px;
     height: auto;
-    margin-block-end: -1px;
-    transform-origin: 50% 100%;
     transition: translate var(--dur-ui) var(--ease-out);
   }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {

@@ -289,7 +289,7 @@ Thin 1px hairline, 3px corners, Geist Mono 0.75rem in ink-soft, 26px tall (36px 
 A recess, not a window: plaster-lift, 1px hairline, 6px corners, a quiet mono caption line on top (the terminal's `zsh · mahdi@tehran`, `80×24`). No title-bar chrome, no traffic lights.
 
 ### Navigation
-- **Navbar:** Nix's head is the mark: it peeks up out of the bar, its cut edge sitting on the bottom rule (hover lifts it 3px). Young Serif name beside it (hidden under 420px). Section links in ink-soft at 0.95rem; the current one goes ink 600 with a 7px lime bud under the word. At the inline-end: the call button (phone icon, and the number itself from 1180px), then the language switch (globe + short code) and the day/night switch (moon or sun, showing the state it switches to), all 40px, 4px corners, hairline.
+- **Navbar:** Nix's front-facing head is the mark (46px; hover lifts it 3px). Young Serif name beside it (hidden under 420px). Section links in ink-soft at 0.95rem; the current one goes ink 600 with a 7px lime bud under the word. At the inline-end: the call button (phone icon, and the number itself from 1180px), then the language switch (globe + short code) and the day/night switch (moon or sun, showing the state it switches to), all 40px, 4px corners, hairline.
 - **Mobile:** the same bar without the links, plus a floating dock (plaster-lift, ink-rule frame, 6px, 56px items); the current item gets the same lime bud dot.
 
 ### The Alcove (signature)
@@ -297,7 +297,14 @@ Copy on the open wall (inline-start), the arrangement on the other side: photo s
 
 ### Nix (mascot)
 
-A raster character: four poses (waving, sleeping, panicked, typing) cut with real alpha from the owner's generated sheet by `scripts/nix.mjs` and served as WebP through `src/components/art/Nix.astro` (`mood="happy" | "sleep" | "panic" | "type"`). His head, cropped by `scripts/icons.mjs`, is the site's mark: the navbar logo and the favicon/apple-touch badge (a plaster tile with an ink edge he peeks into). One pose per place, each with a job: waving on the hero shelf, beside "Get in touch", on top of the resume picker (with a speech bubble) and at the end of every blog post; the last node ("Ship it") of the AI workflow; typing next to the terminal; napping beside "Before that? I was studying", in the footer and on empty/unbuilt pages; panicking on the 404; waving as the avatar of MDX `<Nix>` asides and on the social card. Always decorative (empty alt) unless it carries meaning. By day he sits directly on the plaster; by night a 1px `--rule-strong` cut line (four stacked 0-blur drop-shadows) keeps his black outline from dissolving into the dark. His own colours (cream body, amber horns, coral tail and blush, lime face) are part of the character, not the page palette, and never leak into UI.
+A raster character cut with real alpha from the owner's generated sheets: sheet 1 by `scripts/nix.mjs` (waving, sleeping, panicked, typing), sheets 2 and 3 by `scripts/nix-sheets.mjs` (head, call, mail, cv, grad, thumbs, tea, music, search, point, think, bonsai), served as WebP through `src/components/art/Nix.astro` (`mood=…`). The front-facing head is the site's mark: the navbar logo and, via `scripts/icons.mjs`, the favicon/apple-touch badge (a plaster tile with an ink edge). One pose per place, each with a job:
+- waving: hero shelf, beside "Get in touch", end of every blog post, MDX `<Nix>` asides, the social card
+- bonsai (carrying the branch): beside the Experience title; grad: beside "Before that? I was studying"
+- point: pointing at "All projects"; thumbs (with confetti): the "Ship it" node of the AI loop
+- type: next to the terminal; think: beside the blog heading
+- call / mail: at the end of the phone and email lines in the close; cv: on top of the resume picker
+- sleep: footer; tea: empty blog; music (headphones): the lab; search (magnifier): the 404
+Directional poses mirror with `var(--dir)` so they keep facing what they point at. Always decorative (empty alt). By day he sits directly on the plaster; by night a 1px `--rule-strong` cut line (four stacked 0-blur drop-shadows) keeps his black outline from dissolving into the dark. His own colours (cream body, amber horns, coral tail and blush, lime face) are part of the character, not the page palette, and never leak into UI.
 
 ### Experience timeline
 The hero's branch carried down the page: a 3px bronze stem on the inline-start edge. Each current employer is a 24px lime bud on the stem; school is a hollow bronze node under the funny line "Before that? I was studying, obviously!" with a napping Nix. Each job: company in Young Serif (step-3) with an out-arrow, a date pill ("Oct 2025 – now" / "از مهر ۱۴۰۴ تا الان") beside place and mode, the role in 600, a one-sentence summary at step-1. "What I built there" sits in a plaster-lift recess (1px hairline, 6px) whose items carry hollow bronze commit nodes.

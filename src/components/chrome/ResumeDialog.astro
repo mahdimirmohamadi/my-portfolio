@@ -26,7 +26,7 @@ const choices = [
     <Icon name="x" size={20} />
   </button>
   <div class="resume__nix">
-    <Nix size={112} class="resume__nix-img" />
+    <Nix mood="cv" size={124} class="resume__nix-img" />
     <p class="resume__bubble">{t('resume.nix')}</p>
   </div>
   <h2 class="resume__title" id="resume-title">{t('resume.title')}</h2>
@@ -87,9 +87,9 @@ const choices = [
     margin-block: calc(-1 * var(--space-l) - 56px) var(--space-s);
   }
   .resume__nix :global(.resume__nix-img) {
-    width: 112px;
+    width: 124px;
     transform-origin: 50% 100%;
-    /* he waves away from his speech bubble in both directions */
+    /* he holds the CV out toward his speech bubble in both directions */
     transform: scaleX(var(--dir));
   }
   .resume__bubble {

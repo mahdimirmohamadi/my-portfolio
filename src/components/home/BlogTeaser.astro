@@ -5,6 +5,7 @@ import { getPosts } from '../../lib/content';
 import SectionHead from '../ui/SectionHead.astro';
 import PostRow from '../blog/PostRow.astro';
 import Arrow from '../ui/Arrow.astro';
+import Nix from '../art/Nix.astro';
 
 interface Props {
   lang: Lang;
@@ -15,7 +16,10 @@ const posts = (await getPosts(lang)).slice(0, 3);
 ---
 
 <section class="section wrap" id="blog" aria-labelledby="blog-title">
-  <SectionHead title={t('blog.title')} lead={t('blog.lead')} id="blog-title" />
+  <div class="blog__head">
+    <SectionHead title={t('blog.title')} lead={t('blog.lead')} id="blog-title" />
+    <Nix mood="think" size={88} class="blog__nix" />
+  </div>
   {
     posts.length ? (
       <div class="list">
@@ -36,6 +40,18 @@ const posts = (await getPosts(lang)).slice(0, 3);
 </section>
 
 <style>
+  .blog__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+  /* Nix wonders what the next post will be */
+  .blog__head :global(.blog__nix) {
+    width: clamp(60px, 9vw, 88px);
+    margin-block-end: var(--space-l);
+    transform: scaleX(var(--dir));
+  }
   .list {
     border-block-end: 1px solid var(--rule);
   }
