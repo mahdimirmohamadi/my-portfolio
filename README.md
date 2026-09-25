@@ -1,6 +1,6 @@
 # Ma: mahdimirmo.ir
 
-Mahdi MirMohamadi's portfolio as one quiet alcove: his photo hangs like a scroll, his career grows from a bowl as a git branch with three live buds, and Nix (the mascot, also the logo and favicon) sits on the shelf. Below it: experience as a timeline on the same branch, projects as real screenshots, an animated loop of how AI changed his workflow, skills with logos, a live terminal, the blog and "Get in touch" with the phone number and email set large. A resume picker (EN or FA) opens from any "Download my resume". English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
+Mahdi MirMohamadi's portfolio as one quiet alcove: his photo hangs like a scroll that unrolls when you arrive, and Nix (the mascot, also the logo and favicon) powers on beside it, greets you in a speech bubble and reacts to whatever you hover: he picks up the phone, holds the CV, points at the photo, dozes off if you idle, and panics if you shake the mouse. Below it: experience as a timeline, projects as real screenshots, an animated loop of how AI changed his workflow, skills with logos, a live terminal, the blog and "Get in touch" with the phone number and email set large. A resume picker (EN or FA) opens from any "Download my resume". English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
 
 The design system is written down in [DESIGN.md](DESIGN.md); product intent in [PRODUCT.md](PRODUCT.md).
 

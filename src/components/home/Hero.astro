@@ -1,8 +1,9 @@
 ---
 /**
  * The alcove. Who I am and how to reach me on the open wall (phone and email are the point);
- * on the other side the hanging scroll (Mahdi's photo) and the arrangement: his career drawn
- * as a single git branch rising from a bronze bowl, three lime buds for what's live now.
+ * on the other side the stage: Mahdi's photo hung as a scroll that unrolls on arrival, and Nix
+ * on the shelf, powering on like the CRT he is, greeting you in a speech bubble and reacting
+ * to whatever you touch on the wall (see the script at the end for his whole repertoire).
  */
 import { Image } from 'astro:assets';
 import type { Lang } from '../../i18n/ui';
@@ -18,120 +19,322 @@ interface Props {
 }
 const { lang } = Astro.props;
 const t = useT(lang);
-const fa = lang === 'fa';
 
-// buds: tip positions in the 420×560 arrangement box (x from the inline-start side)
-const buds = [
-  { x: 44, y: 200, label: 'InnoLearn', meta: fa ? '۱۴۰۴' : '2025', href: '#work-innolearn', above: true },
-  { x: 360, y: 410, label: 'Armani English', meta: fa ? '۱۴۰۱' : '2022', href: '#work-armani' },
-  { x: 128, y: 292, label: t('hero.bud.notes'), meta: '', href: lp(lang, '/blog'), above: true },
-];
-// commit nodes sit on the main stem (points on its curve)
-const commits = [
-  [214.7, 471.9],
-  [222, 430],
-  [160, 356],
-  [102, 313.5],
-];
+// every pose Nix can strike on the stage; sun and moon are his resting poses (day / night)
+const poses = ['sun', 'moon', 'call', 'mail', 'cv', 'desk', 'notebook', 'point', 'sleep', 'panic', 'thumbs', 'bow'] as const;
+const lines = {
+  hi: t('hero.nix.hi'),
+  again: t('hero.nix.again'),
+  night: t('hero.nix.night'),
+  phone: t('hero.nix.phone'),
+  mail: t('hero.nix.mail'),
+  resume: t('hero.nix.resume'),
+  work: t('hero.nix.work'),
+  blog: t('hero.nix.blog'),
+  photo: t('hero.nix.photo'),
+  sleep: t('hero.nix.sleep'),
+  wake: t('hero.nix.wake'),
+  panic: t('hero.nix.panic'),
+  poke: [t('hero.nix.poke1'), t('hero.nix.poke2'), t('hero.nix.poke3')],
+};
 ---
 
-<section class="alcove" id="top" aria-labelledby="hero-title">
+<section class="alcove" id="top" aria-labelledby="hero-title" data-stage data-idle>
+  <!-- a second look in the same session skips the arrival: the scene is already set -->
+  <script is:inline>
+    try {
+      if (sessionStorage.getItem('nix-intro')) document.currentScript.parentElement.dataset.seen = '';
+    } catch {}
+  </script>
   <div class="alcove__wall">
     <div class="copy">
-      <h1 class="copy__title" id="hero-title">{t('hero.title')}</h1>
-      <p class="copy__lead">{t('hero.lead')}</p>
-      <div class="copy__actions">
-        <a class="btn" href="#work">
+      <h1 class="copy__title" id="hero-title" style="--n:0">{t('hero.title')}</h1>
+      <p class="copy__lead" style="--n:1">{t('hero.lead')}</p>
+      <div class="copy__actions" style="--n:2">
+        <a class="btn" href="#work" data-nix="work">
           {t('hero.work')}
           <Arrow />
         </a>
-        <a class="btn btn--ghost" href={lp(lang, '/blog')}>
+        <a class="btn btn--ghost" href={lp(lang, '/blog')} data-nix="blog">
           {t('hero.blog')}
         </a>
       </div>
-      <ul class="reach" role="list" aria-label={t('hero.reach')}>
+      <ul class="reach" role="list" aria-label={t('hero.reach')} style="--n:3">
         <li>
-          <a href={`tel:${person.phone.tel}`}>
+          <a href={`tel:${person.phone.tel}`} data-nix="phone">
             <Icon name="phone" size={20} />
             <span class="reach__label">{t('contact.phone.label')}</span>
             <span class="reach__val" dir="ltr">{person.phone.display[lang]}</span>
           </a>
         </li>
         <li>
-          <a href={`mailto:${person.email}`}>
+          <a href={`mailto:${person.email}`} data-nix="mail">
             <Icon name="mail" size={20} />
             <span class="reach__label">{t('contact.email.label')}</span>
             <span class="reach__val" dir="ltr">{person.email}</span>
           </a>
         </li>
       </ul>
-      <a class="resume-btn" href={person.resume[lang]} download data-resume>
+      <a class="resume-btn" href={person.resume[lang]} download data-resume data-nix="resume" style="--n:4">
         <Icon name="download" size={22} />
         <span>{t('hero.resume')}</span>
         <span class="resume-btn__meta">EN · FA</span>
       </a>
     </div>
 
-    <div class="arrangement">
-      <figure class="scroll">
+    <div class="stage">
+      <!-- the hanging scroll: a rod, the photo, and a weighted roller that rides the unroll -->
+      <figure class="scroll" data-nix="photo">
         <span class="scroll__rod" aria-hidden="true"></span>
         <div class="scroll__frame">
-          <Image class="portrait__real" src={original} widths={[300, 580]} sizes="(min-width: 900px) 290px, 48vw" format="webp" quality={80} alt={t('whoami.photo.real.alt')} loading="eager" fetchpriority="high" />
+          <Image class="portrait__real" src={original} widths={[320, 640]} sizes="(min-width: 900px) 320px, 52vw" format="webp" quality={80} alt={t('whoami.photo.real.alt')} loading="eager" fetchpriority="high" />
         </div>
+        <span class="scroll__unroll" aria-hidden="true"><span class="scroll__foot"></span></span>
       </figure>
 
-      <svg class="branch" viewBox="0 0 420 560" role="img" aria-label={t('hero.branch.label')}>
-        <g fill="none" stroke-linecap="round">
-          <path class="stem stem--a" pathLength="1" d="M210 526L210 512C204 478 228 456 222 430 216 402 190 384 160 356 124 322 76 306 56 268 44 244 40 222 44 200" />
-          <path class="stem stem--b" pathLength="1" d="M222 430C262 428 300 426 330 418 346 414 354 412 360 410" />
-          <path class="stem stem--c" pathLength="1" d="M160 356C150 336 132 320 128 292" />
-        </g>
-        {commits.map(([cx, cy]) => <circle class="commit" cx={cx} cy={cy} r="5.5" />)}
-        <g transform="translate(0 12)">
-          <path class="bowl__body" d="M136 506c6 26 30 36 74 36s68-10 74-36Z" />
-          <ellipse class="bowl__rim" cx="210" cy="506" rx="74" ry="8" />
-          <path class="bowl__lip" d="M142 505c20 5 116 5 136 0" />
-          <rect class="bowl__body" x="186" y="540" width="48" height="8" rx="2" />
-        </g>
-        {buds.map((b, i) => <circle class="bud" style={`--i:${i}`} cx={b.x} cy={b.y} r="10" />)}
-      </svg>
-
-      <ul class="buds" role="list">
-        {
-          buds.map((b, i) => (
-            <li class:list={{ above: b.above }} style={`--x:${(b.x / 420) * 100}%;--y:${(b.y / 560) * 100}%;--i:${i}`}>
-              <a href={b.href}>
-                {b.label}
-                {b.meta && <span class="buds__meta">{b.meta}</span>}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-
-      <div class="shelf-nix">
-        <Nix mood="sun" size={104} class="shelf-nix__day" eager />
-        <Nix mood="moon" size={104} class="shelf-nix__night" />
+      <!-- Nix on the shelf, with what he has to say -->
+      <div class="spot">
+        <p class="bubble" data-bubble aria-hidden="true">
+          <span class="bubble__size" data-bubble-size>{lines.hi}</span>
+          <span class="bubble__text" data-bubble-text></span>
+        </p>
+        <div class="actor__box">
+          <button class="actor" type="button" aria-label={t('hero.nix.poke.label')} data-actor>
+            {
+              poses.map((p) => (
+                <span class:list={['pose', `pose--${p}`]} data-p={p}>
+                  <Nix mood={p} size={220} eager={p === 'sun' || p === 'moon'} />
+                </span>
+              ))
+            }
+          </button>
+        </div>
       </div>
     </div>
   </div>
   <div class="shelf" aria-hidden="true"></div>
+  <script type="application/json" data-nix-lines set:html={JSON.stringify(lines)} />
 </section>
 
+<script>
+  import { prefersLessMotion, finePointer } from '../../scripts/util';
+
+  // Nix's repertoire: what he does when you hover, focus, idle, shake the mouse or poke him.
+  const REACT: Record<string, string> = { phone: 'call', mail: 'mail', resume: 'cv', work: 'desk', blog: 'notebook', photo: 'point' };
+  const TRICKS = ['thumbs', 'point', 'bow'];
+
+  document.addEventListener('astro:page-load', () => {
+    const found = document.querySelector<HTMLElement>('[data-stage]');
+    if (!found || found.dataset.ready) return;
+    const stage = found;
+    stage.dataset.ready = '';
+
+    const lines = JSON.parse(stage.querySelector('[data-nix-lines]')!.textContent!) as Record<string, string> & { poke: string[] };
+    const actor = stage.querySelector<HTMLElement>('[data-actor]')!;
+    const poses = [...actor.querySelectorAll<HTMLElement>('[data-p]')];
+    const bubble = stage.querySelector<HTMLElement>('[data-bubble]')!;
+    const text = stage.querySelector<HTMLElement>('[data-bubble-text]')!;
+    const size = stage.querySelector<HTMLElement>('[data-bubble-size]')!;
+    const root = document.documentElement;
+    const less = prefersLessMotion();
+    const seen = 'seen' in stage.dataset;
+    try {
+      sessionStorage.setItem('nix-intro', '1');
+    } catch {}
+
+    // everything this page turn registers dies with it
+    const ac = new AbortController();
+    const on = (target: EventTarget, ev: string, fn: (e: any) => void, opts: AddEventListenerOptions = {}) =>
+      target.addEventListener(ev, fn, { passive: true, ...opts, signal: ac.signal });
+    document.addEventListener('astro:before-swap', () => ac.abort(), { once: true });
+
+    const night = () => root.dataset.theme === 'dark';
+    const restPose = () => (night() ? 'moon' : 'sun');
+    const restLine = () => (night() ? lines.night : seen ? lines.again : lines.hi);
+
+    // ── the bubble: sized by the whole line, typed over it ──
+    let typeTimer = 0;
+    let typeToken = 0;
+    function say(s: string, speed = 22) {
+      const id = ++typeToken;
+      clearTimeout(typeTimer);
+      size.textContent = s;
+      bubble.classList.add('is-on');
+      if (less || speed === 0) {
+        text.textContent = s;
+        return;
+      }
+      text.textContent = '';
+      let i = 0;
+      const step = () => {
+        if (id !== typeToken) return;
+        text.textContent = s.slice(0, ++i);
+        if (i < s.length) typeTimer = window.setTimeout(step, speed);
+      };
+      step();
+    }
+
+    // ── the pose: one image on, and a small hop when it changes ──
+    actor.classList.add('is-live');
+    function pose(p: string) {
+      if (actor.dataset.pose === p) return;
+      actor.dataset.pose = p;
+      poses.forEach((el) => el.classList.toggle('is-on', el.dataset.p === p));
+      if (less) return;
+      actor.classList.remove('is-hop');
+      void actor.offsetWidth;
+      actor.classList.add('is-hop');
+    }
+
+    // ── state ──
+    let hold: string | null = null; // the thing under the pointer / focus
+    let asleep = false;
+    let busy = 0; // a trick or a panic is playing
+    let restTimer = 0;
+    function toRest() {
+      if (hold) return react(hold);
+      pose(restPose());
+      say(restLine(), 0);
+    }
+    function react(key: string) {
+      hold = key;
+      if (busy) return;
+      wake(false);
+      pose(REACT[key]);
+      say(lines[key], 14);
+    }
+    function release(key: string) {
+      if (hold !== key) return;
+      hold = null;
+      if (busy) return;
+      clearTimeout(restTimer);
+      restTimer = window.setTimeout(toRest, 500);
+    }
+
+    for (const el of stage.querySelectorAll<HTMLElement>('[data-nix]')) {
+      const key = el.dataset.nix!;
+      on(el, 'pointerenter', () => react(key));
+      on(el, 'pointerleave', () => release(key));
+      on(el, 'focusin', () => react(key));
+      on(el, 'focusout', () => release(key));
+    }
+
+    // ── poke him ──
+    let pokes = 0;
+    on(actor, 'click', () => {
+      const i = pokes++ % TRICKS.length;
+      busy = 1;
+      wake(false);
+      pose(TRICKS[i]);
+      say(lines.poke[i], 14);
+      clearTimeout(restTimer);
+      restTimer = window.setTimeout(() => {
+        busy = 0;
+        toRest();
+      }, 2600);
+    });
+
+    // ── he dozes off when nothing happens for a while ──
+    let sleepTimer = 0;
+    function armSleep() {
+      clearTimeout(sleepTimer);
+      sleepTimer = window.setTimeout(() => {
+        if (hold || busy || night() || stage.hasAttribute('data-offscreen')) return armSleep();
+        asleep = true;
+        pose('sleep');
+        say(lines.sleep, 0);
+      }, 28000);
+    }
+    function wake(greet = true) {
+      if (!asleep) return;
+      asleep = false;
+      if (!greet) return;
+      pose(restPose());
+      say(lines.wake, 18);
+    }
+    for (const ev of ['pointermove', 'pointerdown', 'keydown', 'scroll', 'touchstart']) {
+      on(window, ev, () => {
+        if (asleep && !busy) wake();
+        armSleep();
+      });
+    }
+    armSleep();
+
+    // ── night falls: back to the moon (unless he is busy with you) ──
+    const mo = new MutationObserver(() => {
+      if (!hold && !busy && !asleep) toRest();
+    });
+    mo.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    ac.signal.addEventListener('abort', () => mo.disconnect());
+
+    // ── with a mouse: he leans toward the pointer, and panics if you shake it ──
+    if (finePointer() && !less) {
+      let cx = 0;
+      const measure = () => {
+        const r = actor.getBoundingClientRect();
+        cx = r.left + r.width / 2;
+      };
+      measure();
+      on(window, 'resize', measure);
+
+      let target = 0;
+      let cur = 0;
+      let raf = 0;
+      const tick = () => {
+        cur += (target - cur) * 0.14;
+        actor.style.rotate = `${cur.toFixed(2)}deg`;
+        raf = Math.abs(target - cur) > 0.02 ? requestAnimationFrame(tick) : 0;
+      };
+      ac.signal.addEventListener('abort', () => cancelAnimationFrame(raf));
+
+      let lastX = 0;
+      let lastDir = 0;
+      let flips: number[] = [];
+      on(window, 'pointermove', (e: PointerEvent) => {
+        if (stage.hasAttribute('data-offscreen')) return;
+        target = Math.max(-7, Math.min(7, ((e.clientX - cx) / innerWidth) * 18));
+        if (!raf) raf = requestAnimationFrame(tick);
+
+        // a shake: six quick reversals inside 700ms
+        const dx = e.clientX - lastX;
+        lastX = e.clientX;
+        const dir = Math.sign(dx);
+        if (dir && dir !== lastDir && Math.abs(dx) > 5) {
+          lastDir = dir;
+          flips.push(e.timeStamp);
+          flips = flips.filter((t) => e.timeStamp - t < 700);
+          if (flips.length >= 6 && !busy) {
+            flips = [];
+            busy = 1;
+            wake(false);
+            pose('panic');
+            say(lines.panic, 12);
+            clearTimeout(restTimer);
+            restTimer = window.setTimeout(() => {
+              busy = 0;
+              toRest();
+            }, 1700);
+          }
+        }
+      });
+    }
+
+    // ── the arrival ──
+    pose(restPose());
+    if (seen || less) say(restLine(), 0);
+    else window.setTimeout(() => say(restLine()), 1650);
+  });
+</script>
 
 <style>
   .alcove {
-    --branch: oklch(0.36 0.03 78);
-    --bowl: oklch(0.3 0.025 78);
-    --bowl-rim: oklch(0.42 0.03 78);
-    --bowl-lip: oklch(0.58 0.035 78);
+    --rod: oklch(0.3 0.025 78);
+    --rod-rim: oklch(0.42 0.03 78);
     position: relative;
   }
   :global(:root[data-theme='dark']) .alcove {
-    --branch: oklch(0.66 0.035 78);
-    --bowl: oklch(0.36 0.02 78);
-    --bowl-rim: oklch(0.5 0.025 78);
-    --bowl-lip: oklch(0.66 0.03 78);
+    --rod: oklch(0.36 0.02 78);
+    --rod-rim: oklch(0.5 0.025 78);
   }
   .alcove__wall {
     position: relative;
@@ -143,7 +346,7 @@ const commits = [
   }
   @media (min-width: 900px) {
     .alcove__wall {
-      grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
       align-items: end;
       gap: var(--space-xl);
       min-height: min(calc(100svh - 82px), 860px);
@@ -265,139 +468,42 @@ const commits = [
     scale: 0.98;
   }
 
-  /* ── the arrangement ── */
-  .arrangement {
+  /* ── the stage ── */
+  .stage {
+    --actor: 42%;
     position: relative;
-    width: min(100%, 500px);
-    aspect-ratio: 420 / 560;
+    width: min(100%, 540px);
+    aspect-ratio: 13 / 15;
     justify-self: center;
   }
-  /* phones: the person leads, so the scroll and branch come before the words */
+  /* phones: the person leads, so the stage comes before the words */
   @media (max-width: 899px) {
-    .arrangement {
+    .stage {
       order: -1;
-      width: min(88vw, 380px);
-    }
-    .shelf-nix :global(.nix) {
-      width: 84px;
+      width: min(88vw, 400px);
     }
   }
   @media (min-width: 900px) {
-    .arrangement {
+    .stage {
       justify-self: end;
     }
   }
-  .branch {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    scale: var(--dir) 1;
-  }
-  .stem {
-    stroke: var(--branch);
-  }
-  .stem--a {
-    stroke-width: 7;
-  }
-  .stem--b {
-    stroke-width: 4.5;
-  }
-  .stem--c {
-    stroke-width: 3.5;
-  }
-  .commit {
-    fill: var(--plaster);
-    stroke: var(--branch);
-    stroke-width: 2.5;
-  }
-  .bowl__body {
-    fill: var(--bowl);
-  }
-  .bowl__rim {
-    fill: var(--bowl-rim);
-  }
-  .bowl__lip {
-    fill: none;
-    stroke: var(--bowl-lip);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-  }
-  .bud {
-    fill: var(--lime);
-    stroke: var(--ink);
-    stroke-width: 2;
-    transform-box: fill-box;
-    transform-origin: center;
-  }
 
-  .buds {
-    position: absolute;
-    inset: 0;
-    list-style: none;
-    padding: 0;
-    pointer-events: none;
-  }
-  .buds li {
-    position: absolute;
-    inset-inline-start: var(--x);
-    inset-block-start: var(--y);
-    translate: calc(-50% * var(--dir)) 14px;
-    pointer-events: auto;
-  }
-  /* labels sit on the open side of their bud, never across the stem */
-  .buds li.above {
-    translate: calc(-50% * var(--dir)) calc(-100% - 14px);
-  }
-  .buds a {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.4em;
-    min-height: 32px;
-    padding: 0.2rem 0.5rem;
-    border-radius: 3px;
-    color: var(--ink);
-    /* a halo in the wall colour, like a map label: the stems stay visible around the words */
-    text-shadow:
-      0 0 2px var(--plaster),
-      0 0 2px var(--plaster),
-      0 0 4px var(--plaster);
-    font-size: 0.82rem;
-    font-weight: 600;
-    white-space: nowrap;
-    text-decoration: none;
-    transition: background-color var(--dur-hover) var(--ease-out);
-  }
-  .buds a:hover {
-    background: var(--lime);
-    color: var(--on-lime);
-    text-shadow: none;
-  }
-  .buds__meta {
-    font-family: var(--ff-mono);
-    font-weight: 400;
-    font-size: 0.72rem;
-    color: var(--ink-faint);
-  }
-  .buds a:hover .buds__meta {
-    color: inherit;
-  }
-
-  /* ── the hanging scroll (photo) ── */
+  /* the hanging scroll: a rod, the photo, a weighted roller at the foot */
   .scroll {
     position: absolute;
     inset-block-start: 0;
-    inset-inline-end: 2%;
-    width: 58%;
+    inset-inline-end: 0;
+    width: 62%;
     margin: 0;
+    transform-origin: 50% 0;
   }
   .scroll__rod {
     display: block;
     height: 7px;
-    margin-inline: -8%;
+    margin-inline: -7%;
     border-radius: 4px;
-    background: var(--bowl);
+    background: var(--rod);
   }
   .scroll__frame {
     position: relative;
@@ -414,80 +520,229 @@ const commits = [
     object-fit: cover;
     object-position: 32% 40%;
   }
-  .shelf-nix {
+  /* the roller lives in a box the size of the frame, so a -100% translate parks it at the rod */
+  .scroll__unroll {
+    position: absolute;
+    inset: 7px 0 0;
+    pointer-events: none;
+  }
+  .scroll__foot {
+    position: absolute;
+    inset-block-end: -5px;
+    inset-inline: -7%;
+    height: 10px;
+    border-radius: var(--radius-sm);
+    background: var(--rod);
+    border-block-start: 2px solid var(--rod-rim);
+  }
+
+  /* Nix's spot on the shelf */
+  .spot {
     position: absolute;
     inset-block-end: 0;
-    inset-inline-end: 0;
-    /* he waves toward the words */
-    scale: calc(-1 * var(--dir)) 1;
+    inset-inline-start: 0;
+    width: var(--actor);
   }
-  .shelf-nix :global(.nix) {
-    transform-origin: 50% 100%;
-    transition: rotate 420ms var(--ease-out);
+  .actor__box {
+    aspect-ratio: 1;
   }
-  /* he wears sunglasses by day and sleeps on the moon at night */
-  .shelf-nix :global(.shelf-nix__night),
-  :global(:root[data-theme='dark']) .shelf-nix :global(.shelf-nix__day) {
-    display: none;
-  }
-  :global(:root[data-theme='dark']) .shelf-nix :global(.shelf-nix__night) {
+  .actor {
+    position: relative;
     display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius);
+    transform-origin: 50% 100%;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
   }
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .shelf-nix:hover :global(.nix) {
-      rotate: -6deg;
-    }
+  .pose {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 180ms var(--ease-out);
+  }
+  .pose :global(.nix) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: 50% 100%;
+  }
+  /* before the script: the resting pose for the theme; after: whatever he was told */
+  .pose--sun,
+  :global(:root[data-theme='dark']) .pose--moon {
+    opacity: 1;
+  }
+  :global(:root[data-theme='dark']) .pose--sun {
+    opacity: 0;
+  }
+  .actor.is-live .pose {
+    opacity: 0;
+  }
+  .actor.is-live .pose.is-on {
+    opacity: 1;
+  }
+  /* he points at the photo, which is on his other side in RTL */
+  :global(:root[dir='rtl']) .pose--point {
+    scale: -1 1;
   }
 
-  /* the shelf the arrangement stands on */
+  /* the speech bubble: sized by the whole line, then typed over */
+  .bubble {
+    position: absolute;
+    inset-block-end: calc(100% + 6px);
+    inset-inline-start: 4%;
+    z-index: 1;
+    width: max-content;
+    max-width: min(250px, 190%);
+    padding: 0.55rem 0.8rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--plaster-lift);
+    color: var(--ink);
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.45;
+    text-align: start;
+    text-wrap: pretty;
+    transform-origin: 14% 100%;
+    opacity: 0;
+    scale: 0.85;
+    transition:
+      opacity 200ms var(--ease-out),
+      scale 260ms var(--ease-out);
+  }
+  :global(:root[dir='rtl']) .bubble {
+    line-height: 1.7;
+  }
+  .bubble.is-on {
+    opacity: 1;
+    scale: 1;
+  }
+  /* the tail: the bubble's own border, folded down toward Nix */
+  .bubble::after {
+    content: '';
+    position: absolute;
+    inset-block-end: -7px;
+    inset-inline-start: 22px;
+    width: 12px;
+    height: 12px;
+    border-right: 1px solid var(--rule-strong);
+    border-bottom: 1px solid var(--rule-strong);
+    background: var(--plaster-lift);
+    rotate: 45deg;
+  }
+  /* phones: the space under the photo is his, so the bubble sits beside his head, tail toward him */
+  @media (max-width: 899px) {
+    .bubble {
+      inset-block-end: 20%;
+      inset-inline-start: 94%;
+      max-width: min(250px, 135%);
+      transform-origin: calc(50% - 50% * var(--dir)) 18px;
+    }
+    .bubble::after {
+      inset-block-end: auto;
+      inset-block-start: 12px;
+      inset-inline-start: -7px;
+      border-right: 0;
+      border-inline-start: 1px solid var(--rule-strong);
+      rotate: calc(45deg * var(--dir));
+    }
+  }
+  .bubble__size {
+    visibility: hidden;
+  }
+  .bubble__text {
+    position: absolute;
+    inset: 0.55rem 0.8rem;
+  }
+
+  /* the shelf the stage stands on */
   .shelf {
     height: 22px;
-    background: var(--bowl);
-    border-block-start: 3px solid var(--bowl-rim);
+    background: var(--rod);
+    border-block-start: 3px solid var(--rod-rim);
   }
 
-  /* ── the one authored moment: the branch grows, then the buds open ── */
+  /* ── the arrival: the words rise, the scroll unrolls, Nix powers on ── */
   @media (prefers-reduced-motion: no-preference) {
-    :global(html:not([data-lite])) .stem {
-      stroke-dasharray: 1;
-      animation: grow 1.5s var(--ease-out) both;
+    :global(html:not([data-lite])) .copy > * {
+      animation: rise 640ms var(--ease-out) both;
+      animation-delay: calc(var(--n) * 80ms);
     }
-    :global(html:not([data-lite])) .stem--a {
-      animation-delay: 150ms;
+    :global(html:not([data-lite])) .scroll__frame {
+      animation: unroll 1000ms var(--ease-in-out) 260ms both;
     }
-    :global(html:not([data-lite])) .stem--b {
-      animation-delay: 700ms;
-      animation-duration: 900ms;
+    :global(html:not([data-lite])) .scroll__unroll {
+      animation: roll 1000ms var(--ease-in-out) 260ms both;
     }
-    :global(html:not([data-lite])) .stem--c {
-      animation-delay: 950ms;
-      animation-duration: 700ms;
+    :global(html:not([data-lite])) .scroll {
+      animation: settle 900ms var(--ease-out) 1260ms both;
     }
-    :global(html:not([data-lite])) .bud {
-      animation: open 520ms var(--ease-out) both;
-      animation-delay: calc(1250ms + var(--i) * 140ms);
+    :global(html:not([data-lite])) .actor__box {
+      animation: power-on 460ms var(--ease-out) 1240ms both;
     }
-    :global(html:not([data-lite])) .buds li {
-      animation: label-in 400ms var(--ease-out) both;
-      animation-delay: calc(1450ms + var(--i) * 140ms);
+    :global(html:not([data-lite])) .actor.is-hop {
+      animation: hop 360ms var(--ease-out);
     }
-  }
-  @keyframes grow {
-    from {
-      stroke-dashoffset: 1;
-    }
-    to {
-      stroke-dashoffset: 0;
+    /* the same session, a second look: the scene is already set */
+    :global(html:not([data-lite])) .alcove[data-seen] :is(.copy > *, .scroll__frame, .scroll__unroll, .scroll, .actor__box) {
+      animation: none;
     }
   }
-  @keyframes open {
-    from {
-      scale: 0.2;
-    }
-  }
-  @keyframes label-in {
+  @keyframes rise {
     from {
       opacity: 0;
+      translate: 0 14px;
+    }
+  }
+  @keyframes unroll {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes roll {
+    from {
+      translate: 0 -100%;
+    }
+  }
+  /* the roller lands and the scroll swings once on its rod */
+  @keyframes settle {
+    0%,
+    100% {
+      rotate: 0deg;
+    }
+    30% {
+      rotate: 1.1deg;
+    }
+    70% {
+      rotate: -0.5deg;
+    }
+  }
+  /* a CRT switching on: a line of light that opens into the picture */
+  @keyframes power-on {
+    from {
+      clip-path: inset(49% 0 49% 0);
+      scale: 1.04 0.02;
+      opacity: 0.4;
+    }
+    35% {
+      clip-path: inset(49% 0 49% 0);
+      scale: 1.04 0.02;
+      opacity: 1;
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+      scale: 1 1;
+      opacity: 1;
+    }
+  }
+  @keyframes hop {
+    30% {
+      translate: 0 -7px;
     }
   }
 </style>

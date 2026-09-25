@@ -23,7 +23,7 @@ The personal site of Mahdi MirMohamadi, an AI-native software engineer in Tehran
 
 ## Brand Personality
 
-**Professional, curious, playful.** Mostly modern and technical, with a light cartoonish edge (a chunky soft display serif and Nix, the small mascot) that shows personality without looking childish. The voice is first person, nerdy and specific, and it sounds spoken: friendly, a little funny ("Before that? I was studying, obviously!"), short sentences, real numbers, no hype. Persian copy is colloquial (محاوره), never formal. It is Linux- and AI-native: the career drawn as a git branch, a live terminal, real screenshots of shipped work.
+**Professional, curious, playful.** Mostly modern and technical, with a light cartoonish edge (a chunky soft display serif and Nix, the small mascot) that shows personality without looking childish. The voice is first person, nerdy and specific, and it sounds spoken: friendly, a little funny ("Before that? I was studying, obviously!"), short sentences, real numbers, no hype. Persian copy is colloquial (محاوره), never formal. It is Linux- and AI-native: a mascot that answers the cursor, a live terminal, real screenshots of shipped work.
 
 ## Anti-references
 
@@ -39,7 +39,7 @@ The personal site of Mahdi MirMohamadi, an AI-native software engineer in Tehran
 2. **Real computer metaphors, used honestly.** Terminal, editor and git log are working UI with real content, not wallpaper. If a metaphor makes information harder to scan, drop it.
 3. **Show, don't claim.** Specific facts (30% faster page loads, InnoMeet live streaming, AI scoring) beat adjectives. Illustrative content is labelled as such.
 4. **Compact and scannable.** A recruiter should get role, experience, stack and contact within one or two screens. Every section earns its height.
-5. **Personality in the details, not the volume.** Delight comes from small, crafted moments (the growing branch, the AI workflow loop, the mascot in many small places), never from effects stacked on every element.
+5. **Personality in the details, not the volume.** Delight comes from small, crafted moments (the hero arrival, Nix reacting to what you touch, the AI workflow loop, the mascot in many small places), never from effects stacked on every element.
 
 ## Accessibility & Inclusion
 

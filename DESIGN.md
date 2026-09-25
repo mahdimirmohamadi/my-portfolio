@@ -154,12 +154,12 @@ components:
   print:
     backgroundColor: "{colors.plaster-deep}"
     rounded: "{rounded.sm}"
-  bud-label-hover:
-    backgroundColor: "{colors.lime}"
-    textColor: "{colors.on-lime}"
-    rounded: "{rounded.tag}"
-    padding: "0.2rem 0.5rem"
-    height: "32px"
+  speech-bubble:
+    backgroundColor: "{colors.plaster-lift}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-strong}"
+    rounded: "{rounded.md}"
+    padding: "0.55rem 0.8rem"
   shelf-rule:
     backgroundColor: "{colors.shelf}"
     rounded: "2px"
@@ -177,9 +177,9 @@ components:
 
 **Creative North Star: "The Alcove"**
 
-The site is a tokonoma, not a landing page. One recessed wall of cool sage plaster holds three things: the owner's photo hung as a scroll, his career drawn as a single git branch rising from a bronze bowl, and the empty wall between them, which points at the email. Everything after the alcove keeps the same quiet: ruled ledgers instead of cards, framed prints instead of tiles, thin ink lines instead of boxes and shadows. The emptiness is load-bearing ("ma"); it is what makes the one lime bloom read.
+The site is a tokonoma, not a landing page. One recessed wall of cool sage plaster holds three things: the owner's photo hung as a scroll, Nix (his mascot) standing on the shelf beside it and talking to whoever walks in, and the empty wall between them, which points at the phone number and the email. Everything after the alcove keeps the same quiet: ruled ledgers instead of cards, framed prints instead of tiles, thin ink lines instead of boxes and shadows. The emptiness is load-bearing ("ma"); it is what makes the one lime bloom read.
 
-Density is calm but not sparse. Sections are ruled lists that a recruiter can scan in seconds, set in a plain sans under a chunky soft serif. Personality lives in a few crafted details (the branch that grows, the 1-bit portrait toggle, Nix the mascot, a live terminal) rather than in effects laid over every element. Night is the same alcove after dark: charcoal plaster, bone ink, the lime unchanged.
+Density is calm but not sparse. Sections are ruled lists that a recruiter can scan in seconds, set in a plain sans under a chunky soft serif. Personality lives in a few crafted details (the scroll that unrolls, Nix reacting to what you touch, a live terminal) rather than in effects laid over every element. Night is the same alcove after dark: charcoal plaster, bone ink, the lime unchanged.
 
 The world explicitly refuses: hard offset shadows, colour gradients, glow, eyebrows and kickers over headings, card grids, imitation brand marks, and monospace used as costume. PRODUCT.md's earlier "chunky outlines, hard offset shadows" personality belonged to the workstation edition; this world does not carry it.
 
@@ -188,7 +188,7 @@ The world explicitly refuses: hard offset shadows, colour gradients, glow, eyebr
 - Flat: depth comes from recess (plaster-lift / plaster-deep) and thin ink rules, never shadow.
 - Young Serif display at weight 400 over Geist; Geist Mono only for real data, code and captions.
 - Ruled ledgers and single framed prints; no card grids.
-- One authored motion moment (the branch grows, the buds open); everything else is quiet and state-driven.
+- One authored motion moment (the arrival: the scroll unrolls, Nix powers on and speaks); everything else is quiet and state-driven, including Nix's reactions.
 - Full RTL parity: logical properties, mirrored arrows via `--dir`, Vazirmatn 800 for Persian headings.
 
 ## Colors
@@ -196,7 +196,7 @@ The world explicitly refuses: hard offset shadows, colour gradients, glow, eyebr
 A near-monochrome sage-and-ink wall with a warm bronze ground line and one saturated yellow-green bloom.
 
 ### Primary
-- **Bloom Lime** (lime): the single accent. Fill for the three hero buds and the Experience timeline buds, the one primary button of a block ("My experience" in the hero, "Call me!" in the close), the "you are here" dot in the navbar and dock, the bud that walks the AI workflow loop, the hovered resume choice, bud-label hover, text selection and the blog reading-progress bar. Never a surface, never text on plaster (it fails contrast there).
+- **Bloom Lime** (lime): the single accent. Fill for the Experience timeline buds, the one primary button of a block ("My experience" in the hero, "Call me!" in the close), the "you are here" dot in the navbar and dock, the bud that walks the AI workflow loop, the hovered resume choice, text selection and the blog reading-progress bar. Never a surface, never text on plaster (it fails contrast there).
 - **Stem Lime** (lime-ink): the readable form of the accent on plaster. Links, focus ring, caret, terminal prompt, list markers, hover underlines. In night mode it becomes Bloom Lime itself.
 - **Seed Ink** (on-lime): text and icons on a lime fill.
 
@@ -216,7 +216,7 @@ A near-monochrome sage-and-ink wall with a warm bronze ground line and one satur
 - **Ink Rule** (rule-strong): ledger rows, print frames, the photo frame, ghost-button border.
 
 ### Named Rules
-**The One Bloom Rule.** Lime marks only what is alive or current: the buds, the one primary action per block, the current nav item, and transient state (selection, reading progress, hover on a bud label or resume choice). If a second thing on screen wants lime, it gets ink instead.
+**The One Bloom Rule.** Lime marks only what is alive or current: the buds, the one primary action per block, the current nav item, and transient state (selection, reading progress, hover on a resume choice). If a second thing on screen wants lime, it gets ink instead.
 
 **The Brand-on-Hover Exception.** Tool marks sit in ink until touched: hovering a skill lights its logo, border and a 12% tint in the tool's own brand colour (simple-icons hex; near-black brands fall back to ink at night). The AI tools row and the AI workflow nodes show their real colours at rest because they are the subject there. These third-party colours are the only blues and purples on the site, and they never become UI chrome.
 
@@ -252,7 +252,7 @@ A near-monochrome sage-and-ink wall with a warm bronze ground line and one satur
 
 Scrolling to an anchor is smooth (off under reduced motion), and anchors land with the heading just under the navbar (`scroll-padding` 72px; each section cancels its own top padding via `scroll-margin`, plus `--anchor-extra` where a shelf or Nix sits above the heading). A sticky 60px navbar spans the top, closed by a 1px ink rule; content sits in a centred column (max 1200px, gutters 32px, 18px under 768px). At 900px+ the navbar carries the section links; below that they move to a floating five-item dock at the bottom (the footer reserves 80px for it) and the navbar keeps the brand, the call button and the switches.
 
-The hero alcove is a two-column grid at 900px+ (1.15fr copy / 0.85fr arrangement, min-height ~100svh capped at 860px) closed by a full-bleed 22px shelf. On phones the arrangement moves above the words (the person leads) at up to 380px wide. The photo takes 58% of the arrangement's width.
+The hero alcove is a two-column grid at 900px+ (1.1fr copy / 0.9fr stage, min-height ~100svh capped at 860px) closed by a full-bleed 22px shelf. The stage is a 13:15 box up to 540px wide: the photo scroll takes 62% of it at the inline-end, Nix's spot 42% at the inline-start on the shelf, his bubble above his head (beside it under the photo on phones). On phones the stage moves above the words (the person leads) at up to 400px wide.
 
 Sections are separated by 5rem (space-2xl) of wall. Inside them, content is ruled rows or the branch: the Experience timeline (a bronze stem on the inline-start edge, story and "what I built there" recess side by side at 960px+), skills as label/chip rows (8rem label column; the list is LTR in both languages), Elsewhere as a two-column ruled list. Projects with screenshots pair up 1fr 1fr; with an odd count the lead print spans the full row with its note beside it (container query at 760px); projects without a screenshot are single index lines. Section leads run the full content width. Spacing follows the 0.25 / 0.5 / 0.75 / 1 / 1.5 / 2.25 / 3.5 / 5rem scale.
 
@@ -262,13 +262,11 @@ Sections are separated by 5rem (space-2xl) of wall. Inside them, content is rule
 
 The system is flat. `--shadow` and every legacy shadow token resolve to `none`. Depth is conveyed by tonal recess (plaster-lift for panels, plaster-deep for wells and photo mats), by thin ink frames, and by the physical metaphor of the shelf: a solid bronze bar with a lighter top rim that things stand on.
 
-The only non-flat effect is the **map-label halo**: bud labels carry a text-shadow in the wall colour (`0 0 2px plaster, 0 0 2px plaster, 0 0 4px plaster`) so the branch stays visible around the words. It is a legibility device, not elevation, and it drops on hover.
-
 **The Shelf, Not Shadow Rule.** Things stand on a shelf; they do not float. No box-shadows, no hard offset shadows, no glow.
 
 ## Shapes
 
-Near-square. Buttons, switches, print frames and inline code use 4-6px; tags and bud labels 3px; the shelf-rule 2px. Circles are reserved for the bud family (hero buds, timeline buds and nodes, the AI workflow nodes, the nav "here" dot, the hollow commit nodes in lists). Rules are 1px hairlines for structure, 1.5px (`--bw`) for button borders and bud-dot outlines. The photo is a hanging scroll: a 7px rounded rod over a 3:4 frame with no top border. Arrows are drawn 16px strokes (1.6 width, round caps) and mirror in RTL.
+Near-square. Buttons, switches, print frames and inline code use 4-6px; tags 3px; the shelf-rule 2px. Circles are reserved for the bud family (timeline buds and nodes, the AI workflow nodes, the nav "here" dot, the hollow commit nodes in lists). Rules are 1px hairlines for structure, 1.5px (`--bw`) for button borders and bud-dot outlines. The photo is a hanging scroll: a 7px rounded rod over a 3:4 frame with no top border, and a 10px weighted roller across its foot. Nix's speech bubble is a 6px panel with a folded-corner tail. Arrows are drawn 16px strokes (1.6 width, round caps) and mirror in RTL.
 
 ## Components
 
@@ -294,12 +292,16 @@ A recess, not a window: plaster-lift, 1px hairline, 6px corners, a quiet mono ca
 - **Mobile:** the same bar without the links, plus a floating dock (plaster-lift, ink-rule frame, 6px, 56px items); the current item gets the same lime bud dot.
 
 ### The Alcove (signature)
-Copy on the open wall (inline-start), the arrangement on the other side: photo scroll hung off-centre, the SVG branch (7 / 4.5 / 3.5 stroke widths, bronze) rising from a bronze bowl, hollow commit nodes on the stem, three lime buds (r 10, 2px ink stroke), and halo map-labels linking to what they mark, with a small mono date. Nix stands on the shelf waving toward the copy (mirrored per direction, tilts on hover). The bowl's foot sits on the shelf. The branch mirrors in RTL with `scale: var(--dir) 1`. The photo is shown as it is: no caption, no filters. Under the two buttons, phone and email are set as a plain labelled pair (icon, faint label, 600-weight value with a hairline underline), never behind a click.
+Copy on the open wall (inline-start), the stage on the other side: the photo hung as a scroll (rod, 3:4 frame, weighted roller at the foot) and Nix on the shelf below it with a speech bubble. The photo is shown as it is: no caption, no filters. Under the two buttons, phone and email are set as a plain labelled pair (icon, faint label, 600-weight value with a hairline underline), never behind a click.
+
+**The arrival** (once per session; a second look in the same tab skips it, and so do reduced motion and `data-lite`): the copy rises in five beats (80ms apart); the scroll unrolls from its rod over 1s (a `clip-path` reveal with the roller riding the edge, ease-in-out), then swings once on the rod to settle; Nix powers on like the CRT he is (a line of light at 1.24s that opens into the picture, 460ms) and his bubble scales in from its tail and types the greeting (22ms a character; the bubble is sized by the full line first, so nothing reflows while it types).
+
+**Nix reacts** (`src/components/home/Hero.astro`, the script at the end). Every hero action carries `data-nix`, and hovering or focusing it swaps his pose with a 180ms crossfade and a 7px hop, and retypes the bubble: phone → handset, email → envelope, resume → CV, "My experience" → at his desk, "My blog" → notebook, the photo → pointing at "the boss" (mirrored in RTL so he still points at it). Leaving returns him to rest after 500ms: sunglasses-and-wave by day, asleep on the moon by night (theme changes mid-page move him too). Poking him cycles three tricks (thumbs, point, bow). With a mouse he leans up to 7° toward the pointer (lerped in rAF), and six quick reversals inside 700ms make him panic for 1.7s. After 28s without input he dozes off; any input wakes him with "Hi again". Reduced motion keeps the pose swaps and the lines, drops the hop, lean and typing. The bubble is `aria-hidden` (decoration); he himself is a real button named "Poke Nix".
 
 ### Nix (mascot)
 
 A raster character cut with real alpha from the owner's generated sheets: sheet 1 by `scripts/nix.mjs`, sheets 2-5 by `scripts/nix-sheets.mjs` (a 3x2 grid on white per sheet; `holes` seeds any enclosed white that is background, like the gap under the headphone band or the empty browser window). Served as WebP through `src/components/art/Nix.astro` (`mood=…`), 28 poses in all. The front-facing head is the site's mark: the navbar logo and, via `scripts/icons.mjs`, the favicon/apple-touch badge. One pose per place, each with a job:
-- hero shelf: sunglasses-and-wave by day, asleep on the moon at night (swapped by `data-theme`)
+- hero stage: sunglasses-and-wave by day, asleep on the moon at night, plus call / mail / cv / desk / notebook / point / sleep / panic / thumbs / bow as reactions (see The Alcove)
 - desk (laptop + mug): Experience; grad: "Before that? I was studying"; hard hat + wrench: Skills
 - peeking out of an empty browser window: Projects; pointing: "All projects"
 - rocket: the "Ship it" node of the AI loop; pressing a giant keycap: the AI toolbox
@@ -328,9 +330,9 @@ Projects with a screenshot are a single print (16:10, ink-rule frame, 4px, top-a
 A 10px bronze bar with a 2px lighter rim, 2px corners. Closes a passage (end of Work, opening the contact close). It is the only heavy horizontal in the system; use it at most once or twice a page.
 
 ### Motion
-- **The one authored moment:** on load the three stems draw in (1.5s, then 900ms and 700ms, staggered 150/700/950ms, ease-out), then the buds open from 0.2 scale (520ms, 140ms apart) and their labels fade in.
+- **The one authored moment:** the hero arrival (copy rises, the scroll unrolls and settles, Nix powers on and speaks), about 2.5s in all, once per session. See The Alcove.
 - **Day / Night:** a view transition revealed as a circle from the toggle (620ms, ease-out).
-- **Everything else:** hover and press only (90 / 160 / 240ms), a short page lift-and-fade between routes, scroll-driven rise for below-fold blocks.
+- **Everything else:** hover and press only (90 / 160 / 240ms), Nix's pose swaps (180ms crossfade, 360ms hop), a short page lift-and-fade between routes, scroll-driven rise for below-fold blocks.
 - **Fallbacks:** under `prefers-reduced-motion` or `html[data-lite]` every animation is removed and final states are shown; theme and page changes become a 120ms crossfade.
 
 ## Do's and Don'ts
@@ -353,4 +355,4 @@ A 10px bronze bar with a 2px lighter rim, 2px corners. Closes a passage (end of 
 - **Don't** draw imitation logos or placeholder marks.
 - **Don't** set headings, nav or buttons in monospace to look technical.
 - **Don't** fill surfaces with lime or use it for decoration; don't introduce blue or purple outside the navy night wall and third-party brand marks.
-- **Don't** give a section more than one authored animation (the growing branch in the hero, the loop in the AI section); everything else is feedback-sized.
+- **Don't** give a section more than one authored animation (the arrival in the hero, the loop in the AI section); everything else is feedback-sized.
