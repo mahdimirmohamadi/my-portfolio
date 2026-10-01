@@ -24,9 +24,9 @@ const { lines, title = 'zsh' } = Astro.props;
   :global(.mdx-term) {
     margin-block: var(--space-l) !important;
   }
+  /* the body is the same glass as the bar */
   :global(.mdx-term .win__body) {
-    padding: var(--space-s) var(--space-m);
-    background: var(--bg-2);
+    padding: var(--space-xs) var(--space-m) var(--space-s);
   }
   /* not a prose code block: undo the .prose pre frame */
   .mdx-term__pre {
@@ -42,7 +42,10 @@ const { lines, title = 'zsh' } = Astro.props;
     direction: ltr;
     text-align: left;
   }
+  .mdx-term__pre :global(.ps1) {
+    color: var(--phosphor);
+  }
   .out {
-    color: var(--text-soft);
+    color: var(--on-glass-soft);
   }
 </style>

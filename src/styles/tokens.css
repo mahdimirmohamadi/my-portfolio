@@ -1,45 +1,64 @@
-/* ─── ma · design tokens ─────────────────────────────────────────────────
-   One alcove. Cool sage plaster, pine-grey ink, a bronze shelf, and one
-   accent (lime) reserved for the blooms, the email action and "you are here".
-   Day is the default (people read this at a desk); night is the same alcove
-   after dark. Legacy token names are kept so every page inherits the world. */
+/* ─── design tokens ─────────────────────────────────────────────────────
+   Sage plaster by day, a navy sky by night. Two materials, each with its own
+   rules: molded plastic (caps: a rim on top, a skirt below) and dark glass
+   (the screens). Lime is only ever something lit: phosphor on glass, LEDs on
+   plastic, the buds on the git graph. Legacy names are kept so every page
+   inherits the world. */
 
 @layer tokens {
   :root {
     color-scheme: light;
 
-    /* plaster + ink */
-    --plaster: oklch(0.936 0.013 128);
-    --plaster-deep: oklch(0.905 0.016 128);
-    --plaster-lift: oklch(0.962 0.009 128);
+    /* the shell: sage plaster */
+    --shell: oklch(0.936 0.013 128);
+    --shell-deep: oklch(0.905 0.016 128);
+    --shell-lift: oklch(0.962 0.009 128);
+    --shell-rim: oklch(0.985 0.006 128);
+    --shell-skirt: oklch(0.78 0.02 124);
+    --shell-line: oklch(0.8 0.016 120);
     --ink: oklch(0.25 0.014 112);
     --ink-soft: oklch(0.4 0.014 112);
-    --ink-faint: oklch(0.49 0.013 112);
-    --rule: oklch(0.8 0.016 120);
+    --ink-faint: oklch(0.47 0.013 112);
+    --rule: var(--shell-line);
     --rule-strong: oklch(0.34 0.014 112);
-    --bronze: oklch(0.31 0.022 80);
-    --bronze-soft: oklch(0.43 0.03 80);
 
-    /* the one accent */
+    /* the glass: every screen */
+    --glass: oklch(0.21 0.014 128);
+    --glass-deep: oklch(0.17 0.014 128);
+    --glass-line: oklch(0.34 0.016 128);
+    --glass-bezel: oklch(0.42 0.02 120);
+    --on-glass: oklch(0.92 0.02 115);
+    --on-glass-soft: oklch(0.76 0.02 115);
+    --on-glass-faint: oklch(0.68 0.02 115);
+
+    /* what is lit */
     --lime: oklch(0.905 0.2 124);
+    --phosphor: var(--lime);
+    --phosphor-dim: oklch(0.74 0.14 124);
     --lime-ink: oklch(0.47 0.13 128);
     --on-lime: oklch(0.22 0.03 125);
-    --oxblood: oklch(0.5 0.15 28);
+    --coral: oklch(0.54 0.17 32);
+    --coral-lit: oklch(0.74 0.16 32);
+    --amber: oklch(0.62 0.12 70);
 
-    /* legacy names → the ma world (blog, project, lab and 404 pages use these) */
-    --bg: var(--plaster);
-    --bg-2: var(--plaster-deep);
-    --surface: var(--plaster-lift);
-    --surface-2: var(--plaster-deep);
+    /* legacy names → the machine (blog, project, lab and 404 pages use these) */
+    --plaster: var(--shell);
+    --plaster-deep: var(--shell-deep);
+    --plaster-lift: var(--shell-lift);
+    --bg: var(--shell);
+    --bg-2: var(--shell-deep);
+    --surface: var(--shell-lift);
+    --surface-2: var(--shell-deep);
     --surface-3: oklch(0.875 0.016 124);
     --text: var(--ink);
     --text-soft: var(--ink-soft);
     --text-faint: var(--ink-faint);
     --edge: var(--rule-strong);
     --edge-soft: var(--rule);
-    --amber: var(--bronze-soft);
-    --coral: var(--oxblood);
-    --cream: var(--plaster-lift);
+    --bronze: var(--shell-skirt);
+    --bronze-soft: var(--shell-skirt);
+    --oxblood: var(--coral);
+    --cream: var(--shell-lift);
     --on-accent: var(--on-lime);
     --accent: var(--lime);
     --link: var(--lime-ink);
@@ -53,13 +72,14 @@
 
     --dir: 1;
 
-    /* shape: near-square, thin rules */
-    --radius: 6px;
-    --radius-sm: 4px;
-    /* keycaps (the AI toolbox) and the browser frame: objects, not panels */
+    /* shape: molded */
+    --radius: 10px;
+    --radius-sm: 6px;
+    --radius-screen: 14px;
     --radius-key: 12px;
     --radius-pill: 999px;
     --bw: 1.5px;
+    --skirt: 3px;
 
     /* type */
     --ff-body: var(--font-body);
@@ -71,9 +91,9 @@
     --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
     --step-1: clamp(1.15rem, 1.08rem + 0.35vw, 1.35rem);
     --step-2: clamp(1.35rem, 1.22rem + 0.6vw, 1.7rem);
-    --step-3: clamp(1.75rem, 1.5rem + 1.1vw, 2.45rem);
-    --step-4: clamp(2.2rem, 1.7rem + 2.2vw, 3.6rem);
-    --step-5: clamp(2.5rem, 1.75rem + 3.3vw, 4.4rem);
+    --step-3: clamp(1.9rem, 1.55rem + 1.5vw, 2.7rem);
+    --step-4: clamp(2.3rem, 1.7rem + 2.6vw, 3.8rem);
+    --step-5: clamp(2.7rem, 1.8rem + 3.8vw, 5rem);
 
     /* space */
     --space-3xs: 0.25rem;
@@ -84,6 +104,7 @@
     --space-l: 2.25rem;
     --space-xl: 3.5rem;
     --space-2xl: 5rem;
+    --space-3xl: 7rem;
     --page-gutter: 18px;
     --measure: 68ch;
     --page-max: 1200px;
@@ -98,21 +119,26 @@
     --dur-ui: 240ms;
   }
 
-  /* night: the same alcove after dark, under a navy sky */
+  /* night: the same room under a navy sky */
   :root[data-theme='dark'] {
     color-scheme: dark;
-    --plaster: oklch(0.215 0.045 262);
-    --plaster-deep: oklch(0.185 0.045 262);
-    --plaster-lift: oklch(0.25 0.048 262);
+    --shell: oklch(0.215 0.045 262);
+    --shell-deep: oklch(0.185 0.045 262);
+    --shell-lift: oklch(0.25 0.048 262);
+    --shell-rim: oklch(0.33 0.05 262);
+    --shell-skirt: oklch(0.12 0.035 262);
+    --shell-line: oklch(0.32 0.045 260);
     --ink: oklch(0.94 0.012 250);
     --ink-soft: oklch(0.8 0.022 252);
     --ink-faint: oklch(0.71 0.025 252);
-    --rule: oklch(0.36 0.045 260);
     --rule-strong: oklch(0.74 0.025 252);
-    --bronze: oklch(0.13 0.012 80);
-    --bronze-soft: oklch(0.72 0.05 80);
+    --glass: oklch(0.15 0.03 262);
+    --glass-deep: oklch(0.12 0.03 262);
+    --glass-line: oklch(0.3 0.04 262);
+    --glass-bezel: oklch(0.4 0.045 262);
     --lime-ink: var(--lime);
-    --oxblood: oklch(0.7 0.14 30);
+    --coral: var(--coral-lit);
+    --amber: oklch(0.78 0.12 70);
     --surface-3: oklch(0.3 0.048 262);
   }
 

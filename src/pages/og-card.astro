@@ -1,10 +1,12 @@
 ---
-// The social card, rendered by the site itself so it uses the real fonts and palette.
-// scripts/og.mjs screenshots this page at 1200×630. Not linked, not indexed.
+// The social card, rendered by the site itself so it uses the real fonts and palette:
+// the git tree from the hero, small, growing up into my portrait, with Nix beside it. scripts/og.mjs screenshots this
+// page at 1200×630. Not linked, not indexed.
 import '../styles/global.css';
-import { Font, Image } from 'astro:assets';
-import original from '../assets/photo/mahdi-original.png';
+import { Font, Image, getImage } from 'astro:assets';
 import nix from '../assets/nix/nix-wave.png';
+import original from '../assets/photo/mahdi-original.png';
+const face = await getImage({ src: original, width: 480, height: 480, format: 'webp', quality: 82 });
 ---
 
 <html lang="en">
@@ -23,19 +25,35 @@ import nix from '../assets/nix/nix-wave.png';
         <p class="role">AI-native software engineer in Tehran. Real products, under real load.</p>
         <p class="url">mahdimirmo.ir</p>
       </div>
-      <div class="art">
-        <span class="rod"></span>
-        <Image class="photo" src={original} width={560} format="webp" quality={85} alt="" />
+      <div class="graph">
+        <span class="me"><img src={face.src} width="212" height="256" alt="" /></span>
+        <Image class="nix" src={nix} width={110} format="webp" quality={90} alt="" />
+        <svg viewBox="0 0 190 488" width="190" height="488" aria-hidden="true">
+          <g fill="none" stroke-linecap="round" stroke-width="3">
+            <path stroke="oklch(0.62 0.03 120)" d="M30 440 L30 40" />
+            <path stroke="oklch(0.6 0.08 45)" d="M30 440 C30 402 114 398 114 360 L114 272 C114 230 30 238 30 200" />
+            <path stroke="oklch(0.6 0.07 80)" d="M114 360 C114 322 156 318 156 280 L156 40" />
+            <path stroke="oklch(0.55 0.07 160)" d="M30 200 C30 162 72 158 72 120 L72 40" />
+          </g>
+          <g fill="oklch(0.936 0.013 128)" stroke="oklch(0.34 0.014 112)" stroke-width="2.5">
+            <circle cx="114" cy="360" r="6" /><circle cx="156" cy="280" r="6" /><circle cx="30" cy="200" r="10" /><circle cx="30" cy="200" r="5" /><circle cx="72" cy="120" r="6" />
+          </g>
+          <g fill="oklch(0.905 0.2 124)" stroke="oklch(0.25 0.014 112)" stroke-width="2">
+            <circle cx="30" cy="40" r="8" /><circle cx="72" cy="40" r="8" /><circle cx="156" cy="40" r="8" />
+          </g>
+          <circle cx="30" cy="440" r="12" fill="oklch(0.936 0.013 128)" stroke="oklch(0.34 0.014 112)" stroke-width="2" />
+          <circle cx="30" cy="440" r="6" fill="oklch(0.34 0.014 112)" />
+        </svg>
+        <ul class="log">
+          <li class="refs"><span>(HEAD -> main, innolearn, armani-english)</span></li>
+          <li><b>Started at InnoLearn</b><span>git checkout -b innolearn · Oct 2025</span></li>
+          <li class="quiet"><b>Graduated, merged back into main</b><span>git merge mechatronics · 2023</span></li>
+          <li><b>Joined Armani English</b><span>git checkout -b armani-english · Sep 2022</span></li>
+          <li><b>Studied Mechatronics</b><span>git checkout -b mechatronics · 2019</span></li>
+          <li><b>git init: born. hello world!</b><span>root commit</span></li>
+        </ul>
       </div>
-      <svg class="branch" viewBox="0 0 300 300" aria-hidden="true">
-        <path d="M150 300C146 262 170 240 160 210 150 180 110 170 88 140 72 118 70 96 76 80" fill="none" stroke="oklch(0.36 0.03 78)" stroke-width="7" stroke-linecap="round" />
-        <path d="M160 210C190 200 214 184 226 160" fill="none" stroke="oklch(0.36 0.03 78)" stroke-width="4.5" stroke-linecap="round" />
-        <circle cx="76" cy="80" r="11" fill="oklch(0.905 0.2 124)" stroke="oklch(0.25 0.014 112)" stroke-width="2" />
-        <circle cx="226" cy="160" r="11" fill="oklch(0.905 0.2 124)" stroke="oklch(0.25 0.014 112)" stroke-width="2" />
-        <circle cx="160" cy="210" r="6" fill="oklch(0.936 0.013 128)" stroke="oklch(0.36 0.03 78)" stroke-width="2.5" />
-      </svg>
-      <Image class="nix" src={nix} width={130} format="webp" quality={90} alt="" />
-      <div class="shelf"></div>
+      <div class="desk"></div>
     </div>
   </body>
 </html>
@@ -43,91 +61,137 @@ import nix from '../assets/nix/nix-wave.png';
 <style>
   body {
     margin: 0;
-    background: var(--plaster);
+    background: var(--shell);
   }
   .card {
     position: relative;
     width: 1200px;
     height: 630px;
     overflow: hidden;
-    background: var(--plaster);
+    background: var(--shell);
   }
   .text {
     position: absolute;
-    left: 80px;
+    left: 72px;
     top: 150px;
-    width: 640px;
+    width: 540px;
   }
   .name {
     font-family: var(--font-display);
-    font-size: 84px;
-    line-height: 1.02;
+    font-size: 66px;
+    line-height: 1;
     letter-spacing: -0.015em;
     color: var(--ink);
   }
   .role {
-    margin-top: 28px;
+    margin-top: 26px;
     font-family: var(--font-body);
-    font-size: 30px;
+    font-size: 28px;
     line-height: 1.35;
     color: var(--ink-soft);
   }
   .url {
-    margin-top: 40px;
+    margin-top: 36px;
     display: inline-block;
-    padding: 6px 14px;
-    border: 1.5px solid var(--ink);
-    border-radius: 4px;
-    background: var(--lime);
+    padding: 8px 18px;
+    border: 1px solid var(--glass-deep);
+    border-radius: 10px;
+    background: var(--glass);
+    box-shadow:
+      inset 0 1px 0 var(--glass-bezel),
+      0 3px 0 var(--glass-deep);
     font-family: var(--font-body);
     font-weight: 600;
     font-size: 26px;
-    color: var(--on-lime);
+    color: var(--phosphor);
   }
-  .art {
+
+  /* the git tree growing up into the portrait, scaled to fit the card */
+  .graph {
     position: absolute;
-    right: 80px;
-    top: 60px;
-    width: 280px;
+    right: 40px;
+    top: 214px;
+    display: flex;
+    gap: 8px;
+    width: 560px;
+    transform: scale(0.78);
+    transform-origin: top right;
   }
-  .rod {
+  .graph svg {
     display: block;
-    height: 9px;
-    margin: 0 -22px;
-    border-radius: 5px;
-    background: oklch(0.3 0.025 78);
+    flex: none;
+    overflow: visible;
   }
-  .photo {
+  .me {
+    position: absolute;
+    left: 4px;
+    top: -234px;
+    width: 212px;
+    height: 256px;
+    padding: 7px;
+    border: 1px solid var(--shell-skirt);
+    border-radius: 14px;
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 3px 0 var(--shell-skirt);
+    box-sizing: border-box;
+  }
+  .me img {
     display: block;
-    width: 280px;
-    height: 370px;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
     object-fit: cover;
-    object-position: 32% 40%;
-    border: 1.5px solid var(--rule-strong);
-    border-top: 0;
-  }
-  .branch {
-    position: absolute;
-    left: 700px;
-    bottom: 34px;
-    width: 300px;
-    height: 300px;
+    object-position: 34% 50%;
   }
   .nix {
     position: absolute;
-    right: 70px;
-    bottom: 34px;
-    width: 130px;
+    right: 20px;
+    top: -110px;
+    width: 110px;
     height: auto;
-    transform: scaleX(-1);
   }
-  .shelf {
+  .log {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-top: 0;
+  }
+  .log li {
+    display: grid;
+    height: 80px;
+    align-content: center;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.25;
+    color: var(--ink-soft);
+  }
+  .log li b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .log li.quiet b {
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+  .log li.refs span {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--lime-ink);
+  }
+  .log li span {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .desk {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 34px;
-    background: oklch(0.3 0.025 78);
-    border-top: 4px solid oklch(0.42 0.03 78);
+    height: 22px;
+    background: var(--shell-skirt);
+    border-top: 2px solid var(--shell-rim);
   }
 </style>

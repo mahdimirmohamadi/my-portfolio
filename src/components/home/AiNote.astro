@@ -13,6 +13,7 @@ import SectionHead from '../ui/SectionHead.astro';
 import Logo from '../ui/Logo.astro';
 import AiToolbox from './AiToolbox.astro';
 import Nix from '../art/Nix.astro';
+import Icon from '../ui/Icon.astro';
 import me from '../../assets/photo/mahdi-original.png';
 
 interface Props {
@@ -51,7 +52,12 @@ const steps = [
             </span>
             <span class="step__title">{t(`ai.flow.${s.id}` as UIKey)}</span>
             <span class="step__sub">{t(`ai.flow.${s.id}.sub` as UIKey)}</span>
-            {s.id === 'review' && <span class="step__again-inline">↺ {t('ai.flow.again')}</span>}
+            {s.id === 'review' && (
+              <span class="step__again-inline">
+                <Icon name="again" size={14} />
+                {t('ai.flow.again')}
+              </span>
+            )}
           </li>
         ))
       }
@@ -123,8 +129,11 @@ const steps = [
     width: var(--node);
     height: var(--node);
     border-radius: 50%;
-    border: var(--bw) solid var(--rule-strong);
-    background: var(--plaster-lift);
+    border: 1px solid var(--shell-skirt);
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
     z-index: 1;
   }
   /* the "you are here" ring: fades in while the bud visits this step */
@@ -174,6 +183,9 @@ const steps = [
   }
   .step__again-inline {
     grid-column: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     justify-self: start;
     margin-block-start: 0.3rem;
     padding: 0.05rem 0.5rem;
@@ -191,7 +203,7 @@ const steps = [
     inset-block-start: var(--node);
     height: calc(100% - var(--node) + var(--space-m));
     width: 3px;
-    background: var(--bronze-soft);
+    background: var(--shell-skirt);
     transform-origin: top;
   }
   .again {
@@ -244,7 +256,7 @@ const steps = [
     .again__line {
       position: absolute;
       inset: 0;
-      border: 2px dashed var(--bronze-soft);
+      border: 2px dashed var(--shell-skirt);
       border-block-start: 0;
       border-radius: 0 0 var(--radius) var(--radius);
     }
@@ -256,8 +268,8 @@ const steps = [
       inset-inline-start: -6px;
       width: 12px;
       height: 12px;
-      border-block-start: 2px solid var(--bronze-soft);
-      border-inline-start: 2px solid var(--bronze-soft);
+      border-block-start: 2px solid var(--shell-skirt);
+      border-inline-start: 2px solid var(--shell-skirt);
       rotate: calc(45deg * var(--dir));
     }
     .again__label {
@@ -266,7 +278,7 @@ const steps = [
       inset-inline-start: 50%;
       translate: calc(-50% * var(--dir)) 0;
       padding: 0.05rem 0.6rem;
-      background: var(--plaster);
+      background: var(--shell);
       font-size: 0.84rem;
       color: var(--ink-soft);
       white-space: nowrap;

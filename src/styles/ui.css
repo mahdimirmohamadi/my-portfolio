@@ -1,22 +1,84 @@
-/* ─── ma primitives: panels, headings, buttons, tags ─── */
+/* ─── the machine · primitives: caps, screens, buttons, keys, tags ─── */
 
 @layer components {
-  /* ── Panel (the old "window"): a framed recess with a quiet caption ── */
+  /* ── a cap: molded plastic. A lighter rim on top, a darker skirt below. ── */
+  .cap {
+    position: relative;
+    background: var(--shell-lift);
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
+  }
+  /* a pressable cap: the skirt collapses as it goes down */
+  .cap--press {
+    transition:
+      translate var(--dur-press) var(--ease-out),
+      box-shadow var(--dur-press) var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .cap--press:hover {
+      background: var(--shell);
+    }
+  }
+  .cap--press:active {
+    translate: 0 2px;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 1px 0 var(--shell-skirt);
+  }
+  /* a recess: a plate the caps sit in */
+  .plate {
+    background: var(--shell-deep);
+    border: 1px solid var(--shell-line);
+    border-radius: var(--radius-screen);
+    box-shadow: inset 0 2px 0 var(--shell-skirt);
+  }
+
+  /* ── a screen: dark warm glass with a hairline bezel ── */
+  .screen {
+    position: relative;
+    background: var(--glass);
+    color: var(--on-glass);
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius-screen);
+    box-shadow:
+      inset 0 0 0 1px var(--glass-line),
+      inset 0 1px 0 var(--shell-rim);
+  }
+  .screen ::selection {
+    background: var(--phosphor);
+    color: var(--on-lime);
+  }
+  .screen a {
+    color: var(--phosphor);
+  }
+  .screen .caption {
+    color: var(--on-glass-faint);
+  }
+
+  /* the legacy panel (blog, lab, 404, package.json): a small screen with a caption line */
   .win {
     position: relative;
-    background: var(--plaster-lift);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
+    background: var(--glass);
+    color: var(--on-glass);
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius-screen);
+    box-shadow:
+      inset 0 0 0 1px var(--glass-line),
+      inset 0 1px 0 var(--shell-rim);
     overflow: clip;
   }
   .win__bar {
     display: flex;
     align-items: baseline;
     gap: var(--space-xs);
-    padding: 0.7rem var(--space-m) 0;
+    padding: 0.75rem var(--space-m) 0;
     font-family: var(--ff-mono);
     font-size: 0.75rem;
-    color: var(--ink-faint);
+    color: var(--on-glass-faint);
     direction: ltr;
   }
   .win__title {
@@ -32,73 +94,172 @@
   .win__body {
     padding: var(--space-m);
   }
+  .win a {
+    color: var(--phosphor);
+  }
+  .win ::selection {
+    background: var(--phosphor);
+    color: var(--on-lime);
+  }
+  /* terminal ink on glass */
+  .t-out {
+    color: var(--on-glass-soft);
+  }
+  .t-dim {
+    color: var(--on-glass-faint);
+  }
+  .t-lime {
+    color: var(--phosphor);
+    font-weight: 600;
+  }
+  .t-amber {
+    color: var(--amber);
+    font-weight: 600;
+  }
+  :root[data-theme='dark'] .t-amber,
+  .screen .t-amber,
+  .win .t-amber {
+    color: oklch(0.8 0.13 72);
+  }
+  .t-coral {
+    color: var(--coral-lit);
+    font-weight: 600;
+  }
 
   /* ── Section heading ── */
   .sec-head {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.6rem;
     margin-block-end: var(--space-l);
   }
   .sec-head__title {
     font-size: var(--step-3);
   }
-  /* the lead runs the full width: it's one thought, so it gets one line where there's room */
   .sec-head__lead {
     color: var(--ink-soft);
     font-size: var(--step-0);
+    max-width: 62ch;
     text-wrap: pretty;
   }
 
-  /* ── Button: a plain rectangle; lime is only for the one thing that matters ── */
+  /* ── Buttons ── */
+  /* primary: a small glass cap, its label lit */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.7em;
-    min-height: 48px;
-    padding: 0.6em 1.3em;
-    border: var(--bw) solid var(--ink);
-    border-radius: var(--radius-sm);
-    background: var(--lime);
-    color: var(--on-lime);
+    min-height: 50px;
+    padding: 0.6em 1.35em;
+    border: 1px solid var(--glass-deep);
+    border-radius: var(--radius);
+    background: var(--glass);
+    color: var(--phosphor);
     font-family: var(--ff-body);
     font-weight: 600;
     font-size: 0.98rem;
     text-decoration: none;
+    box-shadow:
+      inset 0 1px 0 var(--glass-bezel),
+      0 var(--skirt) 0 var(--glass-deep);
     transition:
-      background-color var(--dur-hover) var(--ease-out),
-      scale var(--dur-press) var(--ease-out);
+      translate var(--dur-press) var(--ease-out),
+      box-shadow var(--dur-press) var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out);
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
   :root[data-theme='dark'] .btn {
-    border-color: var(--lime);
+    border-color: oklch(0.08 0.03 262);
+    box-shadow:
+      inset 0 1px 0 var(--glass-line),
+      0 var(--skirt) 0 oklch(0.08 0.03 262);
   }
   .btn svg {
     transition: translate var(--dur-ui) var(--ease-out);
   }
   @media (hover: hover) and (pointer: fine) {
+    .btn:hover {
+      background: var(--glass-deep);
+    }
     .btn:hover svg {
       translate: calc(4px * var(--dir)) 0;
     }
   }
   .btn:active {
-    scale: 0.97;
+    translate: 0 2px;
+    box-shadow:
+      inset 0 1px 0 var(--glass-bezel),
+      0 1px 0 var(--glass-deep);
   }
+  /* ghost: a plain cap */
   .btn--ghost {
-    background: transparent;
+    background: var(--shell-lift);
     color: var(--ink);
-    border-color: var(--rule-strong);
+    border-color: var(--shell-skirt);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
   }
   :root[data-theme='dark'] .btn--ghost {
-    border-color: var(--rule-strong);
+    border-color: var(--shell-skirt);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
   }
   @media (hover: hover) and (pointer: fine) {
     .btn--ghost:hover {
-      background: var(--plaster-deep);
+      background: var(--shell);
     }
   }
-  :root[dir='rtl'] .btn svg {
+  .btn--ghost:active {
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 1px 0 var(--shell-skirt);
+  }
+  /* lit: on glass, the one action that matters is a lime LED cap */
+  .btn--lit {
+    background: var(--lime);
+    color: var(--on-lime);
+    border-color: var(--lime-ink);
+    box-shadow:
+      inset 0 1px 0 oklch(0.97 0.12 124),
+      0 var(--skirt) 0 oklch(0.55 0.15 128);
+  }
+  :root[data-theme='dark'] .btn--lit {
+    border-color: oklch(0.55 0.15 128);
+    box-shadow:
+      inset 0 1px 0 oklch(0.97 0.12 124),
+      0 var(--skirt) 0 oklch(0.55 0.15 128);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn--lit:hover {
+      background: oklch(0.93 0.2 124);
+    }
+  }
+  .btn--lit:active {
+    box-shadow:
+      inset 0 1px 0 oklch(0.97 0.12 124),
+      0 1px 0 oklch(0.55 0.15 128);
+  }
+  /* on glass, the partner action is bone on glass */
+  .btn--glass {
+    background: transparent;
+    color: var(--on-glass);
+    border-color: var(--glass-bezel);
+    box-shadow:
+      inset 0 1px 0 var(--glass-bezel),
+      0 var(--skirt) 0 var(--glass-deep);
+  }
+  :is(.screen, .win, .close) .btn--glass {
+    color: var(--on-glass);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn--glass:hover {
+      background: var(--glass-deep);
+    }
+  }
+  :root[dir='rtl'] .btn svg.arrow {
     scale: -1 1;
   }
 
@@ -111,7 +272,8 @@
     color: var(--ink);
     font-weight: 600;
     text-decoration: underline;
-    text-decoration-color: var(--rule);
+    text-decoration-color: var(--shell-skirt);
+    text-decoration-thickness: 1.5px;
     text-underline-offset: 0.3em;
     transition: text-decoration-color var(--dur-hover) var(--ease-out);
   }
@@ -128,15 +290,16 @@
     scale: -1 1;
   }
 
-  /* ── Tag ── */
+  /* ── Tag: a small printed label ── */
   .chip,
   .sticker {
     display: inline-flex;
     align-items: center;
     min-height: 26px;
     padding: 0.05em 0.6em;
-    border: 1px solid var(--rule);
-    border-radius: 3px;
+    border: 1px solid var(--shell-skirt);
+    border-radius: 5px;
+    background: var(--shell-lift);
     font-family: var(--ff-mono);
     font-size: 0.75rem;
     color: var(--ink-soft);
@@ -148,37 +311,98 @@
     font-family: var(--font-fa);
   }
   .sticker--coral {
-    border-color: var(--oxblood);
-    color: var(--oxblood);
+    border-color: var(--coral);
+    color: var(--coral);
   }
   .sticker--amber,
   .sticker--lime {
     border-color: var(--rule-strong);
     color: var(--ink);
   }
+  /* a linked tag is a tiny key */
   a.chip {
     min-height: 36px;
     text-decoration: none;
+    box-shadow: 0 2px 0 var(--shell-skirt);
     transition:
+      translate var(--dur-press) var(--ease-out),
+      box-shadow var(--dur-press) var(--ease-out),
+      color var(--dur-hover) var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out);
+  }
+  a.chip:hover {
+    color: var(--ink);
+    background: var(--shell);
+  }
+  a.chip:active {
+    translate: 0 1px;
+    box-shadow: 0 1px 0 var(--shell-skirt);
+  }
+
+  /* ── a small keycap (skills, terminal commands) ── */
+  .key-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 36px;
+    padding-inline: 0.7rem;
+    border: 1px solid var(--shell-skirt);
+    border-radius: 7px;
+    background: var(--shell-lift);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    white-space: nowrap;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 2px 0 var(--shell-skirt);
+    transition:
+      translate var(--dur-press) var(--ease-out),
+      box-shadow var(--dur-press) var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out),
       border-color var(--dur-hover) var(--ease-out),
       color var(--dur-hover) var(--ease-out);
   }
-  a.chip:hover {
-    border-color: var(--lime-ink);
-    color: var(--ink);
+  button.key-sm,
+  a.key-sm {
+    cursor: pointer;
+    text-decoration: none;
+  }
+  :is(button, a).key-sm:active {
+    translate: 0 2px;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 0 0 var(--shell-skirt);
   }
 
-  /* a shelf: the alcove's bronze rail, used to close a passage */
+  /* ── an LED: a small lit dot with an ink ring ── */
+  .led {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--lime);
+    border: 1.5px solid var(--ink);
+  }
+
+  /* ── the desk edge: the one heavy horizontal, full bleed ── */
+  .desk-edge {
+    display: block;
+    height: 14px;
+    background: var(--shell-skirt);
+    border-block-start: 2px solid var(--shell-rim);
+    border-block-end: 1px solid oklch(0.62 0.02 124);
+  }
+  :root[data-theme='dark'] .desk-edge {
+    border-block-end-color: oklch(0.08 0.03 262);
+  }
+  /* kept for old call sites */
   .shelf-rule {
     display: block;
     height: 10px;
-    border-radius: 2px;
-    background: oklch(0.3 0.025 78);
-    border-block-start: 2px solid oklch(0.42 0.03 78);
-  }
-  :root[data-theme='dark'] .shelf-rule {
-    background: oklch(0.36 0.02 78);
-    border-block-start-color: oklch(0.5 0.025 78);
+    border-radius: 3px;
+    background: var(--shell-skirt);
+    border-block-start: 2px solid var(--shell-rim);
   }
 
   /* a caption: small, quiet, for data and places (not an eyebrow) */
@@ -191,7 +415,7 @@
 
   .ps1 {
     font-family: var(--ff-mono);
-    color: var(--lime-ink);
+    color: var(--phosphor);
     font-weight: 600;
   }
   .caret {
@@ -199,6 +423,6 @@
     width: 0.55em;
     height: 1.05em;
     vertical-align: -0.16em;
-    background: var(--lime-ink);
+    background: var(--phosphor);
   }
 }

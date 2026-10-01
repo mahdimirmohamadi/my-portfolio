@@ -31,14 +31,18 @@ const items = workspaces.filter((w) => w.dock !== false);
 </nav>
 
 <style>
+  /* a cap in thumb reach */
   .dock {
     position: fixed;
     inset-inline: 10px;
-    inset-block-end: calc(10px + env(safe-area-inset-bottom));
+    inset-block-end: calc(12px + env(safe-area-inset-bottom));
     z-index: 50;
-    border: 1px solid var(--rule-strong);
+    border: 1px solid var(--shell-skirt);
     border-radius: var(--radius);
-    background: var(--plaster-lift);
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
   }
   .dock ul {
     display: grid;

@@ -7,6 +7,12 @@
         "rule": "design-system-font-size",
         "value": "1.2rem",
         "createdAt": "2026-09-18T23:11:01.682Z"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "oklch(0.4 0.09 262 / 0.5)",
+        "createdAt": "2026-09-28T21:18:40.446Z",
+        "reason": "DESIGN.md One Field Rule documents this as the night colour of the radial field behind the hero graph; sidecar ramps don't carry alpha values"
       }
     ]
   }

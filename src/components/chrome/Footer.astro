@@ -13,9 +13,10 @@ const t = useT(lang);
 ---
 
 <footer class="foot">
+  <div class="desk-edge" aria-hidden="true"></div>
   <div class="foot__inner wrap">
     <div class="foot__who">
-      <Nix mood="bye" size={64} />
+      <Nix mood="bye" size={64} eager />
       <p class="foot__made">{t('footer.made')}</p>
     </div>
     <ul class="foot__links" role="list">
@@ -28,9 +29,9 @@ const t = useT(lang);
 </footer>
 
 <style>
+  /* the desk edge closes the page */
   .foot {
     margin-block-start: var(--space-2xl);
-    border-block-start: 1px solid var(--rule);
     /* room for the phone dock */
     padding-block-end: calc(80px + env(safe-area-inset-bottom));
   }
@@ -74,5 +75,8 @@ const t = useT(lang);
   .foot__links a:hover {
     color: var(--ink);
     text-decoration-color: var(--lime-ink);
+  }
+  .foot__links a {
+    text-decoration-color: var(--shell-skirt);
   }
 </style>

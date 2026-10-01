@@ -42,20 +42,26 @@ const Tag = href ? 'a' : 'div';
 </figure>
 
 <style>
+  /* a small screen: dark glass in a bezel */
   .browser {
+    position: relative;
     margin: 0;
-    border: var(--bw) solid var(--rule-strong);
-    border-radius: var(--radius-key);
-    background: var(--plaster-lift);
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius-screen);
+    background: var(--glass);
+    color: var(--on-glass);
+    box-shadow:
+      inset 0 0 0 1px var(--glass-line),
+      inset 0 1px 0 var(--shell-rim);
     overflow: hidden;
   }
   .browser__bar {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    border-block-end: 1px solid var(--rule);
-    background: var(--plaster-deep);
+    padding: 0.55rem 0.8rem;
+    border-block-end: 1px solid var(--glass-line);
+    background: var(--glass);
     direction: ltr;
   }
   .browser__dots {
@@ -66,7 +72,7 @@ const Tag = href ? 'a' : 'div';
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 1.5px solid var(--rule-strong);
+    border: 1.5px solid var(--on-glass-faint);
   }
   .browser__url {
     flex: 1;
@@ -77,12 +83,12 @@ const Tag = href ? 'a' : 'div';
     gap: 0.35rem;
     min-width: 0;
     padding: 0.2rem 0.75rem;
-    border: 1px solid var(--rule);
+    border: 1px solid var(--glass-line);
     border-radius: var(--radius-pill);
-    background: var(--plaster-lift);
+    background: var(--glass-deep);
     font-family: var(--ff-mono);
     font-size: 0.75rem;
-    color: var(--ink-soft);
+    color: var(--on-glass-soft);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -93,7 +99,7 @@ const Tag = href ? 'a' : 'div';
     container-type: inline-size;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    background: var(--plaster-deep);
+    background: var(--glass-deep);
   }
   .browser__viewport :global(.browser__page) {
     display: block;

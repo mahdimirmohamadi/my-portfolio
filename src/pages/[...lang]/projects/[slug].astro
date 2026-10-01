@@ -31,9 +31,9 @@ const shot = shotOf(slug);
       <a class="arrow-link back" href={lp(lang, '/projects')}><Arrow />{t('projects.all')}</a>
     </p>
     <header class="readme__head">
-      <p class="readme__kind">{item.data.kind}</p>
       <h1 class="readme__title" style={`view-transition-name: proj-${slug}`}>{item.data.title}</h1>
       <p class="readme__summary">{item.data.summary}</p>
+      <p class="readme__kind caption">{item.data.kind}</p>
       {
         item.data.url && (
           <p>
@@ -85,7 +85,6 @@ const shot = shotOf(slug);
     border-block-end: 1px solid var(--rule);
   }
   .readme__kind {
-    font-size: 0.88rem;
     color: var(--text-faint);
   }
   .readme__shot {

@@ -53,14 +53,17 @@ const choices = [
     max-height: calc(100dvh - 32px);
     margin: auto;
     padding: var(--space-l) var(--space-l) var(--space-m);
-    border: 1px solid var(--rule-strong);
-    border-radius: var(--radius);
-    background: var(--plaster-lift);
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius-screen);
+    background: var(--shell-lift);
     color: var(--ink);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
     overflow: visible;
   }
   .resume::backdrop {
-    background: oklch(0.2 0.02 112 / 0.45);
+    background: oklch(0.15 0.02 262 / 0.55);
   }
 
   .resume__close {
@@ -76,7 +79,7 @@ const choices = [
   }
   .resume__close:hover {
     color: var(--ink);
-    background: var(--plaster-deep);
+    background: var(--shell-deep);
   }
 
   /* Nix stands on the top edge of the card and talks */
@@ -96,9 +99,10 @@ const choices = [
     position: relative;
     margin-block-end: 2.6rem;
     padding: 0.45rem 0.8rem;
-    border: 1px solid var(--rule-strong);
+    border: 1px solid var(--shell-skirt);
     border-radius: var(--radius);
-    background: var(--plaster-lift);
+    background: var(--shell-lift);
+    box-shadow: 0 2px 0 var(--shell-skirt);
     font-size: 0.9rem;
     font-weight: 600;
   }
@@ -138,13 +142,18 @@ const choices = [
     gap: 0.8rem;
     min-height: 64px;
     padding-inline: var(--space-s);
-    border: var(--bw) solid var(--rule-strong);
-    border-radius: var(--radius-sm);
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius);
+    background: var(--shell-lift);
     color: var(--ink);
     text-decoration: none;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
     transition:
       background-color var(--dur-hover) var(--ease-out),
-      scale var(--dur-press) var(--ease-out);
+      translate var(--dur-press) var(--ease-out),
+      box-shadow var(--dur-press) var(--ease-out);
   }
   .choice__label {
     font-size: 1.1rem;
@@ -163,7 +172,10 @@ const choices = [
     .choice:hover {
       background: var(--lime);
       color: var(--on-lime);
-      border-color: var(--ink);
+      border-color: var(--lime-ink);
+      box-shadow:
+        inset 0 1px 0 oklch(0.97 0.12 124),
+        0 var(--skirt) 0 oklch(0.55 0.15 128);
     }
     .choice:hover .choice__meta {
       color: inherit;
@@ -173,7 +185,10 @@ const choices = [
     }
   }
   .choice:active {
-    scale: 0.98;
+    translate: 0 2px;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 1px 0 var(--shell-skirt);
   }
 
   /* open: the card rises and settles; Nix hops in a beat later */

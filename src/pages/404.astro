@@ -18,7 +18,7 @@ import { ui } from '../i18n/ui';
       <p lang="fa" dir="rtl" class="panic__fa">{ui.fa['404.body']}</p>
       <p class="panic__links">
         <a class="btn" href="/">{ui.en['404.home']}</a>
-        <a class="btn btn--ghost" href="/fa/" lang="fa">نسخهٔ فارسی</a>
+        <a class="btn btn--glass" href="/fa/" lang="fa">نسخهٔ فارسی</a>
       </p>
     </Window>
   </section>
@@ -43,7 +43,8 @@ import { ui } from '../i18n/ui';
     margin: 0;
     padding: var(--space-s);
     border-radius: var(--radius-sm);
-    background: var(--bg-2);
+    background: var(--glass-deep);
+    border: 1px solid var(--glass-line);
     font-size: 0.78rem;
     line-height: 1.6;
     color: var(--text-soft);

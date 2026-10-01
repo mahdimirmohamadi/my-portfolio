@@ -82,7 +82,7 @@ const when = (j: (typeof jobs)[number]) =>
         </li>
       ))
     }
-    <li class="school">
+    <li class="school" id="work-school">
       <span class="node" aria-hidden="true"></span>
       <div class="school__head">
         <h3 class="school__title">{t('work.edu')}</h3>
@@ -120,7 +120,7 @@ const when = (j: (typeof jobs)[number]) =>
     inset-block: 14px 1.2rem;
     inset-inline-start: calc(var(--stem-x) - 1.5px);
     width: 3px;
-    background: var(--bronze-soft);
+    background: var(--shell-skirt);
   }
   .node {
     position: absolute;
@@ -129,8 +129,8 @@ const when = (j: (typeof jobs)[number]) =>
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: var(--plaster);
-    border: 3px solid var(--bronze-soft);
+    background: var(--shell);
+    border: 3px solid var(--shell-skirt);
   }
   .node--bud {
     inset-inline-start: calc(var(--stem-x) - 12px);
@@ -191,10 +191,12 @@ const when = (j: (typeof jobs)[number]) =>
     font-size: 0.9rem;
     color: var(--ink-soft);
   }
+  /* the dates: a printed label */
   .job__when {
     padding: 0.15rem 0.6rem;
-    border: 1px solid var(--rule-strong);
-    border-radius: var(--radius-sm);
+    border: 1px solid var(--shell-skirt);
+    border-radius: 5px;
+    background: var(--shell-lift);
     color: var(--ink);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
@@ -237,24 +239,33 @@ const when = (j: (typeof jobs)[number]) =>
     padding: 0;
     list-style: none;
   }
+  /* the stack: small keys */
   .job__stack li {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.15rem 0.5rem;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-sm);
+    min-height: 30px;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid var(--shell-skirt);
+    border-radius: 7px;
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 2px 0 var(--shell-skirt);
     font-family: var(--font-body);
     font-size: 0.84rem;
     color: var(--ink-soft);
   }
 
-  /* what I built there: a recess in the wall, not a floating card */
+  /* what I built there: a cap beside the story */
   .built {
     padding: var(--space-m);
-    border: 1px solid var(--rule);
+    border: 1px solid var(--shell-skirt);
     border-radius: var(--radius);
-    background: var(--plaster-lift);
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
   }
   .built__title {
     font-size: 0.92rem;
@@ -284,7 +295,7 @@ const when = (j: (typeof jobs)[number]) =>
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    border: 2px solid var(--bronze-soft);
+    border: 2px solid var(--ink-faint);
   }
 
   .school__head {

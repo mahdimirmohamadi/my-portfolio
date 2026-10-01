@@ -1,5 +1,8 @@
 ---
-/** The close: phone and email set large and equal, the call first; then everywhere else. */
+/**
+ * The close: the whole width goes to glass. The phone number and the email lit in phosphor at
+ * display size, equal weight, the call first; then everywhere else, quieter, on the same screen.
+ */
 import type { Lang } from '../../i18n/ui';
 import { useT } from '../../i18n/utils';
 import { person } from '../../data/profile';
@@ -15,69 +18,80 @@ const t = useT(lang);
 const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn', telegram: 'Telegram', x: 'X' };
 ---
 
-<section class="section wrap close" id="contact" aria-labelledby="contact-title">
-  <span class="shelf-rule close__shelf" aria-hidden="true"></span>
-  <div class="close__head">
-    <h2 class="close__title" id="contact-title">{t('contact.title')}</h2>
-    <Nix size={104} class="close__nix" />
-  </div>
-  <p class="close__lead">{t('contact.lead')}</p>
-
-  <dl class="lines">
-    <div>
-      <dt>{t('contact.phone.label')}</dt>
-      <dd><a href={`tel:${person.phone.tel}`} dir="ltr">{person.phone.display[lang]}</a></dd>
-      <Nix mood="call" size={72} class="lines__nix" />
+<section class="close on-glass" id="contact" aria-labelledby="contact-title">
+  <div class="close__inner wrap">
+    <div class="close__head">
+      <h2 class="close__title" id="contact-title">{t('contact.title')}</h2>
+      <Nix size={104} class="close__nix" />
     </div>
-    <div>
-      <dt>{t('contact.email.label')}</dt>
-      <dd><a href={`mailto:${person.email}`} dir="ltr">{person.email}</a></dd>
-      <Nix mood="mail" size={72} class="lines__nix" />
+    <p class="close__lead">{t('contact.lead')}</p>
+
+    <dl class="lines">
+      <div>
+        <dt>{t('contact.phone.label')}</dt>
+        <dd><a href={`tel:${person.phone.tel}`} dir="ltr">{person.phone.display[lang]}</a></dd>
+        <Nix mood="call" size={72} class="lines__nix" />
+      </div>
+      <div>
+        <dt>{t('contact.email.label')}</dt>
+        <dd><a href={`mailto:${person.email}`} dir="ltr">{person.email}</a></dd>
+        <Nix mood="mail" size={72} class="lines__nix" />
+      </div>
+    </dl>
+
+    <div class="close__actions">
+      <a class="btn btn--lit" href={`tel:${person.phone.tel}`}>
+        <Icon name="phone" size={20} />
+        {t('contact.call')}
+      </a>
+      <a class="btn btn--glass" href={`mailto:${person.email}`}>
+        <Icon name="mail" size={20} />
+        {t('contact.email')}
+      </a>
     </div>
-  </dl>
 
-  <div class="close__actions">
-    <a class="btn" href={`tel:${person.phone.tel}`}>
-      <Icon name="phone" size={20} />
-      {t('contact.call')}
-    </a>
-    <a class="btn btn--ghost" href={`mailto:${person.email}`}>
-      <Icon name="mail" size={20} />
-      {t('contact.email')}
-    </a>
-  </div>
-
-  <div class="elsewhere">
-    <h3 class="elsewhere__title">{t('contact.elsewhere')}</h3>
-    <ul role="list">
-      {
-        person.links.map((l) => (
-          <li>
-            <a href={l.href} target="_blank" rel="me noopener">
-              <Logo name={logoOf[l.id] ?? l.label} size={18} />
-              <span>{l.label}</span>
-              <span class="elsewhere__handle">{l.handle.replace(/^[^/]+\//, '')}</span>
-            </a>
-          </li>
-        ))
-      }
-      <li>
-        <a href={person.resume[lang]} download data-resume>
-          <Icon name="download" size={18} />
-          <span>{t('hero.resume')}</span>
-          <span class="elsewhere__handle">EN · FA</span>
-        </a>
-      </li>
-    </ul>
+    <div class="elsewhere">
+      <h3 class="elsewhere__title">{t('contact.elsewhere')}</h3>
+      <ul role="list">
+        {
+          person.links.map((l) => (
+            <li>
+              <a href={l.href} target="_blank" rel="me noopener">
+                <Logo name={logoOf[l.id] ?? l.label} size={18} />
+                <span>{l.label}</span>
+                <span class="elsewhere__handle">{l.handle.replace(/^[^/]+\//, '')}</span>
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={person.resume[lang]} download data-resume>
+            <Icon name="download" size={18} />
+            <span>{t('hero.resume')}</span>
+            <span class="elsewhere__handle">EN · FA</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </section>
 
 <style>
-  #contact {
-    --anchor-extra: -103px;
+  /* the screen: full bleed, bezel lines top and bottom */
+  .close {
+    margin-block-start: var(--space-2xl);
+    padding-block: var(--space-2xl);
+    background: var(--glass);
+    color: var(--on-glass);
+    border-block: 1px solid var(--shell-skirt);
+    box-shadow:
+      inset 0 1px 0 var(--glass-line),
+      inset 0 -1px 0 var(--glass-line);
+    scroll-margin-block-start: 1rem;
   }
-  .close__shelf {
-    margin-block-end: var(--space-xl);
+  .close ::selection {
+    background: var(--phosphor);
+    color: var(--on-lime);
   }
   .close__head {
     display: flex;
@@ -86,6 +100,7 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
   }
   .close__title {
     font-size: var(--step-5);
+    color: var(--on-glass);
   }
   .close__head :global(.close__nix) {
     width: clamp(68px, 12vw, 104px);
@@ -93,25 +108,26 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
   }
   .close__lead {
     margin-block-start: var(--space-s);
-    color: var(--ink-soft);
+    color: var(--on-glass-soft);
     font-size: var(--step-1);
+    max-width: 60ch;
   }
 
-  /* phone and email, equal weight: the two things this page exists for */
+  /* phone and email, lit: the two things this page exists for */
   .lines {
     display: grid;
     margin-block-start: var(--space-l);
-    border-block-start: 1px solid var(--rule-strong);
+    border-block-start: 1px solid var(--glass-bezel);
   }
   .lines > div {
     position: relative;
     display: grid;
     gap: 0.1rem var(--space-m);
     align-content: center;
-    min-height: 88px;
+    min-height: 96px;
     padding-block: var(--space-s);
     padding-inline-end: 72px;
-    border-block-end: 1px solid var(--rule-strong);
+    border-block-end: 1px solid var(--glass-bezel);
   }
   @media (min-width: 700px) {
     .lines > div {
@@ -139,13 +155,18 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
     }
   }
   .lines dt {
+    font-family: var(--ff-mono);
+    font-size: 0.8rem;
+    color: var(--on-glass-faint);
+  }
+  :global(:root[dir='rtl']) .lines dt {
+    font-family: var(--font-fa);
     font-size: 0.9rem;
-    color: var(--ink-faint);
   }
   .lines dd {
-    font-family: var(--font-body);
+    font-family: var(--ff-mono);
     font-weight: 600;
-    font-size: clamp(1.2rem, 0.75rem + 2.3vw, 2.3rem);
+    font-size: clamp(1.25rem, 0.6rem + 2.6vw, 2.6rem);
     letter-spacing: -0.02em;
     line-height: 1.2;
     overflow-wrap: anywhere;
@@ -153,16 +174,17 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
   }
   .lines dd a {
     display: inline-block;
-    color: var(--ink);
+    color: var(--phosphor);
+    text-shadow: 0 0 14px oklch(0.905 0.2 124 / 0.32);
     text-decoration: underline;
-    text-decoration-color: var(--rule);
-    text-decoration-thickness: 0.08em;
-    text-underline-offset: 0.18em;
+    text-decoration-color: var(--glass-bezel);
+    text-decoration-thickness: 0.06em;
+    text-underline-offset: 0.2em;
     unicode-bidi: isolate;
     transition: text-decoration-color var(--dur-hover) var(--ease-out);
   }
   .lines dd a:hover {
-    text-decoration-color: var(--lime-ink);
+    text-decoration-color: var(--phosphor);
   }
   :global(:root[dir='rtl']) .lines dd a[href^='tel'] {
     font-family: var(--font-fa);
@@ -196,12 +218,13 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
   }
   .elsewhere__title {
     font-size: var(--step-1);
+    color: var(--on-glass);
   }
   .elsewhere ul {
     display: grid;
     list-style: none;
     padding: 0;
-    border-block-start: 1px solid var(--rule);
+    border-block-start: 1px solid var(--glass-line);
   }
   @media (min-width: 760px) {
     .elsewhere ul {
@@ -214,23 +237,24 @@ const logoOf: Record<string, string> = { github: 'GitHub', linkedin: 'LinkedIn',
     align-items: center;
     gap: 0.6rem;
     min-height: 52px;
-    border-block-end: 1px solid var(--rule);
-    color: var(--ink);
+    border-block-end: 1px solid var(--glass-line);
+    color: var(--on-glass);
     text-decoration: none;
     font-weight: 600;
     transition: color var(--dur-hover) var(--ease-out);
   }
   .elsewhere a :global(:is(.logo, .icon)) {
-    color: var(--ink-soft);
+    color: var(--on-glass-soft);
   }
   .elsewhere__handle {
     margin-inline-start: auto;
     font-weight: 400;
     font-size: 0.85rem;
-    color: var(--ink-faint);
+    color: var(--on-glass-faint);
     direction: ltr;
   }
-  .elsewhere a:hover .elsewhere__handle {
-    color: var(--lime-ink);
+  .elsewhere a:hover .elsewhere__handle,
+  .elsewhere a:hover :global(:is(.logo, .icon)) {
+    color: var(--phosphor);
   }
 </style>

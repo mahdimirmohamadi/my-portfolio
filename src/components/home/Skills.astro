@@ -65,7 +65,7 @@ const t = useT(lang);
   }
   .skills {
     display: grid;
-    border-block-start: 1px solid var(--rule);
+    border-block-start: 1px solid var(--shell-skirt);
     text-align: left;
   }
   @media (min-width: 960px) {
@@ -112,10 +112,14 @@ const t = useT(lang);
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    min-height: 34px;
-    padding-inline: 0.6rem 0.75rem;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-sm);
+    min-height: 36px;
+    padding-inline: 0.65rem 0.8rem;
+    border: 1px solid var(--shell-skirt);
+    border-radius: 7px;
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 2px 0 var(--shell-skirt);
     font-family: var(--font-body);
     font-size: 0.92rem;
     color: var(--ink);
@@ -136,7 +140,7 @@ const t = useT(lang);
   @media (hover: hover) and (pointer: fine) {
     .tool:hover {
       border-color: var(--brand);
-      background: color-mix(in oklch, var(--brand) 12%, var(--plaster-lift));
+      background: color-mix(in oklch, var(--brand) 12%, var(--shell-lift));
     }
     .tool:hover :global(.logo) {
       color: var(--brand);

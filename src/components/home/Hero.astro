@@ -1,12 +1,14 @@
 ---
 /**
- * The alcove. Who I am and how to reach me on the open wall (phone and email are the point);
- * on the other side the stage: Mahdi's photo hung as a scroll that unrolls on arrival, and Nix
- * on the shelf, powering on like the CRT he is, greeting you in a speech bubble and reacting
- * to whatever you touch on the wall (see the script at the end for his whole repertoire).
+ * The first screen. Who I am and how to reach me on the open side (phone and email are the
+ * point); on the other side my story as a git tree that grows on arrival: git init when I was
+ * born, a branch for Mechatronics that merges back when I graduated, a branch off it for Armani
+ * English, a branch for InnoLearn. Every commit message is a link to that part of Experience;
+ * hovering one lights its branch. The tree grows up into my portrait: that's me, now. Nix stands
+ * still in the corner beside it.
  */
 import { Image } from 'astro:assets';
-import type { Lang } from '../../i18n/ui';
+import type { Lang, UIKey } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
 import { person } from '../../data/profile';
 import Arrow from '../ui/Arrow.astro';
@@ -20,62 +22,99 @@ interface Props {
 const { lang } = Astro.props;
 const t = useT(lang);
 
-// every pose Nix can strike on the stage; sun and moon are his resting poses (day / night)
-const poses = ['sun', 'moon', 'call', 'mail', 'cv', 'desk', 'notebook', 'point', 'sleep', 'panic', 'thumbs', 'bow'] as const;
-const lines = {
-  hi: t('hero.nix.hi'),
-  again: t('hero.nix.again'),
-  night: t('hero.nix.night'),
-  phone: t('hero.nix.phone'),
-  mail: t('hero.nix.mail'),
-  resume: t('hero.nix.resume'),
-  work: t('hero.nix.work'),
-  blog: t('hero.nix.blog'),
-  photo: t('hero.nix.photo'),
-  sleep: t('hero.nix.sleep'),
-  wake: t('hero.nix.wake'),
-  panic: t('hero.nix.panic'),
-  poke: [t('hero.nix.poke1'), t('hero.nix.poke2'), t('hero.nix.poke3')],
-};
+// ── the tree ──
+// lanes (x): main, innolearn, mechatronics, armani-english. Rows (y): newest on top, like `git log --graph`.
+// Wide screens get roomy lanes and 72px rows; phones get tighter lanes and taller rows, so the
+// wrapped commit messages still sit beside their own node.
+type Branch = 'main' | 'inno' | 'mech' | 'armani';
+const TOP = 40;
+function geometry(X: Record<Branch, number>, row: number, bend: number) {
+  const y = (r: number) => TOP + r * row;
+  const W = X.armani + 34;
+  const H = y(5) + 48;
+  // each branch is drawn from where it starts toward its tip, so the tree grows in time order
+  const paths: Record<Branch, string> = {
+    main: `M${X.main} ${y(5)} L${X.main} ${y(0)}`,
+    mech: `M${X.main} ${y(5)} C${X.main} ${y(5) - bend} ${X.mech} ${y(4) + bend} ${X.mech} ${y(4)} L${X.mech} ${y(3) - 8} C${X.mech} ${y(2) + bend * 0.8} ${X.main} ${y(2) + bend} ${X.main} ${y(2)}`,
+    armani: `M${X.mech} ${y(4)} C${X.mech} ${y(4) - bend} ${X.armani} ${y(3) + bend} ${X.armani} ${y(3)} L${X.armani} ${y(0)}`,
+    inno: `M${X.main} ${y(2)} C${X.main} ${y(2) - bend} ${X.inno} ${y(1) + bend} ${X.inno} ${y(1)} L${X.inno} ${y(0)}`,
+  };
+  // the commits: kind, where, and the beat they appear at
+  const nodes: { kind: 'root' | 'commit' | 'merge' | 'tip'; x: number; y: number; at: number }[] = [
+    { kind: 'root', x: X.main, y: y(5), at: 150 },
+    { kind: 'commit', x: X.mech, y: y(4), at: 750 },
+    { kind: 'commit', x: X.armani, y: y(3), at: 1100 },
+    { kind: 'merge', x: X.main, y: y(2), at: 1360 },
+    { kind: 'commit', x: X.inno, y: y(1), at: 1580 },
+    { kind: 'tip', x: X.armani, y: y(0), at: 1750 },
+    { kind: 'tip', x: X.inno, y: y(0), at: 1800 },
+    { kind: 'tip', x: X.main, y: y(0), at: 1950 },
+  ];
+  return { X, row, W, H, y, paths, nodes };
+}
+const trees = [
+  { id: 'wide', ...geometry({ main: 30, inno: 72, mech: 114, armani: 156 }, 80, 38) },
+  { id: 'phone', ...geometry({ main: 22, inno: 50, mech: 78, armani: 106 }, 112, 46) },
+];
+const [wide, phone] = trees;
+// line timing (ms): when each branch starts growing and for how long
+const grow: Record<Branch, readonly [number, number]> = { main: [250, 1700], mech: [450, 900], armani: [850, 900], inno: [1360, 440] };
+const branches: Branch[] = ['main', 'mech', 'armani', 'inno'];
+// the log beside it, one row per tree row
+const rows: { key: string; branch?: Branch; href?: string; at: number }[] = [
+  { key: 'refs', at: 1950 },
+  { key: 'inno', branch: 'inno', href: '#work-innolearn', at: 1580 },
+  { key: 'merge', branch: 'mech', href: '#work-school', at: 1360 },
+  { key: 'armani', branch: 'armani', href: '#work-armani', at: 1100 },
+  { key: 'mech', branch: 'mech', href: '#work-school', at: 750 },
+  { key: 'born', branch: 'main', href: '#work', at: 150 },
+];
+// the living branches carry a commit up to their tip, now and then
+const pulses: { branch: Branch; begin: number; dur: number }[] = [
+  { branch: 'main', begin: 2.6, dur: 4.6 },
+  { branch: 'armani', begin: 3.3, dur: 3.8 },
+  { branch: 'inno', begin: 4.1, dur: 2.6 },
+];
 ---
 
-<section class="alcove" id="top" aria-labelledby="hero-title" data-stage data-idle>
-  <!-- a second look in the same session skips the arrival: the scene is already set -->
+<section class="hero" id="top" aria-labelledby="hero-title" data-hero>
+  <!-- a second look in the same session skips the growth: the tree is already there -->
   <script is:inline>
     try {
-      if (sessionStorage.getItem('nix-intro')) document.currentScript.parentElement.dataset.seen = '';
+      if (sessionStorage.getItem('tree-grown')) document.currentScript.parentElement.dataset.seen = '';
+      sessionStorage.setItem('tree-grown', '1');
     } catch {}
   </script>
-  <div class="alcove__wall">
+  <div class="hero__inner">
     <div class="copy">
       <h1 class="copy__title" id="hero-title" style="--n:0">{t('hero.title')}</h1>
       <p class="copy__lead" style="--n:1">{t('hero.lead')}</p>
       <div class="copy__actions" style="--n:2">
-        <a class="btn" href="#work" data-nix="work">
+        <a class="btn" href="#work">
           {t('hero.work')}
           <Arrow />
         </a>
-        <a class="btn btn--ghost" href={lp(lang, '/blog')} data-nix="blog">
+        <a class="btn btn--ghost" href={lp(lang, '/blog')}>
           {t('hero.blog')}
         </a>
       </div>
       <ul class="reach" role="list" aria-label={t('hero.reach')} style="--n:3">
         <li>
-          <a href={`tel:${person.phone.tel}`} data-nix="phone">
+          <a href={`tel:${person.phone.tel}`}>
             <Icon name="phone" size={20} />
             <span class="reach__label">{t('contact.phone.label')}</span>
             <span class="reach__val" dir="ltr">{person.phone.display[lang]}</span>
           </a>
         </li>
         <li>
-          <a href={`mailto:${person.email}`} data-nix="mail">
+          <a href={`mailto:${person.email}`}>
             <Icon name="mail" size={20} />
             <span class="reach__label">{t('contact.email.label')}</span>
             <span class="reach__val" dir="ltr">{person.email}</span>
           </a>
         </li>
       </ul>
-      <a class="resume-btn" href={person.resume[lang]} download data-resume data-nix="resume" style="--n:4">
+      <a class="resume-btn btn btn--ghost" href={person.resume[lang]} download data-resume style="--n:4">
         <Icon name="download" size={22} />
         <span>{t('hero.resume')}</span>
         <span class="resume-btn__meta">EN · FA</span>
@@ -83,294 +122,147 @@ const lines = {
     </div>
 
     <div class="stage">
-      <!-- the hanging scroll: a rod, the photo, and a weighted roller that rides the unroll -->
-      <figure class="scroll" data-nix="photo">
-        <span class="scroll__rod" aria-hidden="true"></span>
-        <div class="scroll__frame">
-          <Image class="portrait__real" src={original} widths={[320, 640]} sizes="(min-width: 900px) 320px, 52vw" format="webp" quality={80} alt={t('whoami.photo.real.alt')} loading="eager" fetchpriority="high" />
-        </div>
-        <span class="scroll__unroll" aria-hidden="true"><span class="scroll__foot"></span></span>
-      </figure>
+      <Nix mood="happy" size={116} class="hero__nix" />
+      <figure
+        class="tree"
+        style={`--top:${TOP}px; --row-wide:${wide.row}px; --h-wide:${wide.H}px; --w-wide:${wide.W}px; --main-wide:${wide.X.main}px; --row-phone:${phone.row}px; --h-phone:${phone.H}px; --w-phone:${phone.W}px; --main-phone:${phone.X.main}px`}
+      >
+        <!-- me, now: the photo sits on HEAD -->
+        <span class="tree__me">
+          <Image class="tree__me-img" src={original} width={320} height={320} widths={[260, 320, 640]} sizes="(max-width: 480px) 260px, 320px" format="webp" quality={82} alt={t('whoami.photo.real.alt')} loading="eager" fetchpriority="high" />
+        </span>
 
-      <!-- Nix on the shelf, with what he has to say -->
-      <div class="spot">
-        <p class="bubble" data-bubble aria-hidden="true">
-          <span class="bubble__size" data-bubble-size>{lines.hi}</span>
-          <span class="bubble__text" data-bubble-text></span>
-        </p>
-        <div class="actor__box">
-          <button class="actor" type="button" aria-label={t('hero.nix.poke.label')} data-actor>
-            {
-              poses.map((p) => (
-                <span class:list={['pose', `pose--${p}`]} data-p={p}>
-                  <Nix mood={p} size={220} eager={p === 'sun' || p === 'moon'} />
-                </span>
-              ))
-            }
-          </button>
-        </div>
-      </div>
+        {
+          trees.map((g) => (
+            <svg class={`tree__svg tree__svg--${g.id}`} viewBox={`0 0 ${g.W} ${g.H}`} width={g.W} height={g.H} role="img" aria-label={t('hero.tree.label')} data-tree-svg>
+              <g class="lines" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                {branches.map((b) => (
+                  <path class={`line line--${b}`} pathLength="1" d={g.paths[b]} style={`--start:${grow[b][0]}ms; --dur:${grow[b][1]}ms`} />
+                ))}
+                {branches.map((b) => (
+                  <path class={`lit lit--${b}`} d={g.paths[b]} />
+                ))}
+              </g>
+              <g class="pulses" aria-hidden="true">
+                {pulses.map((p) => (
+                  <circle class="pulse" r="4" opacity="0">
+                    <animateMotion dur={`${p.dur}s`} begin={`${p.begin}s`} repeatCount="indefinite" path={g.paths[p.branch]} />
+                    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.85;1" dur={`${p.dur}s`} begin={`${p.begin}s`} repeatCount="indefinite" />
+                  </circle>
+                ))}
+              </g>
+              {g.nodes.map((n) =>
+                n.kind === 'root' ? (
+                  <g class="node node--root" style={`--at:${n.at}ms`}>
+                    <circle class="root__ring" cx={n.x} cy={n.y} r="12" />
+                    <circle class="root__dot" cx={n.x} cy={n.y} r="6" />
+                  </g>
+                ) : n.kind === 'tip' ? (
+                  <g class="node node--tip" style={`--at:${n.at}ms`}>
+                    <circle class="tip__halo" cx={n.x} cy={n.y} r="15" />
+                    <circle class="tip__dot" cx={n.x} cy={n.y} r="8" />
+                  </g>
+                ) : n.kind === 'merge' ? (
+                  <g class="node node--merge" style={`--at:${n.at}ms`}>
+                    <circle class="merge__ring" cx={n.x} cy={n.y} r="10" />
+                    <circle class="commit" cx={n.x} cy={n.y} r="5" />
+                  </g>
+                ) : (
+                  <circle class="node commit" style={`--at:${n.at}ms`} cx={n.x} cy={n.y} r="6" />
+                ),
+              )}
+            </svg>
+          ))
+        }
+
+        <ol class="log" role="list">
+          {
+            rows.map((r) =>
+              r.href ? (
+                <li class={`log__row log__row--${r.key}`} style={`--at:${r.at + 100}ms`}>
+                  <a href={r.href} data-b={r.branch}>
+                    <span class="log__msg" dir="auto">
+                      {t(`hero.tree.${r.key}` as UIKey)}
+                    </span>
+                    <span class="log__cmd" dir="ltr">
+                      {t(`hero.tree.${r.key}.cmd` as UIKey)}
+                    </span>
+                  </a>
+                </li>
+              ) : (
+                <li class="log__row log__row--refs" style={`--at:${r.at + 100}ms`}>
+                  <span class="log__refs" dir="ltr">
+                    {t('hero.tree.refs')}
+                  </span>
+                </li>
+              ),
+            )
+          }
+        </ol>
+      </figure>
     </div>
   </div>
-  <div class="shelf" aria-hidden="true"></div>
-  <script type="application/json" data-nix-lines set:html={JSON.stringify(lines)} />
+  <div class="desk-edge" aria-hidden="true"></div>
 </section>
 
 <script>
-  import { prefersLessMotion, finePointer } from '../../scripts/util';
+  import { prefersLessMotion } from '../../scripts/util';
 
-  // Nix's repertoire: what he does when you hover, focus, idle, shake the mouse or poke him.
-  const REACT: Record<string, string> = { phone: 'call', mail: 'mail', resume: 'cv', work: 'desk', blog: 'notebook', photo: 'point' };
-  const TRICKS = ['thumbs', 'point', 'bow'];
-
+  // the commits flowing up the tree are SMIL: hold them when there is less motion, and while off-screen
+  // (the tree drawn for the other screen size is display:none, so it never intersects and stays paused)
   document.addEventListener('astro:page-load', () => {
-    const found = document.querySelector<HTMLElement>('[data-stage]');
-    if (!found || found.dataset.ready) return;
-    const stage = found;
-    stage.dataset.ready = '';
-
-    const lines = JSON.parse(stage.querySelector('[data-nix-lines]')!.textContent!) as Record<string, string> & { poke: string[] };
-    const actor = stage.querySelector<HTMLElement>('[data-actor]')!;
-    const poses = [...actor.querySelectorAll<HTMLElement>('[data-p]')];
-    const bubble = stage.querySelector<HTMLElement>('[data-bubble]')!;
-    const text = stage.querySelector<HTMLElement>('[data-bubble-text]')!;
-    const size = stage.querySelector<HTMLElement>('[data-bubble-size]')!;
-    const root = document.documentElement;
-    const less = prefersLessMotion();
-    const seen = 'seen' in stage.dataset;
-    try {
-      sessionStorage.setItem('nix-intro', '1');
-    } catch {}
-
-    // everything this page turn registers dies with it
-    const ac = new AbortController();
-    const on = (target: EventTarget, ev: string, fn: (e: any) => void, opts: AddEventListenerOptions = {}) =>
-      target.addEventListener(ev, fn, { passive: true, ...opts, signal: ac.signal });
-    document.addEventListener('astro:before-swap', () => ac.abort(), { once: true });
-
-    const night = () => root.dataset.theme === 'dark';
-    const restPose = () => (night() ? 'moon' : 'sun');
-    const restLine = () => (night() ? lines.night : seen ? lines.again : lines.hi);
-
-    // ── the bubble: sized by the whole line, typed over it ──
-    let typeTimer = 0;
-    let typeToken = 0;
-    function say(s: string, speed = 22) {
-      const id = ++typeToken;
-      clearTimeout(typeTimer);
-      size.textContent = s;
-      bubble.classList.add('is-on');
-      if (less || speed === 0) {
-        text.textContent = s;
-        return;
-      }
-      text.textContent = '';
-      let i = 0;
-      const step = () => {
-        if (id !== typeToken) return;
-        text.textContent = s.slice(0, ++i);
-        if (i < s.length) typeTimer = window.setTimeout(step, speed);
-      };
-      step();
-    }
-
-    // ── the pose: one image on, and a small hop when it changes ──
-    actor.classList.add('is-live');
-    function pose(p: string) {
-      if (actor.dataset.pose === p) return;
-      actor.dataset.pose = p;
-      poses.forEach((el) => el.classList.toggle('is-on', el.dataset.p === p));
-      if (less) return;
-      actor.classList.remove('is-hop');
-      void actor.offsetWidth;
-      actor.classList.add('is-hop');
-    }
-
-    // ── state ──
-    let hold: string | null = null; // the thing under the pointer / focus
-    let asleep = false;
-    let busy = 0; // a trick or a panic is playing
-    let restTimer = 0;
-    function toRest() {
-      if (hold) return react(hold);
-      pose(restPose());
-      say(restLine(), 0);
-    }
-    function react(key: string) {
-      hold = key;
-      if (busy) return;
-      wake(false);
-      pose(REACT[key]);
-      say(lines[key], 14);
-    }
-    function release(key: string) {
-      if (hold !== key) return;
-      hold = null;
-      if (busy) return;
-      clearTimeout(restTimer);
-      restTimer = window.setTimeout(toRest, 500);
-    }
-
-    for (const el of stage.querySelectorAll<HTMLElement>('[data-nix]')) {
-      const key = el.dataset.nix!;
-      on(el, 'pointerenter', () => react(key));
-      on(el, 'pointerleave', () => release(key));
-      on(el, 'focusin', () => react(key));
-      on(el, 'focusout', () => release(key));
-    }
-
-    // ── poke him ──
-    let pokes = 0;
-    on(actor, 'click', () => {
-      const i = pokes++ % TRICKS.length;
-      busy = 1;
-      wake(false);
-      pose(TRICKS[i]);
-      say(lines.poke[i], 14);
-      clearTimeout(restTimer);
-      restTimer = window.setTimeout(() => {
-        busy = 0;
-        toRest();
-      }, 2600);
-    });
-
-    // ── he dozes off when nothing happens for a while ──
-    let sleepTimer = 0;
-    function armSleep() {
-      clearTimeout(sleepTimer);
-      sleepTimer = window.setTimeout(() => {
-        if (hold || busy || night() || stage.hasAttribute('data-offscreen')) return armSleep();
-        asleep = true;
-        pose('sleep');
-        say(lines.sleep, 0);
-      }, 28000);
-    }
-    function wake(greet = true) {
-      if (!asleep) return;
-      asleep = false;
-      if (!greet) return;
-      pose(restPose());
-      say(lines.wake, 18);
-    }
-    for (const ev of ['pointermove', 'pointerdown', 'keydown', 'scroll', 'touchstart']) {
-      on(window, ev, () => {
-        if (asleep && !busy) wake();
-        armSleep();
-      });
-    }
-    armSleep();
-
-    // ── night falls: back to the moon (unless he is busy with you) ──
-    const mo = new MutationObserver(() => {
-      if (!hold && !busy && !asleep) toRest();
-    });
-    mo.observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-    ac.signal.addEventListener('abort', () => mo.disconnect());
-
-    // ── with a mouse: he leans toward the pointer, and panics if you shake it ──
-    if (finePointer() && !less) {
-      let cx = 0;
-      const measure = () => {
-        const r = actor.getBoundingClientRect();
-        cx = r.left + r.width / 2;
-      };
-      measure();
-      on(window, 'resize', measure);
-
-      let target = 0;
-      let cur = 0;
-      let raf = 0;
-      const tick = () => {
-        cur += (target - cur) * 0.14;
-        actor.style.rotate = `${cur.toFixed(2)}deg`;
-        raf = Math.abs(target - cur) > 0.02 ? requestAnimationFrame(tick) : 0;
-      };
-      ac.signal.addEventListener('abort', () => cancelAnimationFrame(raf));
-
-      let lastX = 0;
-      let lastDir = 0;
-      let flips: number[] = [];
-      on(window, 'pointermove', (e: PointerEvent) => {
-        if (stage.hasAttribute('data-offscreen')) return;
-        target = Math.max(-7, Math.min(7, ((e.clientX - cx) / innerWidth) * 18));
-        if (!raf) raf = requestAnimationFrame(tick);
-
-        // a shake: six quick reversals inside 700ms
-        const dx = e.clientX - lastX;
-        lastX = e.clientX;
-        const dir = Math.sign(dx);
-        if (dir && dir !== lastDir && Math.abs(dx) > 5) {
-          lastDir = dir;
-          flips.push(e.timeStamp);
-          flips = flips.filter((t) => e.timeStamp - t < 700);
-          if (flips.length >= 6 && !busy) {
-            flips = [];
-            busy = 1;
-            wake(false);
-            pose('panic');
-            say(lines.panic, 12);
-            clearTimeout(restTimer);
-            restTimer = window.setTimeout(() => {
-              busy = 0;
-              toRest();
-            }, 1700);
-          }
-        }
-      });
-    }
-
-    // ── the arrival ──
-    pose(restPose());
-    if (seen || less) say(restLine(), 0);
-    else window.setTimeout(() => say(restLine()), 1650);
+    const svgs = [...document.querySelectorAll<SVGSVGElement>('[data-tree-svg]')].filter((s) => !s.dataset.ready);
+    if (!svgs.length) return;
+    svgs.forEach((s) => (s.dataset.ready = ''));
+    if (prefersLessMotion()) return svgs.forEach((s) => s.pauseAnimations());
+    const io = new IntersectionObserver((entries) =>
+      entries.forEach((e) => {
+        const s = e.target as SVGSVGElement;
+        if (e.isIntersecting) s.unpauseAnimations();
+        else s.pauseAnimations();
+      }),
+    );
+    svgs.forEach((s) => io.observe(s));
+    document.addEventListener('astro:before-swap', () => io.disconnect(), { once: true });
   });
 </script>
 
 <style>
-  .alcove {
-    --rod: oklch(0.3 0.025 78);
-    --rod-rim: oklch(0.42 0.03 78);
+  .hero {
     position: relative;
+    overflow-x: clip;
   }
-  :global(:root[data-theme='dark']) .alcove {
-    --rod: oklch(0.36 0.02 78);
-    --rod-rim: oklch(0.5 0.025 78);
-  }
-  .alcove__wall {
+  .hero__inner {
     position: relative;
     display: grid;
-    gap: var(--space-l);
-    padding: var(--space-l) var(--page-gutter) 0;
+    gap: var(--space-xl);
+    padding: var(--space-l) var(--page-gutter) var(--space-xl);
     max-width: calc(var(--page-max) + 2 * var(--page-gutter));
     margin-inline: auto;
   }
-  @media (min-width: 900px) {
-    .alcove__wall {
-      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-      align-items: end;
-      gap: var(--space-xl);
-      min-height: min(calc(100svh - 82px), 860px);
-      padding-block-start: var(--space-xl);
+  @media (min-width: 1000px) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(460px, 560px);
+      align-items: center;
+      gap: var(--space-2xl);
+      min-height: min(calc(100svh - 74px), 880px);
+      padding-block: var(--space-l);
     }
   }
 
-  /* ── the open wall ── */
-  .copy {
-    align-self: center;
-    padding-block-end: var(--space-l);
-  }
+  /* ── the open side ── */
   .copy__title {
-    font-size: clamp(2.25rem, 1.6rem + 2.1vw, 3.4rem);
-    line-height: 1.04;
-    max-width: 15ch;
+    font-size: clamp(2.5rem, 1.5rem + 3vw, 4.4rem);
+    line-height: 1;
+    max-width: 12ch;
   }
   :global(:root[dir='rtl']) .copy__title {
-    font-size: clamp(2rem, 1.4rem + 2.2vw, 3.2rem);
-    max-width: 17ch;
+    font-size: clamp(2.1rem, 1.3rem + 2.6vw, 3.6rem);
+    max-width: 16ch;
   }
   .copy__lead {
     margin-block-start: var(--space-m);
-    max-width: 60ch;
+    max-width: 58ch;
     font-size: var(--step-0);
     color: var(--ink-soft);
   }
@@ -378,7 +270,7 @@ const lines = {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-s) var(--space-m);
+    gap: var(--space-s);
     margin-block-start: var(--space-l);
   }
 
@@ -412,7 +304,7 @@ const lines = {
     font-variant-numeric: tabular-nums;
     unicode-bidi: isolate;
     text-decoration: underline;
-    text-decoration-color: var(--rule);
+    text-decoration-color: var(--shell-skirt);
     text-decoration-thickness: 1.5px;
     text-underline-offset: 0.25em;
     transition: text-decoration-color var(--dur-hover) var(--ease-out);
@@ -427,24 +319,13 @@ const lines = {
     }
   }
 
-  /* the resume: a big, obvious ticket that opens the EN/FA picker */
+  /* the resume: a wide key that opens the EN/FA picker */
   .resume-btn {
-    display: inline-flex;
-    align-items: center;
     gap: 0.75rem;
-    min-height: 60px;
-    margin-block-start: var(--space-s);
-    padding: 0.7rem 1.4rem;
-    border: var(--bw) dashed var(--rule-strong);
-    border-radius: var(--radius-sm);
-    color: var(--ink);
-    font-size: 1.08rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition:
-      background-color var(--dur-hover) var(--ease-out),
-      border-style var(--dur-hover) var(--ease-out),
-      scale var(--dur-press) var(--ease-out);
+    min-height: 58px;
+    margin-block-start: var(--space-m);
+    padding-inline: 1.4rem;
+    font-size: 1.05rem;
   }
   .resume-btn__meta {
     font-family: var(--ff-mono);
@@ -456,239 +337,324 @@ const lines = {
     transition: translate var(--dur-ui) var(--ease-out);
   }
   @media (hover: hover) and (pointer: fine) {
-    .resume-btn:hover {
-      border-style: solid;
-      background: var(--plaster-deep);
-    }
     .resume-btn:hover :global(.icon) {
       translate: 0 2px;
     }
   }
-  .resume-btn:active {
-    scale: 0.98;
-  }
 
   /* ── the stage ── */
   .stage {
-    --actor: 42%;
+    /* the portrait gives way a little on short screens so the whole tree stays in the fold */
+    --me-h: clamp(232px, 32svh, 300px);
+    --me-w: calc(var(--me-h) * 0.83);
+    --c-main: oklch(0.62 0.03 120);
+    --c-mech: oklch(0.6 0.08 45);
+    --c-armani: oklch(0.6 0.07 80);
+    --c-inno: oklch(0.55 0.07 160);
     position: relative;
-    width: min(100%, 540px);
-    aspect-ratio: 13 / 15;
     justify-self: center;
+    width: min(100%, 560px);
+    /* room above HEAD for the photo */
+    /* the portrait's height, less the 40px above HEAD, plus its 18px gap */
+    padding-block-start: calc(var(--me-h) - 22px);
   }
-  /* phones: the person leads, so the stage comes before the words */
-  @media (max-width: 899px) {
-    .stage {
-      order: -1;
-      width: min(88vw, 400px);
-    }
+  :global(:root[data-theme='dark']) .stage {
+    --c-main: oklch(0.62 0.03 250);
+    --c-mech: oklch(0.7 0.09 45);
+    --c-armani: oklch(0.7 0.07 80);
+    --c-inno: oklch(0.66 0.08 160);
   }
-  @media (min-width: 900px) {
+  @media (min-width: 1000px) {
     .stage {
       justify-self: end;
     }
   }
+  @media (max-width: 480px) {
+    .stage {
+      --me-w: min(240px, 62vw);
+      --me-h: min(290px, 75vw);
+    }
+  }
+  /* a soft field behind the tree, like light from a screen */
+  .stage::before {
+    content: '';
+    position: absolute;
+    inset: 12% -10% -4% -10%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, oklch(0.905 0.2 124 / 0.14), transparent 72%);
+    pointer-events: none;
+  }
+  :global(:root[data-theme='dark']) .stage::before {
+    background: radial-gradient(closest-side, oklch(0.4 0.09 262 / 0.5), transparent 72%);
+  }
 
-  /* the hanging scroll: a rod, the photo, a weighted roller at the foot */
-  .scroll {
+  /* the tree: lanes on the inline-start, the log beside them */
+  .tree {
+    --row: var(--row-wide);
+    --h: var(--h-wide);
+    --w: var(--w-wide);
+    --main: var(--main-wide);
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--w) minmax(0, 1fr);
+    margin: 0;
+    height: var(--h);
+  }
+  .tree .tree__svg--phone {
+    display: none;
+  }
+  @media (max-width: 480px) {
+    .tree {
+      --row: var(--row-phone);
+      --h: var(--h-phone);
+      --w: var(--w-phone);
+      --main: var(--main-phone);
+      padding-inline-start: 10px;
+    }
+    .tree .tree__svg--wide {
+      display: none;
+    }
+    .tree .tree__svg--phone {
+      display: block;
+    }
+  }
+  /* the lanes keep their exact pitch at every width (base.css shrinks svgs by default) */
+  .tree__svg {
+    display: block;
+    width: var(--w);
+    max-width: none;
+    height: var(--h);
+    overflow: visible;
+    /* the lanes read from the inline-start in both directions */
+    transform: scaleX(var(--dir));
+  }
+  .line {
+    stroke-width: 3;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: opacity var(--dur-ui) var(--ease-out);
+  }
+  .line--main {
+    stroke: var(--c-main);
+  }
+  .line--mech {
+    stroke: var(--c-mech);
+  }
+  .line--armani {
+    stroke: var(--c-armani);
+  }
+  .line--inno {
+    stroke: var(--c-inno);
+  }
+  /* the lit copy of each branch, shown while its commit is hovered */
+  .lit {
+    stroke: var(--lime-ink);
+    stroke-width: 4;
+    opacity: 0;
+    transition: opacity var(--dur-ui) var(--ease-out);
+  }
+  .node {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .commit {
+    fill: var(--shell);
+    stroke: var(--rule-strong);
+    stroke-width: 2.5;
+  }
+  .merge__ring {
+    fill: var(--shell);
+    stroke: var(--rule-strong);
+    stroke-width: 2;
+  }
+  .tip__dot {
+    fill: var(--lime);
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+  .tip__halo {
+    fill: var(--lime);
+    opacity: 0.22;
+  }
+  /* the root commit: a plain ring around an ink dot */
+  .root__ring {
+    fill: var(--shell);
+    stroke: var(--rule-strong);
+    stroke-width: 2;
+  }
+  .root__dot {
+    fill: var(--rule-strong);
+  }
+  .pulse {
+    fill: var(--lime);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+  }
+
+  /* hover a commit: its branch lights up, the rest steps back */
+  .tree:has(.log a:is(:hover, :focus-visible)) .line {
+    opacity: 0.28;
+  }
+  .tree:has(a[data-b='main']:is(:hover, :focus-visible)) :is(.line--main, .lit--main),
+  .tree:has(a[data-b='mech']:is(:hover, :focus-visible)) :is(.line--mech, .lit--mech),
+  .tree:has(a[data-b='armani']:is(:hover, :focus-visible)) :is(.line--armani, .lit--armani),
+  .tree:has(a[data-b='inno']:is(:hover, :focus-visible)) :is(.line--inno, .lit--inno) {
+    opacity: 1;
+  }
+  .log:has(a:is(:hover, :focus-visible)) .log__row:not(:has(a:is(:hover, :focus-visible))) {
+    opacity: 0.5;
+  }
+
+  /* the log: one row per commit, aligned to its node */
+  .log {
+    display: grid;
+    grid-auto-rows: var(--row);
+    padding: 0;
+    padding-block-start: calc(var(--top) - var(--row) / 2);
+    margin: 0;
+    list-style: none;
+  }
+  .log__row {
+    transition: opacity var(--dur-ui) var(--ease-out);
+  }
+  .log__row a {
+    display: grid;
+    align-content: center;
+    gap: 0.15rem;
+    height: 100%;
+    padding-inline: 0.4rem 0.5rem;
+    color: var(--ink);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+  .log__msg {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.3;
+    text-decoration: underline;
+    text-decoration-color: var(--shell-skirt);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.24em;
+    transition: text-decoration-color var(--dur-hover) var(--ease-out);
+  }
+  .log__row--merge .log__msg {
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+  .log__row a:is(:hover, :focus-visible) .log__msg {
+    text-decoration-color: var(--lime-ink);
+  }
+  .log__cmd,
+  .log__refs {
+    font-family: var(--ff-mono), var(--font-fa);
+    font-size: 0.72rem;
+    line-height: 1.35;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    unicode-bidi: isolate;
+    justify-self: start;
+  }
+  :global(:root[dir='rtl']) :is(.log__cmd, .log__refs) {
+    justify-self: end;
+  }
+  .log__row--refs {
+    display: grid;
+    align-content: center;
+    padding-inline: 0.4rem;
+  }
+  .log__refs {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--lime-ink);
+  }
+  @media (max-width: 480px) {
+    .log__msg {
+      font-size: 0.86rem;
+      line-height: 1.22;
+    }
+  }
+
+  /* my portrait at the top: the branches grow up into it. A print in a plastic mount
+     (a cap: rim on top, skirt below), its inline-start edge over main. */
+  .tree__me {
+    position: absolute;
+    inset-block-start: calc(var(--top) - var(--me-h) - 18px);
+    inset-inline-start: max(0px, calc(var(--main) - 26px));
+    z-index: 1;
+    display: block;
+    width: var(--me-w);
+    height: var(--me-h);
+    padding: 7px;
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius-screen);
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
+  }
+  .tree__me :global(.tree__me-img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    /* the face sits left of centre in the square original */
+    object-position: 34% 50%;
+  }
+
+  /* Nix: small and still, in the corner beside the portrait, standing level with its foot */
+  .stage :global(.hero__nix) {
     position: absolute;
     inset-block-start: 0;
     inset-inline-end: 0;
-    width: 62%;
-    margin: 0;
-    transform-origin: 50% 0;
-  }
-  .scroll__rod {
-    display: block;
-    height: 7px;
-    margin-inline: -7%;
-    border-radius: 4px;
-    background: var(--rod);
-  }
-  .scroll__frame {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    border: 1px solid var(--rule-strong);
-    border-block-start: 0;
-    background: var(--plaster-deep);
-  }
-  .scroll__frame :global(.portrait__real) {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 32% 40%;
-  }
-  /* the roller lives in a box the size of the frame, so a -100% translate parks it at the rod */
-  .scroll__unroll {
-    position: absolute;
-    inset: 7px 0 0;
-    pointer-events: none;
-  }
-  .scroll__foot {
-    position: absolute;
-    inset-block-end: -5px;
-    inset-inline: -7%;
-    height: 10px;
-    border-radius: var(--radius-sm);
-    background: var(--rod);
-    border-block-start: 2px solid var(--rod-rim);
-  }
-
-  /* Nix's spot on the shelf */
-  .spot {
-    position: absolute;
-    inset-block-end: 0;
-    inset-inline-start: 0;
-    width: var(--actor);
-  }
-  .actor__box {
-    aspect-ratio: 1;
-  }
-  .actor {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: var(--radius);
-    transform-origin: 50% 100%;
-    -webkit-tap-highlight-color: transparent;
-    cursor: pointer;
-  }
-  .pose {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 180ms var(--ease-out);
-  }
-  .pose :global(.nix) {
-    width: 100%;
-    height: 100%;
+    width: clamp(84px, 7vw, 116px);
+    height: var(--me-h);
     object-fit: contain;
     object-position: 50% 100%;
-  }
-  /* before the script: the resting pose for the theme; after: whatever he was told */
-  .pose--sun,
-  :global(:root[data-theme='dark']) .pose--moon {
-    opacity: 1;
-  }
-  :global(:root[data-theme='dark']) .pose--sun {
-    opacity: 0;
-  }
-  .actor.is-live .pose {
-    opacity: 0;
-  }
-  .actor.is-live .pose.is-on {
-    opacity: 1;
-  }
-  /* he points at the photo, which is on his other side in RTL */
-  :global(:root[dir='rtl']) .pose--point {
-    scale: -1 1;
+    pointer-events: none;
   }
 
-  /* the speech bubble: sized by the whole line, then typed over */
-  .bubble {
-    position: absolute;
-    inset-block-end: calc(100% + 6px);
-    inset-inline-start: 4%;
-    z-index: 1;
-    width: max-content;
-    max-width: min(250px, 190%);
-    padding: 0.55rem 0.8rem;
-    border: 1px solid var(--rule-strong);
-    border-radius: var(--radius);
-    background: var(--plaster-lift);
-    color: var(--ink);
-    font-size: 0.92rem;
-    font-weight: 600;
-    line-height: 1.45;
-    text-align: start;
-    text-wrap: pretty;
-    transform-origin: 14% 100%;
-    opacity: 0;
-    scale: 0.85;
-    transition:
-      opacity 200ms var(--ease-out),
-      scale 260ms var(--ease-out);
-  }
-  :global(:root[dir='rtl']) .bubble {
-    line-height: 1.7;
-  }
-  .bubble.is-on {
-    opacity: 1;
-    scale: 1;
-  }
-  /* the tail: the bubble's own border, folded down toward Nix */
-  .bubble::after {
-    content: '';
-    position: absolute;
-    inset-block-end: -7px;
-    inset-inline-start: 22px;
-    width: 12px;
-    height: 12px;
-    border-right: 1px solid var(--rule-strong);
-    border-bottom: 1px solid var(--rule-strong);
-    background: var(--plaster-lift);
-    rotate: 45deg;
-  }
-  /* phones: the space under the photo is his, so the bubble sits beside his head, tail toward him */
-  @media (max-width: 899px) {
-    .bubble {
-      inset-block-end: 20%;
-      inset-inline-start: 94%;
-      max-width: min(250px, 135%);
-      transform-origin: calc(50% - 50% * var(--dir)) 18px;
-    }
-    .bubble::after {
-      inset-block-end: auto;
-      inset-block-start: 12px;
-      inset-inline-start: -7px;
-      border-right: 0;
-      border-inline-start: 1px solid var(--rule-strong);
-      rotate: calc(45deg * var(--dir));
-    }
-  }
-  .bubble__size {
-    visibility: hidden;
-  }
-  .bubble__text {
-    position: absolute;
-    inset: 0.55rem 0.8rem;
-  }
-
-  /* the shelf the stage stands on */
-  .shelf {
-    height: 22px;
-    background: var(--rod);
-    border-block-start: 3px solid var(--rod-rim);
-  }
-
-  /* ── the arrival: the words rise, the scroll unrolls, Nix powers on ── */
+  /* ── the arrival: the words rise, the tree grows from the root, one branch at a time ── */
   @media (prefers-reduced-motion: no-preference) {
     :global(html:not([data-lite])) .copy > * {
       animation: rise 640ms var(--ease-out) both;
       animation-delay: calc(var(--n) * 80ms);
     }
-    :global(html:not([data-lite])) .scroll__frame {
-      animation: unroll 1000ms var(--ease-in-out) 260ms both;
+    :global(html:not([data-lite])) .line {
+      animation: draw var(--dur) linear var(--start) both;
     }
-    :global(html:not([data-lite])) .scroll__unroll {
-      animation: roll 1000ms var(--ease-in-out) 260ms both;
+    :global(html:not([data-lite])) .node {
+      animation: pop 480ms var(--ease-out) var(--at) both;
     }
-    :global(html:not([data-lite])) .scroll {
-      animation: settle 900ms var(--ease-out) 1260ms both;
+    :global(html:not([data-lite])) .log__row {
+      animation: slide 480ms var(--ease-out) var(--at) both;
     }
-    :global(html:not([data-lite])) .actor__box {
-      animation: power-on 460ms var(--ease-out) 1240ms both;
+    :global(html:not([data-lite])) .tip__halo {
+      animation: breathe 2.8s var(--ease-in-out) 2.4s infinite alternate;
     }
-    :global(html:not([data-lite])) .actor.is-hop {
-      animation: hop 360ms var(--ease-out);
+    :global(html:not([data-lite])) .tree__me {
+      animation: appear 600ms var(--ease-out) 1950ms both;
     }
-    /* the same session, a second look: the scene is already set */
-    :global(html:not([data-lite])) .alcove[data-seen] :is(.copy > *, .scroll__frame, .scroll__unroll, .scroll, .actor__box) {
+    /* the same session, a second look: the tree is already there */
+    :global(html:not([data-lite])) .hero[data-seen] :is(.copy > *, .line, .node, .log__row, .tree__svg, .log) {
       animation: none;
     }
+    :global(html:not([data-lite])) .hero[data-seen] .tree__me {
+      animation: none;
+    }
+    :global(html:not([data-lite])) .hero[data-seen] .tip__halo {
+      animation: breathe 2.8s var(--ease-in-out) infinite alternate;
+    }
+  }
+  /* less motion: the finished tree, nothing moving */
+  @media (prefers-reduced-motion: reduce) {
+    .pulses {
+      display: none;
+    }
+  }
+  :global(html[data-lite]) .pulses {
+    display: none;
   }
   @keyframes rise {
     from {
@@ -696,53 +662,33 @@ const lines = {
       translate: 0 14px;
     }
   }
-  @keyframes unroll {
+  @keyframes draw {
     from {
-      clip-path: inset(0 0 100% 0);
+      stroke-dashoffset: 1;
+    }
+  }
+  @keyframes pop {
+    from {
+      scale: 0;
+    }
+  }
+  @keyframes slide {
+    from {
+      opacity: 0;
+      translate: calc(10px * var(--dir)) 0;
+    }
+  }
+  @keyframes breathe {
+    from {
+      opacity: 0.12;
     }
     to {
-      clip-path: inset(0 0 0 0);
+      opacity: 0.45;
     }
   }
-  @keyframes roll {
+  @keyframes appear {
     from {
-      translate: 0 -100%;
-    }
-  }
-  /* the roller lands and the scroll swings once on its rod */
-  @keyframes settle {
-    0%,
-    100% {
-      rotate: 0deg;
-    }
-    30% {
-      rotate: 1.1deg;
-    }
-    70% {
-      rotate: -0.5deg;
-    }
-  }
-  /* a CRT switching on: a line of light that opens into the picture */
-  @keyframes power-on {
-    from {
-      clip-path: inset(49% 0 49% 0);
-      scale: 1.04 0.02;
-      opacity: 0.4;
-    }
-    35% {
-      clip-path: inset(49% 0 49% 0);
-      scale: 1.04 0.02;
-      opacity: 1;
-    }
-    to {
-      clip-path: inset(0 0 0 0);
-      scale: 1 1;
-      opacity: 1;
-    }
-  }
-  @keyframes hop {
-    30% {
-      translate: 0 -7px;
+      opacity: 0;
     }
   }
 </style>

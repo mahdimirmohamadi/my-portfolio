@@ -27,6 +27,7 @@ function init(root: HTMLElement) {
   const input = root.querySelector<HTMLInputElement>('[data-term-input]')!;
   const screen = root.querySelector<HTMLElement>('[data-term-screen]')!;
   const data: Data = JSON.parse(root.querySelector('[data-term-data]')!.textContent!);
+  const fetchTpl = root.querySelector<HTMLTemplateElement>('[data-term-neofetch]');
   const history: string[] = [];
   let hIndex = 0;
   let busy = false;
@@ -54,10 +55,16 @@ function init(root: HTMLElement) {
         line('tip: ↑/↓ history · tab completes · ctrl+l clears', 't-dim');
       },
     },
-    whoami: { help: 'who is this', run: () => line('mahdi — AI-native software engineer @ InnoLearn & Armani English, Tehran') },
+    whoami: { help: 'who is this', run: () => line('mahdi, AI-native software engineer @ InnoLearn & Armani English, Tehran') },
     neofetch: {
       help: 'system info',
       run: () => {
+        // the boot block again (photo + facts); ASCII Nix when the page has no template
+        if (fetchTpl) {
+          log.append(fetchTpl.content.cloneNode(true));
+          log.scrollTop = log.scrollHeight;
+          return;
+        }
         const rows = [`${b('mahdi')}@${b('workstation')}`, '-----------------', ...data.facts.map(([k, v]) => `${b(k, 'amber')}: ${esc(v)}`)];
         const n = Math.max(rows.length, NIX.length);
         for (let i = 0; i < n; i++) line(`<span class="t-lime">${esc(NIX[i] ?? '         ')}</span>   ${rows[i] ?? ''}`);
@@ -81,7 +88,7 @@ function init(root: HTMLElement) {
       },
     },
     cd: {
-      help: 'cd <work|ai|projects|skills|blog|contact>',
+      help: 'cd <work|projects|ai|skills|blog|contact>',
       run: ([dir = '~']) => {
         const id = dir.replace(/^~\/?/, '').replace(/\/$/, '') || 'top';
         if (id === 'blog') return void (location.href = data.blog);
@@ -207,7 +214,8 @@ function init(root: HTMLElement) {
     if ((e.target as HTMLElement).closest('a') || getSelection()?.toString()) return;
     input.focus({ preventScroll: true });
   });
-  root.querySelectorAll<HTMLButtonElement>('[data-term-run]').forEach((btn) =>
+  // the command keys sit outside the screen, on the plastic
+  document.querySelectorAll<HTMLButtonElement>('[data-term-run]').forEach((btn) =>
     btn.addEventListener('click', () => typeAndRun(btn.dataset.termRun!)),
   );
 }

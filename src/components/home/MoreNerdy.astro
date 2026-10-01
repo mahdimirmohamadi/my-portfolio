@@ -101,9 +101,12 @@ const TgTag = tgHref ? 'a' : 'div';
     display: grid;
     padding: 0;
     list-style: none;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-key);
-    background: var(--plaster-lift);
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius-screen);
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
     overflow: hidden;
   }
   .chats li + li {
@@ -125,7 +128,7 @@ const TgTag = tgHref ? 'a' : 'div';
     }
   }
   a.chat:hover {
-    background: var(--plaster);
+    background: var(--shell);
   }
   .chat__avatar {
     position: relative;
@@ -134,8 +137,8 @@ const TgTag = tgHref ? 'a' : 'div';
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    border: var(--bw) solid var(--rule-strong);
-    background: var(--plaster-deep);
+    border: 1px solid var(--shell-skirt);
+    background: var(--shell-deep);
   }
   .chat__avatar :global(img) {
     width: 100%;
@@ -156,8 +159,8 @@ const TgTag = tgHref ? 'a' : 'div';
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: var(--bw) solid var(--plaster-lift);
-    background: var(--plaster-lift);
+    border: var(--bw) solid var(--shell-lift);
+    background: var(--shell-lift);
   }
   .chat__body {
     display: grid;

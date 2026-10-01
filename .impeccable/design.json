@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-18T21:45:52+00:00",
-  "title": "Design System: Ma",
+  "generatedAt": "2026-10-01T14:29:21+00:00",
+  "title": "Design System: The Git Graph",
   "extensions": {
     "colorMeta": {
       "lime": {
         "role": "primary",
-        "displayName": "Bloom Lime",
+        "displayName": "Phosphor",
         "canonical": "oklch(0.905 0.2 124)",
         "tonalRamp": [
           "oklch(0.15 0.2 124)",
@@ -17,6 +17,22 @@
           "oklch(0.72 0.2 124)",
           "oklch(0.84 0.2 124)",
           "oklch(0.95 0.2 124)"
+        ],
+        "mode": "day"
+      },
+      "phosphor-dim": {
+        "role": "primary",
+        "displayName": "Dim Phosphor",
+        "canonical": "oklch(0.74 0.14 124)",
+        "tonalRamp": [
+          "oklch(0.15 0.14 124)",
+          "oklch(0.26 0.14 124)",
+          "oklch(0.37 0.14 124)",
+          "oklch(0.48 0.14 124)",
+          "oklch(0.60 0.14 124)",
+          "oklch(0.72 0.14 124)",
+          "oklch(0.84 0.14 124)",
+          "oklch(0.95 0.14 124)"
         ],
         "mode": "day"
       },
@@ -52,7 +68,215 @@
         ],
         "mode": "day"
       },
-      "plaster": {
+      "glass": {
+        "role": "secondary",
+        "displayName": "Glass",
+        "canonical": "oklch(0.21 0.014 128)",
+        "tonalRamp": [
+          "oklch(0.15 0.014 128)",
+          "oklch(0.26 0.014 128)",
+          "oklch(0.37 0.014 128)",
+          "oklch(0.48 0.014 128)",
+          "oklch(0.60 0.014 128)",
+          "oklch(0.72 0.014 128)",
+          "oklch(0.84 0.014 128)",
+          "oklch(0.95 0.014 128)"
+        ],
+        "mode": "day"
+      },
+      "glass-deep": {
+        "role": "secondary",
+        "displayName": "Glass Well",
+        "canonical": "oklch(0.17 0.014 128)",
+        "tonalRamp": [
+          "oklch(0.15 0.014 128)",
+          "oklch(0.26 0.014 128)",
+          "oklch(0.37 0.014 128)",
+          "oklch(0.48 0.014 128)",
+          "oklch(0.60 0.014 128)",
+          "oklch(0.72 0.014 128)",
+          "oklch(0.84 0.014 128)",
+          "oklch(0.95 0.014 128)"
+        ],
+        "mode": "day"
+      },
+      "glass-line": {
+        "role": "secondary",
+        "displayName": "Glass Bezel Line",
+        "canonical": "oklch(0.34 0.016 128)",
+        "tonalRamp": [
+          "oklch(0.15 0.016 128)",
+          "oklch(0.26 0.016 128)",
+          "oklch(0.37 0.016 128)",
+          "oklch(0.48 0.016 128)",
+          "oklch(0.60 0.016 128)",
+          "oklch(0.72 0.016 128)",
+          "oklch(0.84 0.016 128)",
+          "oklch(0.95 0.016 128)"
+        ],
+        "mode": "day"
+      },
+      "glass-bezel": {
+        "role": "secondary",
+        "displayName": "Glass Bezel",
+        "canonical": "oklch(0.42 0.02 120)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 120)",
+          "oklch(0.26 0.02 120)",
+          "oklch(0.37 0.02 120)",
+          "oklch(0.48 0.02 120)",
+          "oklch(0.60 0.02 120)",
+          "oklch(0.72 0.02 120)",
+          "oklch(0.84 0.02 120)",
+          "oklch(0.95 0.02 120)"
+        ],
+        "mode": "day"
+      },
+      "on-glass": {
+        "role": "secondary",
+        "displayName": "Bone",
+        "canonical": "oklch(0.92 0.02 115)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 115)",
+          "oklch(0.26 0.02 115)",
+          "oklch(0.37 0.02 115)",
+          "oklch(0.48 0.02 115)",
+          "oklch(0.60 0.02 115)",
+          "oklch(0.72 0.02 115)",
+          "oklch(0.84 0.02 115)",
+          "oklch(0.95 0.02 115)"
+        ],
+        "mode": "day"
+      },
+      "on-glass-soft": {
+        "role": "secondary",
+        "displayName": "Soft Bone",
+        "canonical": "oklch(0.76 0.02 115)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 115)",
+          "oklch(0.26 0.02 115)",
+          "oklch(0.37 0.02 115)",
+          "oklch(0.48 0.02 115)",
+          "oklch(0.60 0.02 115)",
+          "oklch(0.72 0.02 115)",
+          "oklch(0.84 0.02 115)",
+          "oklch(0.95 0.02 115)"
+        ],
+        "mode": "day"
+      },
+      "on-glass-faint": {
+        "role": "secondary",
+        "displayName": "Faint Bone",
+        "canonical": "oklch(0.68 0.02 115)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 115)",
+          "oklch(0.26 0.02 115)",
+          "oklch(0.37 0.02 115)",
+          "oklch(0.48 0.02 115)",
+          "oklch(0.60 0.02 115)",
+          "oklch(0.72 0.02 115)",
+          "oklch(0.84 0.02 115)",
+          "oklch(0.95 0.02 115)"
+        ],
+        "mode": "day"
+      },
+      "stem-main": {
+        "role": "secondary",
+        "displayName": "Main Lane",
+        "canonical": "oklch(0.62 0.03 120)",
+        "tonalRamp": [
+          "oklch(0.15 0.03 120)",
+          "oklch(0.26 0.03 120)",
+          "oklch(0.37 0.03 120)",
+          "oklch(0.48 0.03 120)",
+          "oklch(0.60 0.03 120)",
+          "oklch(0.72 0.03 120)",
+          "oklch(0.84 0.03 120)",
+          "oklch(0.95 0.03 120)"
+        ],
+        "mode": "day"
+      },
+      "stem-innolearn": {
+        "role": "secondary",
+        "displayName": "InnoLearn Lane",
+        "canonical": "oklch(0.55 0.06 160)",
+        "tonalRamp": [
+          "oklch(0.15 0.06 160)",
+          "oklch(0.26 0.06 160)",
+          "oklch(0.37 0.06 160)",
+          "oklch(0.48 0.06 160)",
+          "oklch(0.60 0.06 160)",
+          "oklch(0.72 0.06 160)",
+          "oklch(0.84 0.06 160)",
+          "oklch(0.95 0.06 160)"
+        ],
+        "mode": "day"
+      },
+      "stem-armani": {
+        "role": "secondary",
+        "displayName": "Armani Lane",
+        "canonical": "oklch(0.6 0.06 80)",
+        "tonalRamp": [
+          "oklch(0.15 0.06 80)",
+          "oklch(0.26 0.06 80)",
+          "oklch(0.37 0.06 80)",
+          "oklch(0.48 0.06 80)",
+          "oklch(0.60 0.06 80)",
+          "oklch(0.72 0.06 80)",
+          "oklch(0.84 0.06 80)",
+          "oklch(0.95 0.06 80)"
+        ],
+        "mode": "day"
+      },
+      "coral": {
+        "role": "tertiary",
+        "displayName": "Coral",
+        "canonical": "oklch(0.54 0.17 32)",
+        "tonalRamp": [
+          "oklch(0.15 0.17 32)",
+          "oklch(0.26 0.17 32)",
+          "oklch(0.37 0.17 32)",
+          "oklch(0.48 0.17 32)",
+          "oklch(0.60 0.17 32)",
+          "oklch(0.72 0.17 32)",
+          "oklch(0.84 0.17 32)",
+          "oklch(0.95 0.17 32)"
+        ],
+        "mode": "day"
+      },
+      "coral-lit": {
+        "role": "tertiary",
+        "displayName": "Lit Coral",
+        "canonical": "oklch(0.74 0.16 32)",
+        "tonalRamp": [
+          "oklch(0.15 0.16 32)",
+          "oklch(0.26 0.16 32)",
+          "oklch(0.37 0.16 32)",
+          "oklch(0.48 0.16 32)",
+          "oklch(0.60 0.16 32)",
+          "oklch(0.72 0.16 32)",
+          "oklch(0.84 0.16 32)",
+          "oklch(0.95 0.16 32)"
+        ],
+        "mode": "day"
+      },
+      "amber": {
+        "role": "tertiary",
+        "displayName": "Amber",
+        "canonical": "oklch(0.62 0.12 70)",
+        "tonalRamp": [
+          "oklch(0.15 0.12 70)",
+          "oklch(0.26 0.12 70)",
+          "oklch(0.37 0.12 70)",
+          "oklch(0.48 0.12 70)",
+          "oklch(0.60 0.12 70)",
+          "oklch(0.72 0.12 70)",
+          "oklch(0.84 0.12 70)",
+          "oklch(0.95 0.12 70)"
+        ],
+        "mode": "day"
+      },
+      "shell": {
         "role": "neutral",
         "displayName": "Sage Plaster",
         "canonical": "oklch(0.936 0.013 128)",
@@ -68,7 +292,7 @@
         ],
         "mode": "day"
       },
-      "plaster-deep": {
+      "shell-deep": {
         "role": "neutral",
         "displayName": "Recess",
         "canonical": "oklch(0.905 0.016 128)",
@@ -84,9 +308,9 @@
         ],
         "mode": "day"
       },
-      "plaster-lift": {
+      "shell-lift": {
         "role": "neutral",
-        "displayName": "Lifted Plaster",
+        "displayName": "Cap",
         "canonical": "oklch(0.962 0.009 128)",
         "tonalRamp": [
           "oklch(0.15 0.009 128)",
@@ -97,6 +321,54 @@
           "oklch(0.72 0.009 128)",
           "oklch(0.84 0.009 128)",
           "oklch(0.95 0.009 128)"
+        ],
+        "mode": "day"
+      },
+      "shell-rim": {
+        "role": "neutral",
+        "displayName": "Rim",
+        "canonical": "oklch(0.985 0.006 128)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 128)",
+          "oklch(0.26 0.006 128)",
+          "oklch(0.37 0.006 128)",
+          "oklch(0.48 0.006 128)",
+          "oklch(0.60 0.006 128)",
+          "oklch(0.72 0.006 128)",
+          "oklch(0.84 0.006 128)",
+          "oklch(0.95 0.006 128)"
+        ],
+        "mode": "day"
+      },
+      "shell-skirt": {
+        "role": "neutral",
+        "displayName": "Skirt",
+        "canonical": "oklch(0.78 0.02 124)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 124)",
+          "oklch(0.26 0.02 124)",
+          "oklch(0.37 0.02 124)",
+          "oklch(0.48 0.02 124)",
+          "oklch(0.60 0.02 124)",
+          "oklch(0.72 0.02 124)",
+          "oklch(0.84 0.02 124)",
+          "oklch(0.95 0.02 124)"
+        ],
+        "mode": "day"
+      },
+      "shell-line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(0.8 0.016 120)",
+        "tonalRamp": [
+          "oklch(0.15 0.016 120)",
+          "oklch(0.26 0.016 120)",
+          "oklch(0.37 0.016 120)",
+          "oklch(0.48 0.016 120)",
+          "oklch(0.60 0.016 120)",
+          "oklch(0.72 0.016 120)",
+          "oklch(0.84 0.016 120)",
+          "oklch(0.95 0.016 120)"
         ],
         "mode": "day"
       },
@@ -135,7 +407,7 @@
       "ink-faint": {
         "role": "neutral",
         "displayName": "Faint Ink",
-        "canonical": "oklch(0.49 0.013 112)",
+        "canonical": "oklch(0.47 0.013 112)",
         "tonalRamp": [
           "oklch(0.15 0.013 112)",
           "oklch(0.26 0.013 112)",
@@ -145,22 +417,6 @@
           "oklch(0.72 0.013 112)",
           "oklch(0.84 0.013 112)",
           "oklch(0.95 0.013 112)"
-        ],
-        "mode": "day"
-      },
-      "rule": {
-        "role": "neutral",
-        "displayName": "Hairline",
-        "canonical": "oklch(0.8 0.016 120)",
-        "tonalRamp": [
-          "oklch(0.15 0.016 120)",
-          "oklch(0.26 0.016 120)",
-          "oklch(0.37 0.016 120)",
-          "oklch(0.48 0.016 120)",
-          "oklch(0.60 0.016 120)",
-          "oklch(0.72 0.016 120)",
-          "oklch(0.84 0.016 120)",
-          "oklch(0.95 0.016 120)"
         ],
         "mode": "day"
       },
@@ -180,307 +436,291 @@
         ],
         "mode": "day"
       },
-      "bronze": {
-        "role": "secondary",
-        "displayName": "Bronze",
-        "canonical": "oklch(0.31 0.022 80)",
-        "tonalRamp": [
-          "oklch(0.15 0.022 80)",
-          "oklch(0.26 0.022 80)",
-          "oklch(0.37 0.022 80)",
-          "oklch(0.48 0.022 80)",
-          "oklch(0.60 0.022 80)",
-          "oklch(0.72 0.022 80)",
-          "oklch(0.84 0.022 80)",
-          "oklch(0.95 0.022 80)"
-        ],
-        "mode": "day"
-      },
-      "bronze-soft": {
-        "role": "secondary",
-        "displayName": "Soft Bronze",
-        "canonical": "oklch(0.43 0.03 80)",
-        "tonalRamp": [
-          "oklch(0.15 0.03 80)",
-          "oklch(0.26 0.03 80)",
-          "oklch(0.37 0.03 80)",
-          "oklch(0.48 0.03 80)",
-          "oklch(0.60 0.03 80)",
-          "oklch(0.72 0.03 80)",
-          "oklch(0.84 0.03 80)",
-          "oklch(0.95 0.03 80)"
-        ],
-        "mode": "day"
-      },
-      "shelf": {
-        "role": "secondary",
-        "displayName": "Shelf Bronze",
-        "canonical": "oklch(0.3 0.025 78)",
-        "tonalRamp": [
-          "oklch(0.15 0.025 78)",
-          "oklch(0.26 0.025 78)",
-          "oklch(0.37 0.025 78)",
-          "oklch(0.48 0.025 78)",
-          "oklch(0.60 0.025 78)",
-          "oklch(0.72 0.025 78)",
-          "oklch(0.84 0.025 78)",
-          "oklch(0.95 0.025 78)"
-        ],
-        "mode": "day"
-      },
-      "shelf-rim": {
-        "role": "secondary",
-        "displayName": "Shelf Rim",
-        "canonical": "oklch(0.42 0.03 78)",
-        "tonalRamp": [
-          "oklch(0.15 0.03 78)",
-          "oklch(0.26 0.03 78)",
-          "oklch(0.37 0.03 78)",
-          "oklch(0.48 0.03 78)",
-          "oklch(0.60 0.03 78)",
-          "oklch(0.72 0.03 78)",
-          "oklch(0.84 0.03 78)",
-          "oklch(0.95 0.03 78)"
-        ],
-        "mode": "day"
-      },
-      "branch": {
-        "role": "secondary",
-        "displayName": "Branch",
-        "canonical": "oklch(0.36 0.03 78)",
-        "tonalRamp": [
-          "oklch(0.15 0.03 78)",
-          "oklch(0.26 0.03 78)",
-          "oklch(0.37 0.03 78)",
-          "oklch(0.48 0.03 78)",
-          "oklch(0.60 0.03 78)",
-          "oklch(0.72 0.03 78)",
-          "oklch(0.84 0.03 78)",
-          "oklch(0.95 0.03 78)"
-        ],
-        "mode": "day"
-      },
-      "oxblood": {
-        "role": "tertiary",
-        "displayName": "Oxblood",
-        "canonical": "oklch(0.5 0.15 28)",
-        "tonalRamp": [
-          "oklch(0.15 0.15 28)",
-          "oklch(0.26 0.15 28)",
-          "oklch(0.37 0.15 28)",
-          "oklch(0.48 0.15 28)",
-          "oklch(0.60 0.15 28)",
-          "oklch(0.72 0.15 28)",
-          "oklch(0.84 0.15 28)",
-          "oklch(0.95 0.15 28)"
-        ],
-        "mode": "day"
-      },
-      "night-plaster": {
+      "night-shell": {
         "role": "neutral",
-        "displayName": "Night Sage Plaster",
-        "canonical": "oklch(0.205 0.009 128)",
+        "displayName": "Navy Sky",
+        "canonical": "oklch(0.215 0.045 262)",
         "tonalRamp": [
-          "oklch(0.15 0.009 128)",
-          "oklch(0.26 0.009 128)",
-          "oklch(0.37 0.009 128)",
-          "oklch(0.48 0.009 128)",
-          "oklch(0.60 0.009 128)",
-          "oklch(0.72 0.009 128)",
-          "oklch(0.84 0.009 128)",
-          "oklch(0.95 0.009 128)"
+          "oklch(0.15 0.045 262)",
+          "oklch(0.26 0.045 262)",
+          "oklch(0.37 0.045 262)",
+          "oklch(0.48 0.045 262)",
+          "oklch(0.60 0.045 262)",
+          "oklch(0.72 0.045 262)",
+          "oklch(0.84 0.045 262)",
+          "oklch(0.95 0.045 262)"
         ],
         "mode": "night"
       },
-      "night-plaster-deep": {
+      "night-shell-deep": {
         "role": "neutral",
         "displayName": "Night Recess",
-        "canonical": "oklch(0.175 0.009 128)",
+        "canonical": "oklch(0.185 0.045 262)",
         "tonalRamp": [
-          "oklch(0.15 0.009 128)",
-          "oklch(0.26 0.009 128)",
-          "oklch(0.37 0.009 128)",
-          "oklch(0.48 0.009 128)",
-          "oklch(0.60 0.009 128)",
-          "oklch(0.72 0.009 128)",
-          "oklch(0.84 0.009 128)",
-          "oklch(0.95 0.009 128)"
+          "oklch(0.15 0.045 262)",
+          "oklch(0.26 0.045 262)",
+          "oklch(0.37 0.045 262)",
+          "oklch(0.48 0.045 262)",
+          "oklch(0.60 0.045 262)",
+          "oklch(0.72 0.045 262)",
+          "oklch(0.84 0.045 262)",
+          "oklch(0.95 0.045 262)"
         ],
         "mode": "night"
       },
-      "night-plaster-lift": {
+      "night-shell-lift": {
         "role": "neutral",
-        "displayName": "Night Lifted Plaster",
-        "canonical": "oklch(0.235 0.01 128)",
+        "displayName": "Night Cap",
+        "canonical": "oklch(0.25 0.048 262)",
         "tonalRamp": [
-          "oklch(0.15 0.01 128)",
-          "oklch(0.26 0.01 128)",
-          "oklch(0.37 0.01 128)",
-          "oklch(0.48 0.01 128)",
-          "oklch(0.60 0.01 128)",
-          "oklch(0.72 0.01 128)",
-          "oklch(0.84 0.01 128)",
-          "oklch(0.95 0.01 128)"
+          "oklch(0.15 0.048 262)",
+          "oklch(0.26 0.048 262)",
+          "oklch(0.37 0.048 262)",
+          "oklch(0.48 0.048 262)",
+          "oklch(0.60 0.048 262)",
+          "oklch(0.72 0.048 262)",
+          "oklch(0.84 0.048 262)",
+          "oklch(0.95 0.048 262)"
+        ],
+        "mode": "night"
+      },
+      "night-shell-rim": {
+        "role": "neutral",
+        "displayName": "Night Rim",
+        "canonical": "oklch(0.33 0.05 262)",
+        "tonalRamp": [
+          "oklch(0.15 0.05 262)",
+          "oklch(0.26 0.05 262)",
+          "oklch(0.37 0.05 262)",
+          "oklch(0.48 0.05 262)",
+          "oklch(0.60 0.05 262)",
+          "oklch(0.72 0.05 262)",
+          "oklch(0.84 0.05 262)",
+          "oklch(0.95 0.05 262)"
+        ],
+        "mode": "night"
+      },
+      "night-shell-skirt": {
+        "role": "neutral",
+        "displayName": "Night Skirt",
+        "canonical": "oklch(0.12 0.035 262)",
+        "tonalRamp": [
+          "oklch(0.15 0.035 262)",
+          "oklch(0.26 0.035 262)",
+          "oklch(0.37 0.035 262)",
+          "oklch(0.48 0.035 262)",
+          "oklch(0.60 0.035 262)",
+          "oklch(0.72 0.035 262)",
+          "oklch(0.84 0.035 262)",
+          "oklch(0.95 0.035 262)"
+        ],
+        "mode": "night"
+      },
+      "night-shell-line": {
+        "role": "neutral",
+        "displayName": "Night Hairline",
+        "canonical": "oklch(0.32 0.045 260)",
+        "tonalRamp": [
+          "oklch(0.15 0.045 260)",
+          "oklch(0.26 0.045 260)",
+          "oklch(0.37 0.045 260)",
+          "oklch(0.48 0.045 260)",
+          "oklch(0.60 0.045 260)",
+          "oklch(0.72 0.045 260)",
+          "oklch(0.84 0.045 260)",
+          "oklch(0.95 0.045 260)"
         ],
         "mode": "night"
       },
       "night-ink": {
         "role": "neutral",
-        "displayName": "Night Pine Ink",
-        "canonical": "oklch(0.93 0.012 115)",
+        "displayName": "Cool Bone Ink",
+        "canonical": "oklch(0.94 0.012 250)",
         "tonalRamp": [
-          "oklch(0.15 0.012 115)",
-          "oklch(0.26 0.012 115)",
-          "oklch(0.37 0.012 115)",
-          "oklch(0.48 0.012 115)",
-          "oklch(0.60 0.012 115)",
-          "oklch(0.72 0.012 115)",
-          "oklch(0.84 0.012 115)",
-          "oklch(0.95 0.012 115)"
+          "oklch(0.15 0.012 250)",
+          "oklch(0.26 0.012 250)",
+          "oklch(0.37 0.012 250)",
+          "oklch(0.48 0.012 250)",
+          "oklch(0.60 0.012 250)",
+          "oklch(0.72 0.012 250)",
+          "oklch(0.84 0.012 250)",
+          "oklch(0.95 0.012 250)"
         ],
         "mode": "night"
       },
       "night-ink-soft": {
         "role": "neutral",
         "displayName": "Night Soft Ink",
-        "canonical": "oklch(0.78 0.012 115)",
+        "canonical": "oklch(0.8 0.022 252)",
         "tonalRamp": [
-          "oklch(0.15 0.012 115)",
-          "oklch(0.26 0.012 115)",
-          "oklch(0.37 0.012 115)",
-          "oklch(0.48 0.012 115)",
-          "oklch(0.60 0.012 115)",
-          "oklch(0.72 0.012 115)",
-          "oklch(0.84 0.012 115)",
-          "oklch(0.95 0.012 115)"
+          "oklch(0.15 0.022 252)",
+          "oklch(0.26 0.022 252)",
+          "oklch(0.37 0.022 252)",
+          "oklch(0.48 0.022 252)",
+          "oklch(0.60 0.022 252)",
+          "oklch(0.72 0.022 252)",
+          "oklch(0.84 0.022 252)",
+          "oklch(0.95 0.022 252)"
         ],
         "mode": "night"
       },
       "night-ink-faint": {
         "role": "neutral",
         "displayName": "Night Faint Ink",
-        "canonical": "oklch(0.68 0.012 115)",
+        "canonical": "oklch(0.71 0.025 252)",
         "tonalRamp": [
-          "oklch(0.15 0.012 115)",
-          "oklch(0.26 0.012 115)",
-          "oklch(0.37 0.012 115)",
-          "oklch(0.48 0.012 115)",
-          "oklch(0.60 0.012 115)",
-          "oklch(0.72 0.012 115)",
-          "oklch(0.84 0.012 115)",
-          "oklch(0.95 0.012 115)"
-        ],
-        "mode": "night"
-      },
-      "night-rule": {
-        "role": "neutral",
-        "displayName": "Night Hairline",
-        "canonical": "oklch(0.33 0.012 120)",
-        "tonalRamp": [
-          "oklch(0.15 0.012 120)",
-          "oklch(0.26 0.012 120)",
-          "oklch(0.37 0.012 120)",
-          "oklch(0.48 0.012 120)",
-          "oklch(0.60 0.012 120)",
-          "oklch(0.72 0.012 120)",
-          "oklch(0.84 0.012 120)",
-          "oklch(0.95 0.012 120)"
+          "oklch(0.15 0.025 252)",
+          "oklch(0.26 0.025 252)",
+          "oklch(0.37 0.025 252)",
+          "oklch(0.48 0.025 252)",
+          "oklch(0.60 0.025 252)",
+          "oklch(0.72 0.025 252)",
+          "oklch(0.84 0.025 252)",
+          "oklch(0.95 0.025 252)"
         ],
         "mode": "night"
       },
       "night-rule-strong": {
         "role": "neutral",
         "displayName": "Night Ink Rule",
-        "canonical": "oklch(0.72 0.012 115)",
+        "canonical": "oklch(0.74 0.025 252)",
         "tonalRamp": [
-          "oklch(0.15 0.012 115)",
-          "oklch(0.26 0.012 115)",
-          "oklch(0.37 0.012 115)",
-          "oklch(0.48 0.012 115)",
-          "oklch(0.60 0.012 115)",
-          "oklch(0.72 0.012 115)",
-          "oklch(0.84 0.012 115)",
-          "oklch(0.95 0.012 115)"
+          "oklch(0.15 0.025 252)",
+          "oklch(0.26 0.025 252)",
+          "oklch(0.37 0.025 252)",
+          "oklch(0.48 0.025 252)",
+          "oklch(0.60 0.025 252)",
+          "oklch(0.72 0.025 252)",
+          "oklch(0.84 0.025 252)",
+          "oklch(0.95 0.025 252)"
         ],
         "mode": "night"
       },
-      "night-bronze-soft": {
+      "night-glass": {
         "role": "secondary",
-        "displayName": "Night Soft Bronze",
-        "canonical": "oklch(0.72 0.05 80)",
+        "displayName": "Night Glass",
+        "canonical": "oklch(0.15 0.03 262)",
         "tonalRamp": [
-          "oklch(0.15 0.05 80)",
-          "oklch(0.26 0.05 80)",
-          "oklch(0.37 0.05 80)",
-          "oklch(0.48 0.05 80)",
-          "oklch(0.60 0.05 80)",
-          "oklch(0.72 0.05 80)",
-          "oklch(0.84 0.05 80)",
-          "oklch(0.95 0.05 80)"
+          "oklch(0.15 0.03 262)",
+          "oklch(0.26 0.03 262)",
+          "oklch(0.37 0.03 262)",
+          "oklch(0.48 0.03 262)",
+          "oklch(0.60 0.03 262)",
+          "oklch(0.72 0.03 262)",
+          "oklch(0.84 0.03 262)",
+          "oklch(0.95 0.03 262)"
         ],
         "mode": "night"
       },
-      "night-shelf": {
+      "night-glass-deep": {
         "role": "secondary",
-        "displayName": "Night Shelf Bronze",
-        "canonical": "oklch(0.36 0.02 78)",
+        "displayName": "Night Glass Well",
+        "canonical": "oklch(0.12 0.03 262)",
         "tonalRamp": [
-          "oklch(0.15 0.02 78)",
-          "oklch(0.26 0.02 78)",
-          "oklch(0.37 0.02 78)",
-          "oklch(0.48 0.02 78)",
-          "oklch(0.60 0.02 78)",
-          "oklch(0.72 0.02 78)",
-          "oklch(0.84 0.02 78)",
-          "oklch(0.95 0.02 78)"
+          "oklch(0.15 0.03 262)",
+          "oklch(0.26 0.03 262)",
+          "oklch(0.37 0.03 262)",
+          "oklch(0.48 0.03 262)",
+          "oklch(0.60 0.03 262)",
+          "oklch(0.72 0.03 262)",
+          "oklch(0.84 0.03 262)",
+          "oklch(0.95 0.03 262)"
         ],
         "mode": "night"
       },
-      "night-shelf-rim": {
+      "night-glass-line": {
         "role": "secondary",
-        "displayName": "Night Shelf Rim",
-        "canonical": "oklch(0.5 0.025 78)",
+        "displayName": "Night Glass Bezel Line",
+        "canonical": "oklch(0.3 0.04 262)",
         "tonalRamp": [
-          "oklch(0.15 0.025 78)",
-          "oklch(0.26 0.025 78)",
-          "oklch(0.37 0.025 78)",
-          "oklch(0.48 0.025 78)",
-          "oklch(0.60 0.025 78)",
-          "oklch(0.72 0.025 78)",
-          "oklch(0.84 0.025 78)",
-          "oklch(0.95 0.025 78)"
+          "oklch(0.15 0.04 262)",
+          "oklch(0.26 0.04 262)",
+          "oklch(0.37 0.04 262)",
+          "oklch(0.48 0.04 262)",
+          "oklch(0.60 0.04 262)",
+          "oklch(0.72 0.04 262)",
+          "oklch(0.84 0.04 262)",
+          "oklch(0.95 0.04 262)"
         ],
         "mode": "night"
       },
-      "night-branch": {
+      "night-glass-bezel": {
         "role": "secondary",
-        "displayName": "Night Branch",
-        "canonical": "oklch(0.66 0.035 78)",
+        "displayName": "Night Glass Bezel",
+        "canonical": "oklch(0.4 0.045 262)",
         "tonalRamp": [
-          "oklch(0.15 0.035 78)",
-          "oklch(0.26 0.035 78)",
-          "oklch(0.37 0.035 78)",
-          "oklch(0.48 0.035 78)",
-          "oklch(0.60 0.035 78)",
-          "oklch(0.72 0.035 78)",
-          "oklch(0.84 0.035 78)",
-          "oklch(0.95 0.035 78)"
+          "oklch(0.15 0.045 262)",
+          "oklch(0.26 0.045 262)",
+          "oklch(0.37 0.045 262)",
+          "oklch(0.48 0.045 262)",
+          "oklch(0.60 0.045 262)",
+          "oklch(0.72 0.045 262)",
+          "oklch(0.84 0.045 262)",
+          "oklch(0.95 0.045 262)"
         ],
         "mode": "night"
       },
-      "night-oxblood": {
+      "night-amber": {
         "role": "tertiary",
-        "displayName": "Night Oxblood",
-        "canonical": "oklch(0.7 0.14 30)",
+        "displayName": "Night Amber",
+        "canonical": "oklch(0.78 0.12 70)",
         "tonalRamp": [
-          "oklch(0.15 0.14 30)",
-          "oklch(0.26 0.14 30)",
-          "oklch(0.37 0.14 30)",
-          "oklch(0.48 0.14 30)",
-          "oklch(0.60 0.14 30)",
-          "oklch(0.72 0.14 30)",
-          "oklch(0.84 0.14 30)",
-          "oklch(0.95 0.14 30)"
+          "oklch(0.15 0.12 70)",
+          "oklch(0.26 0.12 70)",
+          "oklch(0.37 0.12 70)",
+          "oklch(0.48 0.12 70)",
+          "oklch(0.60 0.12 70)",
+          "oklch(0.72 0.12 70)",
+          "oklch(0.84 0.12 70)",
+          "oklch(0.95 0.12 70)"
+        ],
+        "mode": "night"
+      },
+      "night-stem-main": {
+        "role": "secondary",
+        "displayName": "Night Main Lane",
+        "canonical": "oklch(0.6 0.03 250)",
+        "tonalRamp": [
+          "oklch(0.15 0.03 250)",
+          "oklch(0.26 0.03 250)",
+          "oklch(0.37 0.03 250)",
+          "oklch(0.48 0.03 250)",
+          "oklch(0.60 0.03 250)",
+          "oklch(0.72 0.03 250)",
+          "oklch(0.84 0.03 250)",
+          "oklch(0.95 0.03 250)"
+        ],
+        "mode": "night"
+      },
+      "night-stem-innolearn": {
+        "role": "secondary",
+        "displayName": "Night InnoLearn Lane",
+        "canonical": "oklch(0.65 0.07 160)",
+        "tonalRamp": [
+          "oklch(0.15 0.07 160)",
+          "oklch(0.26 0.07 160)",
+          "oklch(0.37 0.07 160)",
+          "oklch(0.48 0.07 160)",
+          "oklch(0.60 0.07 160)",
+          "oklch(0.72 0.07 160)",
+          "oklch(0.84 0.07 160)",
+          "oklch(0.95 0.07 160)"
+        ],
+        "mode": "night"
+      },
+      "night-stem-armani": {
+        "role": "secondary",
+        "displayName": "Night Armani Lane",
+        "canonical": "oklch(0.68 0.06 80)",
+        "tonalRamp": [
+          "oklch(0.15 0.06 80)",
+          "oklch(0.26 0.06 80)",
+          "oklch(0.37 0.06 80)",
+          "oklch(0.48 0.06 80)",
+          "oklch(0.60 0.06 80)",
+          "oklch(0.72 0.06 80)",
+          "oklch(0.84 0.06 80)",
+          "oklch(0.95 0.06 80)"
         ],
         "mode": "night"
       }
@@ -488,76 +728,162 @@
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "The contact close only (\"Say hi.\")."
+        "purpose": "The contact close title only (\"Say hi.\")."
       },
       "hero": {
         "displayName": "Hero",
-        "purpose": "The single hero sentence, max 13ch."
+        "purpose": "The single hero sentence printed on the plaster, max 12ch."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Section titles; short and plain."
+        "purpose": "Section titles and the company names in the Experience ledger."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Company names in the ledger, project titles."
+        "purpose": "Project titles, the toolbox title, the resume picker question."
       },
       "subtitle": {
         "displayName": "Subtitle",
-        "purpose": "Index-line titles, side labels, prose h3."
+        "purpose": "Index-line titles, \"Elsewhere\", the contact lead, prose h3."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Leads and prose, 56-68ch."
+        "purpose": "Leads and prose, 48-68ch."
       },
       "body-strong": {
         "displayName": "Body strong",
-        "purpose": "Buttons, arrow links, ledger labels."
+        "purpose": "Button labels, arrow links, ledger labels, reach values."
+      },
+      "log-message": {
+        "displayName": "Log message",
+        "purpose": "The commit messages beside the git graph: 600 at the tips and the root, 500 in ink-soft between; 0.82rem under 480px."
+      },
+      "log-meta": {
+        "displayName": "Log meta",
+        "purpose": "The ref or branch · date under each commit message, mono in faint ink, lime-ink at the tips; Vazirmatn 0.76rem in RTL."
       },
       "small": {
         "displayName": "Small",
-        "purpose": "Metadata, rail copy, nav, footer."
+        "purpose": "Metadata, nav links, footer."
       },
       "caption-mono": {
         "displayName": "Caption mono",
-        "purpose": "Data only: dates, tags, terminal, panel captions."
+        "purpose": "Data only: screen captions, tags, key legends, PDF meta."
+      },
+      "terminal": {
+        "displayName": "Terminal",
+        "purpose": "Everything printed on the terminal screen; input never under 16px on phones."
+      },
+      "lit-display": {
+        "displayName": "Lit display",
+        "purpose": "The phone number and the email in the contact close: phosphor on glass with a bloom."
       },
       "persian": {
         "displayName": "Persian body",
-        "purpose": "Replaces body under dir=rtl."
+        "purpose": "Replaces body under dir=rtl, line-height 1.9."
       },
       "persian-display": {
         "displayName": "Persian display",
-        "purpose": "Replaces Young Serif headings under dir=rtl (800)."
+        "purpose": "Replaces Young Serif headings under dir=rtl (800, 1.35)."
       }
     },
     "shadows": [
       {
         "name": "none",
         "value": "none",
-        "purpose": "Every shadow token resolves to none; depth is recess and rules."
+        "purpose": "Every legacy shadow token resolves to none; there are no drop shadows and no blur."
       },
       {
-        "name": "map-label-halo",
-        "value": "text-shadow: 0 0 2px var(--plaster), 0 0 2px var(--plaster), 0 0 4px var(--plaster)",
-        "purpose": "Legibility halo on bud labels over the branch; dropped on hover. Not elevation."
+        "name": "cap",
+        "value": "inset 0 1px 0 var(--shell-rim), 0 3px 0 var(--shell-skirt)",
+        "purpose": "Molded plastic: a 1px rim on top, a 3px skirt below. Every cap, ghost button, AI loop node, dock, chat list, resume picker."
+      },
+      {
+        "name": "cap-pressed",
+        "value": "translate: 0 2px; box-shadow: inset 0 1px 0 var(--shell-rim), 0 1px 0 var(--shell-skirt)",
+        "purpose": "The cap drops 2px and its skirt collapses (90ms)."
+      },
+      {
+        "name": "key-sm",
+        "value": "inset 0 1px 0 var(--shell-rim), 0 2px 0 var(--shell-skirt)",
+        "purpose": "Small keys: command keys, nav switches, skill keys, stack tags, kbd, Nix's speech bubble. Pressed: 2px down, 0 skirt."
+      },
+      {
+        "name": "tag-link",
+        "value": "0 2px 0 var(--shell-skirt)",
+        "purpose": "A linked tag is a tiny key; pressed 1px down with a 1px skirt."
+      },
+      {
+        "name": "plate",
+        "value": "inset 0 2px 0 var(--shell-skirt)",
+        "purpose": "A recess the keys sit in (the AI toolbox plate)."
+      },
+      {
+        "name": "screen",
+        "value": "inset 0 0 0 1px var(--glass-line), inset 0 1px 0 var(--shell-rim)",
+        "purpose": "Glass: an inset bezel line and a rim. The terminal, browser windows, .win panels."
+      },
+      {
+        "name": "glass-band",
+        "value": "inset 0 1px 0 var(--glass-line), inset 0 -1px 0 var(--glass-line)",
+        "purpose": "The full-bleed contact close: bezels top and bottom."
+      },
+      {
+        "name": "glass-cap",
+        "value": "inset 0 1px 0 var(--glass-bezel), 0 3px 0 var(--glass-deep)",
+        "purpose": "The primary button on plastic (a glass cap with a lit label). Night: rim glass-line, skirt oklch(0.08 0.01 120)."
+      },
+      {
+        "name": "lit-cap",
+        "value": "inset 0 1px 0 oklch(0.97 0.12 124), 0 3px 0 oklch(0.55 0.15 128)",
+        "purpose": ".btn--lit and the hovered resume choice: a lime LED cap."
+      },
+      {
+        "name": "phosphor-bloom",
+        "value": "text-shadow: 0 0 14px oklch(0.905 0.2 124 / 0.32)",
+        "purpose": "Lit display text on glass only (contact phone and email); the neofetch host line uses 0 0 10px at 0.35. Legibility for a lit character, not elevation."
+      },
+      {
+        "name": "graph-field",
+        "value": "radial-gradient(closest-side, oklch(0.905 0.2 124 / 0.14), transparent 72%)",
+        "purpose": "The one soft field, behind the hero graph (inset 8% -10% -6% -10%); night: oklch(0.4 0.09 262 / 0.5)."
+      },
+      {
+        "name": "raster-lines",
+        "value": "repeating-linear-gradient(0deg, transparent 0 3px, oklch(0 0 0 / 0.14) 3px 4px)",
+        "purpose": "The terminal's texture: a 1px line at 14% black every 4px. The only texture on the site."
+      },
+      {
+        "name": "nix-cut",
+        "value": "filter: drop-shadow(1px 0 0 var(--nix-cut)) drop-shadow(-1px 0 0 var(--nix-cut)) drop-shadow(0 1px 0 var(--nix-cut)) drop-shadow(0 -1px 0 var(--nix-cut))",
+        "purpose": "Nix's sticker edge: transparent on the day shell, faint bone inside .on-glass, rule-strong at night."
+      },
+      {
+        "name": "desk-edge",
+        "value": "border-block-start: 2px solid var(--shell-rim); border-block-end: 1px solid oklch(0.62 0.04 84)",
+        "purpose": "The 14px shell-skirt bar that closes the hero and the page; night bottom line oklch(0.08 0.01 85)."
+      },
+      {
+        "name": "dialog-backdrop",
+        "value": "oklch(0.15 0.01 100 / 0.55)",
+        "purpose": "The resume picker backdrop."
       }
     ],
     "motion": [
       {
         "name": "ease-out",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Default for hover, press, entrances and the branch."
+        "purpose": "Default for hover, press, entrances, the node pops, the arrival."
       },
       {
         "name": "ease-in-out",
         "value": "cubic-bezier(0.77, 0, 0.175, 1)",
-        "purpose": "Portrait dither wipe (700ms)."
+        "purpose": "The lines drawing, the halos breathing, the AI loop stems, the bob."
       },
       {
         "name": "dur-press",
         "value": "90ms",
-        "purpose": "Press scale (0.97 buttons, 0.95 chips)."
+        "purpose": "A cap drops 2px and its skirt collapses."
       },
       {
         "name": "dur-hover",
@@ -567,188 +893,325 @@
       {
         "name": "dur-ui",
         "value": "240ms",
-        "purpose": "Arrow lean, dot scale."
+        "purpose": "Arrow lean, LED scale, Nix head lift."
       },
       {
-        "name": "branch-grow",
-        "value": "stroke-dashoffset 1 to 0; 1.5s / 900ms / 700ms at 150 / 700 / 950ms",
-        "purpose": "The one authored moment: the stems draw in."
+        "name": "arrival-copy",
+        "value": "rise 640ms ease-out, delay n * 80ms (five beats: title, lead, actions, reach, resume)",
+        "purpose": "The hero copy rises line by line (from 14px below)."
       },
       {
-        "name": "bud-open",
-        "value": "scale 0.2 to 1, 520ms, delay 1250ms + i*140ms",
-        "purpose": "Buds open after the branch; labels fade in 200ms later."
+        "name": "arrival-lines",
+        "value": "stroke-dashoffset 1 -> 0 ease-in-out; main 1500ms at 250ms, armani-english 1000ms at 550ms, innolearn 800ms at 1050ms",
+        "purpose": "The three lanes draw themselves in chronological order."
+      },
+      {
+        "name": "arrival-nodes",
+        "value": "scale 0 -> 1, 520ms ease-out at --at (root 150, joinArmani 800, grad 900, portal 1100, joinInno 1400, cwv 1450, innomeet 1750, head 1900)",
+        "purpose": "Each commit pops at its beat."
+      },
+      {
+        "name": "arrival-rows",
+        "value": "opacity + translate 10px * --dir, 480ms ease-out at --at + 120ms",
+        "purpose": "Each log row slides in after its node."
+      },
+      {
+        "name": "halo-breathe",
+        "value": "opacity 0.12 <-> 0.45, 2.8s ease-in-out infinite alternate, from --at + 600ms (no delay on a second look); paused off-screen",
+        "purpose": "The three buds are alive."
+      },
+      {
+        "name": "arrival-land",
+        "value": "opacity 0 + translate 0 -40px -> 0, 700ms ease-out at 2000ms",
+        "purpose": "Nix drops onto HEAD."
+      },
+      {
+        "name": "arrival-bubble",
+        "value": "scale 0.85 -> 1 (260ms) + opacity (200ms) at 2500ms, then 22ms per character",
+        "purpose": "His bubble scales in from its tail and types."
+      },
+      {
+        "name": "nix-pose",
+        "value": "opacity 180ms crossfade + hop 360ms (-7px at 30%)",
+        "purpose": "Nix's reactions to hover and focus; 14ms per character when he retypes."
+      },
+      {
+        "name": "nix-lean",
+        "value": "rotate up to 7deg, lerp 0.14 per frame",
+        "purpose": "He leans toward a fine pointer; six reversals in 700ms make him panic for 1.7s."
+      },
+      {
+        "name": "nix-idle",
+        "value": "sleep after 28s without input; a poke trick lasts 2.6s; rest returns 500ms after leaving",
+        "purpose": "Nix's timers."
+      },
+      {
+        "name": "keystroke",
+        "value": "260ms ease-out, delay i * 170ms + 150ms; LED lit 30-60%",
+        "purpose": "The toolbox keys type themselves once when first seen."
+      },
+      {
+        "name": "key-press",
+        "value": "hover: cap down 4px (140ms); active: 6px (60ms)",
+        "purpose": "A toolbox keycap."
+      },
+      {
+        "name": "ai-loop",
+        "value": "step-in 420ms, delay i * 260ms; stem 300ms ease-in-out at +200ms; loop at 1300ms; then the bud walks 8 x 1.1s beats from 1.9s",
+        "purpose": "The AI workflow draws itself once when seen."
+      },
+      {
+        "name": "browser-pan",
+        "value": "translate to bottom over 1.2-14s cubic-bezier(0.45, 0, 0.55, 1) after 150ms; back in 700ms ease-out",
+        "purpose": "A project screenshot scrolls at reading speed on hover or focus."
+      },
+      {
+        "name": "resume-open",
+        "value": "opacity 220ms + translate 14px 320ms ease-out (@starting-style); Nix hop 480ms at 90ms; bubble 260ms at 380ms; close 160ms ease-in",
+        "purpose": "The resume picker."
+      },
+      {
+        "name": "caret-blink",
+        "value": "1.05s steps(1) infinite",
+        "purpose": "Terminal carets."
       },
       {
         "name": "theme-circle-reveal",
-        "value": "view transition, clip-path circle from the toggle, 620ms ease-out",
+        "value": "view transition, clip-path circle from the toggle, 620ms ease-out (html[data-theme-switching])",
         "purpose": "Day / night switch."
       },
       {
         "name": "page-transition",
-        "value": "out 160ms lift -10px / in 240ms from +14px",
+        "value": "out 160ms lift -10px / in 240ms from +14px at 60ms",
         "purpose": "Route changes."
       },
       {
+        "name": "rise",
+        "value": "scroll-driven, view() entry 0% to cover 22%",
+        "purpose": "Below-fold blocks rise into view."
+      },
+      {
         "name": "calm-path",
-        "value": "prefers-reduced-motion: reduce or html[data-lite]",
-        "purpose": "All animation off, final states visible; theme and page changes become a 120ms crossfade."
+        "value": "prefers-reduced-motion: reduce or html[data-lite] or hero[data-seen]",
+        "purpose": "All animation off, final states visible (the graph is drawn, Nix is there); theme and page changes become a 120ms crossfade; the browser window becomes scrollable."
       }
     ],
     "breakpoints": [
+      {
+        "name": "brand-name / neofetch-stack",
+        "value": "420px"
+      },
+      {
+        "name": "reach-wrap / close-nix / nix-150 / one-line-log",
+        "value": "480px"
+      },
+      {
+        "name": "skills-label-column",
+        "value": "560px"
+      },
+      {
+        "name": "close-label-column",
+        "value": "700px"
+      },
+      {
+        "name": "elsewhere-two-column / print-side-by-side (container)",
+        "value": "760px"
+      },
       {
         "name": "gutter",
         "value": "768px"
       },
       {
-        "name": "alcove-two-column",
+        "name": "plate-four-keys",
+        "value": "820px"
+      },
+      {
+        "name": "navbar-links / dock / projects-pairs / ai-loop-across",
         "value": "900px"
       },
       {
-        "name": "ledger-wide",
+        "name": "ledger-wide / skills-two-column / terminal-two-column",
         "value": "960px"
       },
       {
-        "name": "rail",
-        "value": "1040px"
+        "name": "hero-two-column / nix-200",
+        "value": "1000px"
       },
       {
-        "name": "print-side-by-side (container)",
-        "value": "760px"
+        "name": "phone-in-navbar",
+        "value": "1180px"
       }
     ]
   },
   "components": [
     {
-      "name": "Primary Button (Email)",
+      "name": "Primary Button (glass cap, lit label)",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "The one lime action: email. Plain rectangle, arrow leans forward on hover.",
-      "html": "<a class=\"ds-btn\" href=\"#\">Email me <svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2.5 8h11M9 3.5 13.5 8 9 12.5\"/></svg></a>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;gap:.7em;min-height:48px;padding:.6em 1.3em;border:1.5px solid var(--ink,oklch(0.25 0.014 112));border-radius:4px;background:var(--lime,oklch(0.905 0.2 124));color:var(--on-lime,oklch(0.22 0.03 125));font-family:Geist,system-ui,sans-serif;font-weight:600;font-size:.98rem;text-decoration:none;transition:scale 90ms cubic-bezier(0.16,1,0.3,1)}.ds-btn svg{transition:translate 240ms cubic-bezier(0.16,1,0.3,1)}.ds-btn:hover svg{translate:4px 0}.ds-btn:active{scale:.97}.ds-btn:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
+      "description": "On plastic, the one action that matters is a small glass cap with a phosphor label. Drops 2px and its skirt collapses when pressed.",
+      "html": "<a class=\"ds-btn\" href=\"#\">My experience <svg class=\"arrow\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2.5 8h11M9 3.5 13.5 8 9 12.5\"/></svg></a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.7em;min-height:50px;padding:.6em 1.35em;border:1px solid var(--glass-deep,oklch(0.17 0.014 128));border-radius:10px;background:var(--glass,oklch(0.21 0.014 128));color:var(--lime,oklch(0.905 0.2 124));font-family:Geist,system-ui,sans-serif;font-weight:600;font-size:.98rem;text-decoration:none;box-shadow:inset 0 1px 0 var(--glass-bezel,oklch(0.42 0.02 120)),0 3px 0 var(--glass-deep,oklch(0.17 0.014 128));transition:translate 90ms cubic-bezier(0.16,1,0.3,1),box-shadow 90ms cubic-bezier(0.16,1,0.3,1),background-color 160ms cubic-bezier(0.16,1,0.3,1)}.ds-btn svg{transition:translate 240ms cubic-bezier(0.16,1,0.3,1)}.ds-btn:hover{background:var(--glass-deep,oklch(0.17 0.014 128))}.ds-btn:hover svg{translate:4px 0}.ds-btn:active{translate:0 2px;box-shadow:inset 0 1px 0 var(--glass-bezel,oklch(0.42 0.02 120)),0 1px 0 var(--glass-deep,oklch(0.17 0.014 128))}.ds-btn:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
     },
     {
-      "name": "Ghost Button",
+      "name": "Ghost Button (plain cap)",
       "kind": "button",
       "refersTo": "button-ghost",
-      "description": "Secondary actions; ink-rule border, recesses on hover.",
-      "html": "<button class=\"ds-btn-ghost\" type=\"button\">Copy address</button>",
-      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;min-height:48px;padding:.6em 1.3em;border:1.5px solid var(--rule-strong,oklch(0.34 0.014 112));border-radius:4px;background:transparent;color:var(--ink,oklch(0.25 0.014 112));font-family:Geist,system-ui,sans-serif;font-weight:600;font-size:.98rem;cursor:pointer;transition:background-color 160ms cubic-bezier(0.16,1,0.3,1)}.ds-btn-ghost:hover{background:var(--plaster-deep,oklch(0.905 0.016 128))}.ds-btn-ghost:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
+      "description": "The partner action on plastic: a molded sage cap with a rim on top and a 3px skirt below.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">My blog</a>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:.6em 1.35em;border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:10px;background:var(--shell-lift,oklch(0.962 0.009 128));color:var(--ink,oklch(0.25 0.014 112));font-family:Geist,system-ui,sans-serif;font-weight:600;font-size:.98rem;text-decoration:none;box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128)),0 3px 0 var(--shell-skirt,oklch(0.78 0.02 124));transition:translate 90ms cubic-bezier(0.16,1,0.3,1),box-shadow 90ms cubic-bezier(0.16,1,0.3,1),background-color 160ms cubic-bezier(0.16,1,0.3,1)}.ds-btn-ghost:hover{background:var(--shell,oklch(0.936 0.013 128))}.ds-btn-ghost:active{translate:0 2px;box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128)),0 1px 0 var(--shell-skirt,oklch(0.78 0.02 124))}.ds-btn-ghost:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
     },
     {
-      "name": "Arrow Link",
-      "kind": "custom",
-      "refersTo": "arrow-link",
-      "description": "Standard secondary action: ink text, hairline underline that turns lime-ink on hover.",
-      "html": "<a class=\"ds-arrow\" href=\"#\">Read my notes <svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2.5 8h11M9 3.5 13.5 8 9 12.5\"/></svg></a>",
-      "css": ".ds-arrow{display:inline-flex;align-items:center;gap:.45em;min-height:44px;color:var(--ink,oklch(0.25 0.014 112));font-family:Geist,system-ui,sans-serif;font-weight:600;text-decoration:underline;text-decoration-color:var(--rule,oklch(0.8 0.016 120));text-underline-offset:.3em;transition:text-decoration-color 160ms}.ds-arrow svg{transition:translate 240ms cubic-bezier(0.16,1,0.3,1)}.ds-arrow:hover{text-decoration-color:var(--lime-ink,oklch(0.47 0.13 128))}.ds-arrow:hover svg{translate:4px 0}.ds-arrow:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
+      "name": "Lit and Glass Buttons (on a screen)",
+      "kind": "button",
+      "refersTo": "button-lit",
+      "description": "On glass the primary is a lime LED cap and the partner is bone on glass. Shown on a glass band.",
+      "html": "<div class=\"ds-band\"><a class=\"ds-btn-lit\" href=\"#\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2\"/></svg>Call me!</a> <a class=\"ds-btn-glass\" href=\"#\">Email me</a></div>",
+      "css": ".ds-band{display:flex;gap:1rem;flex-wrap:wrap;padding:1.5rem;background:var(--glass,oklch(0.21 0.014 128));border-block:1px solid var(--shell-skirt,oklch(0.78 0.02 124));box-shadow:inset 0 1px 0 var(--glass-line,oklch(0.34 0.016 128)),inset 0 -1px 0 var(--glass-line,oklch(0.34 0.016 128))}.ds-btn-lit,.ds-btn-glass{display:inline-flex;align-items:center;justify-content:center;gap:.7em;min-height:54px;padding:.6em 1.35em;border-radius:10px;font-family:Geist,system-ui,sans-serif;font-weight:600;font-size:1.05rem;text-decoration:none;transition:translate 90ms cubic-bezier(0.16,1,0.3,1),box-shadow 90ms cubic-bezier(0.16,1,0.3,1),background-color 160ms cubic-bezier(0.16,1,0.3,1)}.ds-btn-lit{background:var(--lime,oklch(0.905 0.2 124));color:var(--on-lime,oklch(0.22 0.03 125));border:1px solid var(--lime-ink,oklch(0.47 0.13 128));box-shadow:inset 0 1px 0 oklch(0.97 0.12 124),0 3px 0 oklch(0.55 0.15 128)}.ds-btn-lit:hover{background:oklch(0.93 0.2 124)}.ds-btn-lit:active{translate:0 2px;box-shadow:inset 0 1px 0 oklch(0.97 0.12 124),0 1px 0 oklch(0.55 0.15 128)}.ds-btn-glass{background:transparent;color:var(--on-glass,oklch(0.92 0.02 115));border:1px solid var(--glass-bezel,oklch(0.42 0.02 120));box-shadow:inset 0 1px 0 var(--glass-bezel,oklch(0.42 0.02 120)),0 3px 0 var(--glass-deep,oklch(0.17 0.014 128))}.ds-btn-glass:hover{background:var(--glass-deep,oklch(0.17 0.014 128))}.ds-btn-glass:active{translate:0 2px;box-shadow:inset 0 1px 0 var(--glass-bezel,oklch(0.42 0.02 120)),0 1px 0 var(--glass-deep,oklch(0.17 0.014 128))}.ds-btn-lit:focus-visible,.ds-btn-glass:focus-visible{outline:2px solid var(--lime,oklch(0.905 0.2 124));outline-offset:3px}"
+    },
+    {
+      "name": "Small Key",
+      "kind": "chip",
+      "refersTo": "key-sm",
+      "description": "Command keys, nav switches and skill keys: a 7px cap with a 2px skirt. Pressed it drops 2px and the skirt goes to 0; a command key's label goes lime-ink on hover.",
+      "html": "<button class=\"ds-key ds-key--mono\" type=\"button\">help</button> <button class=\"ds-key ds-key--mono\" type=\"button\">sudo hire-me</button> <a class=\"ds-key\" href=\"#\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><circle cx=\"12\" cy=\"12\" r=\"9\"/></svg>TypeScript</a>",
+      "css": ".ds-key{display:inline-flex;align-items:center;gap:.45rem;min-height:36px;padding-inline:.7rem;border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:7px;background:var(--shell-lift,oklch(0.962 0.009 128));color:var(--ink,oklch(0.25 0.014 112));font-family:Geist,system-ui,sans-serif;font-size:.92rem;white-space:nowrap;text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128)),0 2px 0 var(--shell-skirt,oklch(0.78 0.02 124));transition:translate 90ms cubic-bezier(0.16,1,0.3,1),box-shadow 90ms cubic-bezier(0.16,1,0.3,1),background-color 160ms cubic-bezier(0.16,1,0.3,1),color 160ms cubic-bezier(0.16,1,0.3,1)}.ds-key--mono{font-family:'Geist Mono',ui-monospace,monospace;font-size:.8rem;min-height:34px}.ds-key svg{color:var(--ink-soft,oklch(0.4 0.014 112))}.ds-key:hover{background:var(--shell,oklch(0.936 0.013 128))}.ds-key--mono:hover{color:var(--lime-ink,oklch(0.47 0.13 128))}.ds-key:active{translate:0 2px;box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128)),0 0 0 var(--shell-skirt,oklch(0.78 0.02 124))}.ds-key:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
     },
     {
       "name": "Tag",
       "kind": "chip",
       "refersTo": "tag",
-      "description": "Thin hairline tag in Geist Mono; data only.",
-      "html": "<span class=\"ds-tag\">#astro</span> <a class=\"ds-tag ds-tag--link\" href=\"#\">#linux</a>",
-      "css": ".ds-tag{display:inline-flex;align-items:center;min-height:26px;padding:.05em .6em;border:1px solid var(--rule,oklch(0.8 0.016 120));border-radius:3px;font-family:'Geist Mono',ui-monospace,monospace;font-size:.75rem;color:var(--ink-soft,oklch(0.4 0.014 112));text-decoration:none}.ds-tag--link{min-height:36px;transition:border-color 160ms,color 160ms}.ds-tag--link:hover{border-color:var(--lime-ink,oklch(0.47 0.13 128));color:var(--ink,oklch(0.25 0.014 112))}"
+      "description": "A small printed label in Geist Mono; a linked tag is a tiny key. Coral outline only for a draft.",
+      "html": "<span class=\"ds-tag\">#astro</span> <a class=\"ds-tag ds-tag--link\" href=\"#\">#linux</a> <span class=\"ds-tag ds-tag--coral\">draft</span>",
+      "css": ".ds-tag{display:inline-flex;align-items:center;min-height:26px;padding:.05em .6em;border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:5px;background:var(--shell-lift,oklch(0.962 0.009 128));font-family:'Geist Mono',ui-monospace,monospace;font-size:.75rem;color:var(--ink-soft,oklch(0.4 0.014 112));text-decoration:none;white-space:nowrap}.ds-tag--link{min-height:36px;box-shadow:0 2px 0 var(--shell-skirt,oklch(0.78 0.02 124));transition:translate 90ms cubic-bezier(0.16,1,0.3,1),box-shadow 90ms cubic-bezier(0.16,1,0.3,1),color 160ms,background-color 160ms}.ds-tag--link:hover{color:var(--ink,oklch(0.25 0.014 112));background:var(--shell,oklch(0.936 0.013 128))}.ds-tag--link:active{translate:0 1px;box-shadow:0 1px 0 var(--shell-skirt,oklch(0.78 0.02 124))}.ds-tag--coral{border-color:var(--coral,oklch(0.54 0.17 32));color:var(--coral,oklch(0.54 0.17 32))}.ds-tag--link:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
     },
     {
-      "name": "Rail Navigation",
+      "name": "Navbar",
       "kind": "nav",
-      "refersTo": "rail",
-      "description": "Vertical nav; the current item gets a lime bud dot.",
-      "html": "<nav class=\"ds-rail\"><a href=\"#\" aria-current=\"page\">Home</a><a href=\"#\">Work</a><a href=\"#\">Projects</a><a href=\"#\">Notes</a></nav>",
-      "css": ".ds-rail{display:grid;gap:.1rem;width:208px;padding:1rem 1.5rem;background:var(--plaster,oklch(0.936 0.013 128));border-inline-end:1px solid var(--rule,oklch(0.8 0.016 120));font-family:Geist,system-ui,sans-serif}.ds-rail a{position:relative;display:flex;align-items:center;min-height:38px;padding-inline-start:1.1rem;color:var(--ink-soft,oklch(0.4 0.014 112));text-decoration:none;font-size:.95rem;transition:color 160ms}.ds-rail a::before{content:'';position:absolute;inset-inline-start:0;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--rule,oklch(0.8 0.016 120));transition:scale 240ms,background-color 160ms}.ds-rail a:hover{color:var(--ink,oklch(0.25 0.014 112))}.ds-rail a[aria-current=page]{color:var(--ink,oklch(0.25 0.014 112));font-weight:600}.ds-rail a[aria-current=page]::before{background:var(--lime,oklch(0.905 0.2 124));border-color:var(--ink,oklch(0.25 0.014 112));scale:1.45}.ds-rail a:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
+      "refersTo": "navbar",
+      "description": "Printed on the bezel: section links in soft ink, the current one with a 7px lime LED under the word; the call and switch keys at the end.",
+      "html": "<nav class=\"ds-bar\"><a class=\"ds-bar__brand\" href=\"#\">Mahdi MirMohamadi</a><ul class=\"ds-bar__nav\"><li><a href=\"#\" aria-current=\"page\">Work</a></li><li><a href=\"#\">Projects</a></li><li><a href=\"#\">Skills</a></li><li><a href=\"#\">Blog</a></li></ul><a class=\"ds-bar__key\" href=\"#\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2\"/></svg>Call</a><button class=\"ds-bar__key\" type=\"button\">FA</button><button class=\"ds-bar__key\" type=\"button\" aria-label=\"Night\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z\"/></svg></button></nav>",
+      "css": ".ds-bar{display:flex;align-items:center;gap:1rem;min-height:60px;padding-inline:1rem;background:var(--shell,oklch(0.936 0.013 128));border-block-end:1px solid var(--shell-line,oklch(0.8 0.016 120));font-family:Geist,system-ui,sans-serif}.ds-bar__brand{color:var(--ink,oklch(0.25 0.014 112));font-family:'Young Serif',Georgia,serif;font-size:1.1rem;text-decoration:none}.ds-bar__nav{display:flex;gap:.2rem;margin:0 0 0 auto;padding:0;list-style:none}.ds-bar__nav a{position:relative;display:inline-flex;align-items:center;min-height:44px;padding-inline:.65rem;color:var(--ink-soft,oklch(0.4 0.014 112));font-size:.95rem;text-decoration:none;transition:color 160ms}.ds-bar__nav a:hover{color:var(--ink,oklch(0.25 0.014 112))}.ds-bar__nav a::after{content:'';position:absolute;bottom:4px;left:calc(50% - 3.5px);width:7px;height:7px;border-radius:50%;background:var(--lime,oklch(0.905 0.2 124));border:1.5px solid var(--ink,oklch(0.25 0.014 112));scale:0;transition:scale 240ms cubic-bezier(0.16,1,0.3,1)}.ds-bar__nav a[aria-current=page]{color:var(--ink,oklch(0.25 0.014 112));font-weight:600}.ds-bar__nav a[aria-current=page]::after{scale:1}.ds-bar__key{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:38px;min-width:40px;padding-inline:.65rem;border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:7px;background:var(--shell-lift,oklch(0.962 0.009 128));color:var(--ink,oklch(0.25 0.014 112));font:inherit;font-size:.86rem;font-weight:600;text-decoration:none;cursor:pointer;box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128)),0 2px 0 var(--shell-skirt,oklch(0.78 0.02 124));transition:translate 90ms,box-shadow 90ms,background-color 160ms}.ds-bar__key:hover{background:var(--shell,oklch(0.936 0.013 128))}.ds-bar__key:active{translate:0 2px;box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128)),0 0 0 var(--shell-skirt,oklch(0.78 0.02 124))}.ds-bar a:focus-visible,.ds-bar button:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}"
     },
     {
-      "name": "Ledger Row",
+      "name": "Screen (terminal with neofetch)",
+      "kind": "card",
+      "refersTo": "screen",
+      "description": "Dark glass with a hairline bezel and raster lines; bone text, phosphor for what is alive. The terminal section's screen in miniature.",
+      "html": "<div class=\"ds-screen\"><div class=\"ds-screen__bar\"><span>zsh · mahdi@tehran</span><span>80×24</span></div><div class=\"ds-screen__body\"><p><b class=\"ds-ps1\">$</b> neofetch</p><p class=\"ds-host\"><b>mahdi</b>@<b>workstation</b></p><p><span class=\"ds-k\">role</span>: Front-end engineer</p><p><span class=\"ds-k\">uptime</span>: 4 years</p><p><span class=\"ds-k\">os</span>: Linux</p><p class=\"ds-dim\">type <b class=\"ds-amber\">help</b>, or press a key under the screen</p><p><b class=\"ds-ps1\">$</b> <span class=\"ds-caret\"></span></p></div></div>",
+      "css": ".ds-screen{position:relative;overflow:clip;background:var(--glass,oklch(0.21 0.014 128));color:var(--on-glass,oklch(0.92 0.02 115));border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:14px;box-shadow:inset 0 0 0 1px var(--glass-line,oklch(0.34 0.016 128)),inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128));font-family:'Geist Mono',ui-monospace,monospace}.ds-screen::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:repeating-linear-gradient(0deg,transparent 0 3px,oklch(0 0 0/0.14) 3px 4px)}.ds-screen__bar{display:flex;justify-content:space-between;padding:.7rem 1.5rem 0;font-size:.74rem;color:var(--on-glass-faint,oklch(0.68 0.02 115))}.ds-screen__body{padding:1rem 1.5rem 1.5rem;font-size:.86rem;line-height:1.65}.ds-screen__body p{margin:0}.ds-ps1{color:var(--lime,oklch(0.905 0.2 124));font-weight:600}.ds-host{margin-block-end:.15rem;padding-block-end:.15rem;border-block-end:1px dashed var(--glass-line,oklch(0.34 0.016 128))}.ds-host b{color:var(--lime,oklch(0.905 0.2 124));text-shadow:0 0 10px oklch(0.905 0.2 124/0.35)}.ds-k{color:var(--phosphor-dim,oklch(0.74 0.14 124));font-weight:600}.ds-dim{color:var(--on-glass-faint,oklch(0.68 0.02 115))}.ds-amber{color:oklch(0.8 0.13 72);font-weight:600}.ds-caret{display:inline-block;width:.55em;height:1.05em;vertical-align:-.16em;background:var(--lime,oklch(0.905 0.2 124));animation:ds-blink 1.05s steps(1) infinite}@keyframes ds-blink{50%{opacity:0}}@media(prefers-reduced-motion:reduce){.ds-caret{animation:none}}"
+    },
+    {
+      "name": "Keycap on a Plate (AI toolbox)",
+      "kind": "custom",
+      "refersTo": "keycap",
+      "description": "A 16:10 keycap over a 6px skirt on a recessed plate; hover presses it 4px and lights its LED, click presses the full 6px.",
+      "html": "<ul class=\"ds-plate\"><li><a class=\"ds-keycap\" href=\"#\"><span class=\"ds-keycap__skirt\"></span><span class=\"ds-keycap__cap\"><span class=\"ds-keycap__legend\">01</span><svg width=\"40\" height=\"40\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><rect x=\"4\" y=\"4\" width=\"16\" height=\"16\" rx=\"4\"/></svg><span class=\"ds-keycap__name\">Claude Code</span><span class=\"ds-keycap__led\"></span></span></a><p class=\"ds-plate__use\">Plans and writes with me in the terminal.</p></li><li><a class=\"ds-keycap\" href=\"#\"><span class=\"ds-keycap__skirt\"></span><span class=\"ds-keycap__cap\"><span class=\"ds-keycap__legend\">02</span><svg width=\"40\" height=\"40\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><circle cx=\"12\" cy=\"12\" r=\"8\"/></svg><span class=\"ds-keycap__name\">Cursor</span><span class=\"ds-keycap__led\"></span></span></a><p class=\"ds-plate__use\">The editor, with the model in the loop.</p></li></ul>",
+      "css": ".ds-plate{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;margin:0;padding:1.5rem;list-style:none;border:1px solid var(--shell-line,oklch(0.8 0.016 120));border-radius:14px;background:var(--shell-deep,oklch(0.905 0.016 128));box-shadow:inset 0 2px 0 var(--shell-skirt,oklch(0.78 0.02 124));font-family:Geist,system-ui,sans-serif}.ds-plate li{display:grid;gap:.75rem;align-content:start}.ds-keycap{--press:6px;position:relative;display:block;padding-block-end:var(--press);color:var(--ink,oklch(0.25 0.014 112));text-decoration:none;outline-offset:4px}.ds-keycap__skirt{position:absolute;inset:var(--press) 0 0;border-radius:12px;background:var(--shell-skirt,oklch(0.78 0.02 124))}.ds-keycap__cap{position:relative;display:grid;justify-items:center;align-content:center;gap:.5rem;aspect-ratio:16/10;padding:1.6rem .8rem .9rem;border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:12px;background:var(--shell-lift,oklch(0.962 0.009 128));box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128));transition:translate 140ms cubic-bezier(0.16,1,0.3,1),background-color 160ms}.ds-keycap__legend{position:absolute;top:.45rem;left:.6rem;font-family:'Geist Mono',ui-monospace,monospace;font-size:.75rem;color:var(--ink-faint,oklch(0.47 0.013 112))}.ds-keycap__name{font-weight:600;font-size:.95rem;text-align:center}.ds-keycap__led{position:absolute;top:.55rem;right:.6rem;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--shell-skirt,oklch(0.78 0.02 124));background:transparent;transition:background-color 140ms}.ds-keycap:hover .ds-keycap__cap,.ds-keycap:focus-visible .ds-keycap__cap{translate:0 calc(var(--press) - 2px);background:var(--shell,oklch(0.936 0.013 128))}.ds-keycap:hover .ds-keycap__led,.ds-keycap:focus-visible .ds-keycap__led,.ds-keycap:active .ds-keycap__led{background:var(--lime,oklch(0.905 0.2 124));border-color:var(--ink,oklch(0.25 0.014 112))}.ds-keycap:active .ds-keycap__cap{translate:0 var(--press);transition-duration:60ms}.ds-keycap:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128))}.ds-plate__use{margin:0;font-size:.92rem;line-height:1.55;color:var(--ink-soft,oklch(0.4 0.014 112))}"
+    },
+    {
+      "name": "Ledger Row with LED bud",
       "kind": "custom",
       "refersTo": "work-ledger",
-      "description": "One ruled row per employer with a calendar leaf in the margin and commit-node bullets.",
-      "html": "<ol class=\"ds-ledger\"><li><div class=\"ds-leaf\"><small>since</small><b>Oct</b><span>2025</span></div><div><h3>InnoLearn</h3><p class=\"ds-meta\">Front-end engineer · Melbourne, remote</p><ul><li>Chat plus live video and audio streaming</li><li>Live quizzes and polls during a class</li></ul></div></li></ol>",
-      "css": ".ds-ledger{list-style:none;padding:0;margin:0;border-block-end:1px solid var(--rule-strong,oklch(0.34 0.014 112));font-family:Geist,system-ui,sans-serif;color:var(--ink,oklch(0.25 0.014 112))}.ds-ledger>li{display:grid;grid-template-columns:8rem 1fr;border-block-start:1px solid var(--rule-strong,oklch(0.34 0.014 112));padding-block:1.5rem}.ds-leaf{display:grid;justify-items:center;align-content:start;gap:.1rem}.ds-leaf small{font-size:.72rem;color:var(--ink-faint,oklch(0.49 0.013 112))}.ds-leaf b{font-size:.9rem;color:var(--ink-soft,oklch(0.4 0.014 112))}.ds-leaf span{font-family:'Young Serif',Georgia,serif;font-size:1.9rem;line-height:1}.ds-ledger h3{margin:0;font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:1.6rem}.ds-meta{margin:.3rem 0 0;font-size:.88rem;color:var(--ink-faint,oklch(0.49 0.013 112))}.ds-ledger ul{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:.45rem}.ds-ledger ul li{position:relative;padding-inline-start:1.1rem;font-size:.95rem;color:var(--ink-soft,oklch(0.4 0.014 112))}.ds-ledger ul li::before{content:'';position:absolute;inset-inline-start:0;top:.55em;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--bronze-soft,oklch(0.43 0.03 80))}"
+      "description": "One employer on the stem: a 24px lime bud with an ink ring, the company in Young Serif, the dates as a printed label, the stack as small keys.",
+      "html": "<ol class=\"ds-stem\"><li class=\"ds-job\"><span class=\"ds-bud\"></span><h3>InnoLearn</h3><p class=\"ds-meta\"><time class=\"ds-when\">Oct 2025 – now</time><span>Melbourne · remote</span></p><p class=\"ds-role\">Front-end engineer</p><ul class=\"ds-stack\"><li>React</li><li>Next.js</li><li>TypeScript</li></ul></li></ol>",
+      "css": ".ds-stem{position:relative;margin:0;padding:0 0 0 2.6rem;list-style:none;font-family:Geist,system-ui,sans-serif;color:var(--ink,oklch(0.25 0.014 112))}.ds-stem::before{content:'';position:absolute;top:14px;bottom:1.2rem;left:9.5px;width:3px;background:var(--shell-skirt,oklch(0.78 0.02 124))}.ds-job{position:relative}.ds-bud{position:absolute;left:-2.6rem;margin-left:-1px;top:.4rem;width:24px;height:24px;border-radius:50%;background:var(--lime,oklch(0.905 0.2 124));border:2px solid var(--ink,oklch(0.25 0.014 112))}.ds-job h3{margin:0;font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:clamp(1.9rem,1.55rem + 1.5vw,2.7rem);line-height:1.1;letter-spacing:-.015em}.ds-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;margin:.6rem 0 0;font-size:.9rem;color:var(--ink-soft,oklch(0.4 0.014 112))}.ds-when{padding:.15rem .6rem;border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:5px;background:var(--shell-lift,oklch(0.962 0.009 128));color:var(--ink,oklch(0.25 0.014 112));font-weight:600;font-variant-numeric:tabular-nums}.ds-role{margin:1rem 0 0;font-weight:600}.ds-stack{display:flex;flex-wrap:wrap;gap:.35rem;margin:.75rem 0 0;padding:0;list-style:none}.ds-stack li{display:inline-flex;align-items:center;min-height:30px;padding:.1rem .55rem;border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:7px;background:var(--shell-lift,oklch(0.962 0.009 128));box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128)),0 2px 0 var(--shell-skirt,oklch(0.78 0.02 124));font-size:.84rem;color:var(--ink-soft,oklch(0.4 0.014 112))}"
     },
     {
-      "name": "Framed Print",
-      "kind": "card",
-      "refersTo": "print",
-      "description": "A project screenshot framed in an ink rule beside its note; no card box.",
-      "html": "<article class=\"ds-print\"><a class=\"ds-print__frame\" href=\"#\"><div class=\"ds-print__img\"></div></a><div><h3><a href=\"#\">Armani English Website</a></h3><p>A large, multi-page store for educational products.</p><p class=\"ds-print__stack\">E-commerce · SEO · Next.js, TypeScript</p></div></article>",
-      "css": ".ds-print{display:grid;grid-template-columns:1.15fr 1fr;gap:3.5rem;align-items:center;font-family:Geist,system-ui,sans-serif;color:var(--ink-soft,oklch(0.4 0.014 112))}.ds-print__frame{display:block;border:1px solid var(--rule-strong,oklch(0.34 0.014 112));border-radius:4px;overflow:hidden;background:var(--plaster-deep,oklch(0.905 0.016 128))}.ds-print__img{aspect-ratio:16/10;background:var(--plaster-lift,oklch(0.962 0.009 128));transition:scale 700ms cubic-bezier(0.16,1,0.3,1)}.ds-print:hover .ds-print__img{scale:1.025}.ds-print h3{margin:0;font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:1.6rem}.ds-print h3 a{color:var(--ink,oklch(0.25 0.014 112));text-decoration:none}.ds-print h3 a:hover{text-decoration:underline;text-decoration-color:var(--lime-ink,oklch(0.47 0.13 128));text-decoration-thickness:2px}.ds-print__stack{font-size:.85rem;color:var(--ink-faint,oklch(0.49 0.013 112))}"
-    },
-    {
-      "name": "Shelf-rule and Bud",
+      "name": "Git Graph with Nix's bubble and the desk edge",
       "kind": "custom",
-      "refersTo": "shelf-rule",
-      "description": "The bronze shelf divider and a bud with its halo map-label.",
-      "html": "<div class=\"ds-alc\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><circle cx=\"12\" cy=\"12\" r=\"10\" fill=\"oklch(0.905 0.2 124)\" stroke=\"oklch(0.25 0.014 112)\" stroke-width=\"2\"/></svg><a class=\"ds-bud\" href=\"#\">InnoLearn <span>2025</span></a></div><span class=\"ds-shelf\"></span>",
-      "css": ".ds-alc{display:flex;align-items:center;gap:.4rem;margin-block-end:1.5rem;background:var(--plaster,oklch(0.936 0.013 128));font-family:Geist,system-ui,sans-serif}.ds-bud{display:inline-flex;align-items:baseline;gap:.4em;min-height:32px;padding:.2rem .5rem;border-radius:3px;color:var(--ink,oklch(0.25 0.014 112));text-shadow:0 0 2px var(--plaster,oklch(0.936 0.013 128)),0 0 2px var(--plaster,oklch(0.936 0.013 128)),0 0 4px var(--plaster,oklch(0.936 0.013 128));font-size:.82rem;font-weight:600;text-decoration:none;transition:background-color 160ms}.ds-bud span{font-family:'Geist Mono',ui-monospace,monospace;font-weight:400;font-size:.72rem;color:var(--ink-faint,oklch(0.49 0.013 112))}.ds-bud:hover{background:var(--lime,oklch(0.905 0.2 124));color:var(--on-lime,oklch(0.22 0.03 125));text-shadow:none}.ds-bud:hover span{color:inherit}.ds-shelf{display:block;height:10px;border-radius:2px;background:oklch(0.3 0.025 78);border-top:2px solid oklch(0.42 0.03 78)}"
+      "refersTo": "graph-bud",
+      "description": "The hero's signature: three lanes at 34/74/114, hollow commits, lime buds with breathing halos, the root ring, log rows beside them, a speech bubble cap above and the desk edge below.",
+      "html": "<div class=\"ds-stage\"><p class=\"ds-bubble\">Hi! I'm Nix, Mahdi's daemon. Poke around.</p><figure class=\"ds-graph\"><svg viewBox=\"0 0 150 216\" width=\"150\" height=\"216\" aria-hidden=\"true\"><g fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"3\"><path stroke=\"var(--stem-main,oklch(0.62 0.03 120))\" d=\"M34 168 L34 40\"/><path stroke=\"var(--stem-armani,oklch(0.6 0.06 80))\" d=\"M34 168 C34 118 114 154 114 104\"/><path stroke=\"var(--stem-innolearn,oklch(0.55 0.06 160))\" d=\"M34 168 C34 108 74 164 74 104\"/></g><circle class=\"ds-halo\" cx=\"34\" cy=\"40\" r=\"16\"/><circle class=\"ds-bud-dot\" cx=\"34\" cy=\"40\" r=\"9\"/><circle class=\"ds-halo\" cx=\"74\" cy=\"104\" r=\"16\"/><circle class=\"ds-bud-dot\" cx=\"74\" cy=\"104\" r=\"9\"/><circle class=\"ds-commit\" cx=\"114\" cy=\"104\" r=\"6\"/><circle class=\"ds-root\" cx=\"34\" cy=\"168\" r=\"30\"/></svg><ol class=\"ds-log\"><li class=\"ds-log__row ds-log__row--bud\"><a href=\"#\"><span class=\"ds-log__msg\">This site, and the notes I write</span><span class=\"ds-log__meta\">HEAD -> main</span></a></li><li class=\"ds-log__row ds-log__row--bud\"><a href=\"#\"><span class=\"ds-log__msg\">InnoMeet: chat, live video, quizzes</span><span class=\"ds-log__meta\">innolearn</span></a></li><li class=\"ds-log__row\"><a href=\"#\"><span class=\"ds-log__msg\">init: Mahdi starts at IUST</span><span class=\"ds-log__meta\">main · 2019</span></a></li></ol></figure></div><span class=\"ds-desk\"></span>",
+      "css": ".ds-stage{position:relative;padding:3.5rem 1.5rem 1rem;background:var(--shell,oklch(0.936 0.013 128));font-family:Geist,system-ui,sans-serif}.ds-stage::before{content:'';position:absolute;inset:8% -10% -6% -10%;border-radius:50%;background:radial-gradient(closest-side,oklch(0.905 0.2 124/0.14),transparent 72%);pointer-events:none}.ds-bubble{position:absolute;top:.6rem;left:6rem;width:max-content;max-width:280px;margin:0;padding:.6rem .85rem;border:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-radius:10px;background:var(--shell-lift,oklch(0.962 0.009 128));color:var(--ink,oklch(0.25 0.014 112));font-size:.92rem;font-weight:600;line-height:1.45;box-shadow:inset 0 1px 0 var(--shell-rim,oklch(0.985 0.006 128)),0 2px 0 var(--shell-skirt,oklch(0.78 0.02 124))}.ds-bubble::after{content:'';position:absolute;bottom:10px;left:-7px;width:12px;height:12px;border-bottom:1px solid var(--shell-skirt,oklch(0.78 0.02 124));border-left:1px solid var(--shell-skirt,oklch(0.78 0.02 124));background:var(--shell-lift,oklch(0.962 0.009 128));rotate:45deg}.ds-graph{position:relative;display:grid;grid-template-columns:150px minmax(0,1fr);margin:0}.ds-graph svg{display:block;overflow:visible}.ds-commit{fill:var(--shell,oklch(0.936 0.013 128));stroke:var(--rule-strong,oklch(0.34 0.014 112));stroke-width:2.5}.ds-bud-dot{fill:var(--lime,oklch(0.905 0.2 124));stroke:var(--ink,oklch(0.25 0.014 112));stroke-width:2}.ds-halo{fill:var(--lime,oklch(0.905 0.2 124));opacity:.22;animation:ds-breathe 2.8s cubic-bezier(0.77,0,0.175,1) infinite alternate}.ds-root{fill:var(--shell-lift,oklch(0.962 0.009 128));stroke:var(--rule-strong,oklch(0.34 0.014 112));stroke-width:2}.ds-log{display:grid;grid-auto-rows:64px;margin:0;padding:8px 0 0;list-style:none}.ds-log__row a{display:grid;align-content:center;gap:.05rem;height:100%;padding:0 .5rem 0 .25rem;color:var(--ink,oklch(0.25 0.014 112));text-decoration:none;border-radius:6px}.ds-log__msg{font-weight:500;font-size:.95rem;line-height:1.3;color:var(--ink-soft,oklch(0.4 0.014 112));text-decoration:underline;text-decoration-color:transparent;text-underline-offset:.22em;transition:text-decoration-color 160ms}.ds-log__row--bud .ds-log__msg,.ds-log__row:last-child .ds-log__msg{font-weight:600;color:var(--ink,oklch(0.25 0.014 112))}.ds-log__meta{font-family:'Geist Mono',ui-monospace,monospace;font-size:.72rem;color:var(--ink-faint,oklch(0.47 0.013 112));font-variant-numeric:tabular-nums}.ds-log__row--bud .ds-log__meta{color:var(--lime-ink,oklch(0.47 0.13 128))}.ds-log__row a:hover .ds-log__msg{text-decoration-color:var(--lime-ink,oklch(0.47 0.13 128))}.ds-log__row a:focus-visible{outline:2px solid var(--lime-ink,oklch(0.47 0.13 128));outline-offset:3px}.ds-desk{display:block;height:14px;background:var(--shell-skirt,oklch(0.78 0.02 124));border-top:2px solid var(--shell-rim,oklch(0.985 0.006 128));border-bottom:1px solid oklch(0.62 0.04 84)}@keyframes ds-breathe{from{opacity:.12}to{opacity:.45}}@media(prefers-reduced-motion:reduce){.ds-halo{animation:none}}"
     }
   ],
   "narrative": {
-    "northStar": "The Alcove",
-    "overview": "The site is a tokonoma, not a landing page. One recessed wall of cool sage plaster holds three things: the owner's photo hung as a scroll, his career drawn as a single git branch rising from a bronze bowl, and the empty wall between them, which points at the email. Everything after the alcove keeps the same quiet: ruled ledgers instead of cards, framed prints instead of tiles, thin ink lines instead of boxes and shadows. The emptiness is load-bearing (\"ma\"); it is what makes the one lime bloom read.\n\nDensity is calm but not sparse. Sections are ruled lists that a recruiter can scan in seconds, set in a plain sans under a chunky soft serif. Personality lives in a few crafted details (the branch that grows, the 1-bit portrait toggle, Nix asleep on the shelf, a live terminal) rather than in effects laid over every element. Night is the same alcove after dark: charcoal plaster, bone ink, the lime unchanged.\n\nThe world explicitly refuses: hard offset shadows, colour gradients, glow, eyebrows and kickers over headings, card grids, imitation brand marks, and monospace used as costume. PRODUCT.md's earlier \"chunky outlines, hard offset shadows\" personality belonged to the workstation edition; this world does not carry it.",
+    "northStar": "The Git Graph",
+    "overview": "A software engineer's first screen is his git log. The site is built on two materials that belong to a working machine, not to a theme: sage plaster for the ground and everything you can press (caps, keys, plates, panels), and dark green-black glass for every screen (the browser windows around the shipped sites, the terminal, code blocks, the contact close). Plastic is molded: a 1px lighter rim along its top edge, a darker skirt under its bottom edge, and it drops 2px when pressed. Glass is a recess with a hairline bezel, bone text, and phosphor for whatever is alive on it. Lime is never paint; it is only ever something lit: the buds on the git graph and their breathing halos, the LEDs on plastic (the Experience buds, the \"you are here\" dot in the nav, a pressed key), phosphor text on glass, and the label of the one primary glass cap per block.\n\nThe first screen carries the whole idea. On one side the person: the sentence, the phone number, the email, the resume. On the other his story as a real git tree: `git init` when he was born (his photo is the root commit), a branch for studying Mechatronics that merges back when he graduated, a branch off it for Armani English, a branch for InnoLearn, three lime tips for what is alive now, growing up into his portrait: him, now. Nix stands small in the corner beside it. It grows once per session from the root up, and every commit message is a link to that part of Experience. Below it the page is compact and scannable: ruled ledgers, small screens, keycaps and index lines printed on the plaster under a chunky soft serif set large. Night is the same room under a navy sky: the shell turns navy, the glass turns navy-black and stays darker than the shell, the ink turns cool bone, and the phosphor does not change.\n\nThe world explicitly refuses: drop shadows and blur, colour gradients (the one exception is the soft radial field behind the hero graph), glow as decoration, eyebrows and kickers over headings, card grids, imitation brand marks, monospace as costume, blue or purple in the chrome, the badge + headline + CTA pair + stats hero, the neon hacker desktop, a terminal as the hero, a bone or cream ground, and any ikebana, tree or Iranian motif. This is a product, molded and quiet.",
     "keyCharacteristics": [
-      "Sage plaster ground, pine-grey ink, bronze shelf; one accent (lime) for what is alive or current.",
-      "Flat: depth comes from recess (plaster-lift / plaster-deep) and thin ink rules, never shadow.",
-      "Young Serif display at weight 400 over Geist; Geist Mono only for real data, code and captions.",
-      "Ruled ledgers and single framed prints; no card grids.",
-      "One authored motion moment (the branch grows, the buds open); everything else is quiet and state-driven.",
-      "Full RTL parity: logical properties, mirrored arrows via `--dir`, Vazirmatn 800 for Persian headings."
+      "Two materials with their own rules: sage plastic (rim on top, skirt below, pressable, ink text) and dark glass (bezel, bone text, phosphor for what is alive).",
+      "Lime is only ever lit: the graph's buds and halos, bordered LED dots on plastic, phosphor text on glass in Geist Mono, and the label of the one primary glass cap per block.",
+      "Depth is rim, skirt and recess (0-blur box-shadows), never a drop shadow; the only textures are the terminal's raster lines and the radial field behind the graph.",
+      "Young Serif 400 for the human voice on the plaster; Geist for reading; Geist Mono only where the content is literally terminal output or data (the log's refs, the neofetch, captions, tags).",
+      "One authored motion moment (the arrival: the copy rises, the tree grows from the root, one branch at a time); after it, only a quiet commit flowing up each living branch now and then. Everything else is press feedback and short state changes. Nix is still in the hero: one pose, no reactions.",
+      "Full RTL parity: logical properties, the graph and every directional pose mirrored via `--dir`, Vazirmatn 400/800 for Persian."
     ],
     "rules": [
       {
-        "name": "The One Bloom Rule",
-        "body": "Lime marks only what is alive or current: the buds, the email action, the current nav item, and transient state (selection, reading progress, hover on a bud label). If a second thing on screen wants lime, it gets ink instead.",
+        "name": "The Lit, Not Painted Rule",
+        "body": "Lime appears only where something is lit: a bud on the graph, a bordered LED dot on plastic (Experience bud, nav \"here\" dot, pressed-key LED), phosphor text on glass (set in Geist Mono because it is terminal output), the label of the one primary glass cap per block, or the fill of the one lit cap on a screen. If a second thing on screen wants lime, it gets ink.",
         "section": "colors"
       },
       {
-        "name": "The Plaster, Not Cream Rule",
-        "body": "The ground is cool sage (hue 128). No warm cream, no pure white, no pure black; night plaster keeps the same hue at L 0.205.",
+        "name": "The Two Materials Rule",
+        "body": "Every surface is either plastic (shell family, ink text) or glass (glass family, bone text). Text on glass is bone; anything alive on glass is phosphor. Text on plastic is ink; anything alive on plastic is lime-ink or an LED. Never bone on plastic, never ink on glass.",
         "section": "colors"
       },
       {
-        "name": "The No Gradient Rule",
-        "body": "Every fill is a flat token. No colour gradients, no blue or purple anywhere.",
+        "name": "The Brand-on-Hover Exception",
+        "body": "Tool marks sit in ink until touched: hovering a skill key lights its logo and border and tints the key 12% in the tool's own brand colour (simple-icons hex; near-black brands fall back to ink at night). The AI toolbox and AI loop marks show their real colours at rest because they are the subject there. These third-party colours are the only blues and purples on the site, and they never become UI chrome.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Field Rule",
+        "body": "Every fill is a flat token. The only gradients are the terminal's raster lines (a repeating 1px line at 14% black every 4px: a texture, not a colour) and the soft radial field behind the hero graph (lime at 14% by day, `oklch(0.4 0.09 262 / 0.5)` at night, fading out at 72%). Nothing else may use one. No blue or purple in the UI.",
         "section": "colors"
       },
       {
         "name": "The Honest Mono Rule",
-        "body": "Monospace appears only where the content is literally code or data: terminal, tags, dates, file-ish captions. Headings, nav, buttons and prose are never mono.",
+        "body": "Monospace appears only where the content is literally terminal output or data: the log's refs and dates, the screen, the neofetch, the command keys, tags, captions, key legends, and the two lit contact lines (which are terminal output at display size). Headings, nav, buttons, prose and the log's commit messages are never mono.",
         "section": "typography"
       },
       {
         "name": "The One Weight Display Rule",
-        "body": "Young Serif is set at 400 with -0.015em tracking and balanced wrapping. Emphasis comes from size and position, not bold. In RTL, headings switch to Vazirmatn 800, line-height 1.35, tracking 0.",
+        "body": "Young Serif is set at 400 with -0.015em tracking and balanced wrapping. Emphasis comes from size and position, not bold. In RTL, headings switch to Vazirmatn 800, line-height 1.35, tracking 0, and body line-height rises to 1.9.",
         "section": "typography"
       },
       {
         "name": "The Ledger Rule",
-        "body": "Lists of work, skills, tools and links are rows divided by 1px rules, not boxes. A row earns its height with content, not padding.",
+        "body": "Lists of work, skills, links and posts are rows divided by 1px hairlines (shell-line on plastic, glass-line on glass), not boxes. A row earns its height with content, not padding.",
         "section": "layout"
       },
       {
-        "name": "The Shelf, Not Shadow Rule",
-        "body": "Things stand on a shelf; they do not float. No box-shadows, no hard offset shadows, no glow.",
+        "name": "The Log First Rule",
+        "body": "The hero is the person beside his graph: on desktops the words sit at the inline-start and the graph at the inline-end; on phones the words come first and the graph keeps its lane pitch underneath. The hero never becomes a badge + headline + CTA pair + stats stack, and never a terminal.",
+        "section": "layout"
+      },
+      {
+        "name": "The Rim and Skirt Rule",
+        "body": "Things are molded, they do not float. Depth is a 1px rim on top and a solid skirt below, and pressing a thing collapses its skirt. No drop shadows, no blur, no glow on plastic.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Bloom Only on Glass Rule",
+        "body": "The phosphor bloom exists only on lit display text on a screen. Never on plastic, never on a button label, never on body text. A bud on plastic glows by opacity (its halo), never by blur.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "**Do** keep lime to buds, the email action and the current nav item (plus transient selection and progress); use lime-ink for any lime text or link on plaster.",
-      "**Do** separate content with 1px rules (rule for structure, rule-strong for ledgers and frames) and let the plaster breathe between sections (5rem).",
-      "**Do** close a passage with the shelf-rule, and let the hero stand on the full-bleed shelf.",
-      "**Do** use Young Serif 400 for headings and Geist for everything readable; switch both to Vazirmatn (800 for headings) in RTL.",
-      "**Do** use logical properties and multiply every directional translate or scale by `var(--dir)`; mirror arrows in RTL.",
-      "**Do** give motion a reduced-motion and `html[data-lite]` path that shows the final state.",
-      "**Do** show tools by their real simple-icons marks in currentColor, or by name alone when no mark exists."
+      "**Do** keep lime to what is lit: the graph's buds and halos, bordered LED dots on plastic, phosphor text on glass (Geist Mono), the label of the one primary glass cap per block, the one lit cap on a screen, and transient state (selection, reading progress, a hovered resume choice); use lime-ink for any lime text or link on plastic.",
+      "**Do** put the phone number wherever the email is: navbar, hero, the close, the footer, the terminal's `contact`.",
+      "**Do** build every plastic thing as a cap: shell-lift fill, 1px shell-skirt border, a 1px rim inset on top and a solid skirt below (3px caps, 2px small keys), and make it press (2px down, skirt collapses, 90ms).",
+      "**Do** build every screen as glass: glass fill, 1px shell-skirt border, an inset glass-line bezel, 14px corners, bone text, phosphor for what is alive; put code, terminals, screenshots and the contact close on glass.",
+      "**Do** draw the graph honestly: lanes at 34 / 74 / 114 with a 64px row pitch, hollow commits for the past, lime buds only for what is alive now, the three lane colours for the lines and nothing else, and only dates `profile.ts` sources.",
+      "**Do** separate content with 1px hairlines (shell-line on plastic, glass-line on glass) and let the plaster breathe between sections (5rem); close the hero and the page with the desk edge.",
+      "**Do** use Young Serif 400 for headings and Geist for everything readable; switch both to Vazirmatn (800 for headings) in RTL, and Persian text on glass and in the log's meta too.",
+      "**Do** use logical properties and multiply every directional translate, rotate or scale by `var(--dir)`; mirror the graph, arrows and directional Nix poses in RTL.",
+      "**Do** give motion a reduced-motion and `html[data-lite]` path that shows the final state, and keep it to transform, opacity and stroke-dashoffset.",
+      "**Do** show tools by their real marks: simple-icons in currentColor (brand colour on hover), official site icons for Antigravity and Hermes Agent, or the name alone when no mark exists.",
+      "**Do** write like the person talks: first person, conversational, a little funny. Persian copy is colloquial (محاوره), not formal."
     ],
     "donts": [
-      "**Don't** add box-shadows, hard offset shadows, glow or colour gradients; the world is flat plaster.",
+      "**Don't** add drop shadows, blur, glow on plastic or colour gradients; depth is rim, skirt and recess, the terminal's raster lines are the only texture, and the radial field behind the hero graph is the only soft field.",
+      "**Don't** paint a surface lime, set lime body text on plastic, or bloom text anywhere but lit display text on glass.",
       "**Don't** put an eyebrow or kicker line above a heading; a caption is for data and places only.",
-      "**Don't** build card grids; use ruled ledgers, framed prints and index lines.",
+      "**Don't** build card grids; use ruled ledgers, small screens, keycaps and index lines.",
       "**Don't** draw imitation logos or placeholder marks.",
-      "**Don't** set headings, nav or buttons in monospace to look technical.",
-      "**Don't** fill surfaces with lime or use it for decoration; don't introduce blue or purple.",
-      "**Don't** add a second authored animation next to the growing branch."
+      "**Don't** set headings, nav, buttons or the log's commit messages in monospace to look technical; mono is for what the machine prints.",
+      "**Don't** put bone text on plastic or ink text on glass; each material keeps its own ink.",
+      "**Don't** introduce blue or purple outside the navy night shell and third-party brand marks.",
+      "**Don't** invent commits, buds or dates on the graph, and don't reuse the lane colours anywhere else.",
+      "**Don't** give a section more than one authored animation (the arrival in the hero, the loop in the AI section, the keys typing once); everything else is feedback-sized."
     ]
   }
 }

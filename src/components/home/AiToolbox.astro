@@ -102,9 +102,10 @@ const t = useT(lang);
     gap: var(--space-m) var(--space-s);
     margin-block-start: var(--space-m);
     padding: var(--space-m);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
-    background: var(--plaster-deep);
+    border: 1px solid var(--shell-line);
+    border-radius: var(--radius-screen);
+    background: var(--shell-deep);
+    box-shadow: inset 0 2px 0 var(--shell-skirt);
     list-style: none;
   }
   @media (min-width: 820px) {
@@ -134,19 +135,20 @@ const t = useT(lang);
     position: absolute;
     inset: var(--press) 0 0;
     border-radius: var(--radius-key);
-    background: var(--rule-strong);
+    background: var(--shell-skirt);
   }
   .key__cap {
     position: relative;
     display: grid;
     justify-items: center;
     align-content: center;
-    gap: 0.55rem;
-    aspect-ratio: 5 / 4;
-    padding: 0.8rem;
-    border: var(--bw) solid var(--rule-strong);
+    gap: 0.5rem;
+    aspect-ratio: 16 / 10;
+    padding: 1.6rem 0.8rem 0.9rem;
+    border: 1px solid var(--shell-skirt);
     border-radius: var(--radius-key);
-    background: var(--plaster-lift);
+    background: var(--shell-lift);
+    box-shadow: inset 0 1px 0 var(--shell-rim);
     transition:
       translate 140ms var(--ease-out),
       background-color var(--dur-hover) var(--ease-out);
@@ -172,7 +174,7 @@ const t = useT(lang);
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    border: 1.5px solid var(--rule-strong);
+    border: 1.5px solid var(--shell-skirt);
     background: transparent;
     transition: background-color 140ms var(--ease-out);
   }
@@ -184,7 +186,7 @@ const t = useT(lang);
   @media (hover: hover) and (pointer: fine) {
     .key:hover .key__cap {
       translate: 0 calc(var(--press) - 2px);
-      background: var(--plaster);
+      background: var(--shell);
     }
     .key:hover .key__led {
       background: var(--lime);

@@ -66,12 +66,13 @@ const other = lang === 'fa' ? 'en' : 'fa';
 </header>
 
 <style>
+  /* the bezel: the bar is printed on the plastic, closed by a hairline */
   .bar {
     position: sticky;
     inset-block-start: 0;
     z-index: 40;
-    background: var(--plaster);
-    border-block-end: 1px solid var(--rule-strong);
+    background: var(--shell);
+    border-block-end: 1px solid var(--shell-line);
   }
   .bar__inner {
     display: flex;
@@ -145,7 +146,7 @@ const other = lang === 'fa' ? 'en' : 'fa';
   .bar__nav a:hover {
     color: var(--ink);
   }
-  /* "you are here": a small lime bud under the word */
+  /* "you are here": a small LED under the word */
   .bar__nav a::after {
     content: '';
     position: absolute;
@@ -178,31 +179,44 @@ const other = lang === 'fa' ? 'en' : 'fa';
       margin-inline-start: var(--space-s);
     }
   }
+  /* the switches are small keys */
   .call,
   .tool {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    min-height: 40px;
+    min-height: 38px;
     min-width: 40px;
-    padding-inline: 0.6rem;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-sm);
+    padding-inline: 0.65rem;
+    border: 1px solid var(--shell-skirt);
+    border-radius: 7px;
+    background: var(--shell-lift);
     color: var(--ink);
     font-size: 0.86rem;
     text-decoration: none;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 2px 0 var(--shell-skirt);
     transition:
-      border-color var(--dur-hover) var(--ease-out),
+      translate var(--dur-press) var(--ease-out),
+      box-shadow var(--dur-press) var(--ease-out),
       background-color var(--dur-hover) var(--ease-out);
   }
-  .call:hover,
-  .tool:hover {
-    border-color: var(--rule-strong);
-    background: var(--plaster-deep);
+  @media (hover: hover) and (pointer: fine) {
+    .call:hover,
+    .tool:hover {
+      background: var(--shell);
+    }
+  }
+  .call:active,
+  .tool:active {
+    translate: 0 2px;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 0 0 var(--shell-skirt);
   }
   .call {
-    border-color: var(--rule-strong);
     font-weight: 600;
   }
   .call__num {

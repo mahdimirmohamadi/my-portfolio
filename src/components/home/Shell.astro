@@ -1,0 +1,49 @@
+---
+/** The live terminal, given its own quiet corner: the note on one side, the shell on the other. */
+import type { Lang } from '../../i18n/ui';
+import { useT } from '../../i18n/utils';
+import SectionHead from '../ui/SectionHead.astro';
+import Terminal from './Terminal.astro';
+import Nix from '../art/Nix.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+<section class="section wrap shell" id="shell" aria-labelledby="shell-title">
+  <div class="shell__note">
+    <SectionHead title={t('term.title')} lead={t('term.lead')} id="shell-title" />
+    <Nix mood="type" size={170} class="shell__nix" />
+  </div>
+  <div class="shell__screen">
+    <Terminal lang={lang} />
+  </div>
+</section>
+
+<style>
+  .shell__screen {
+    display: grid;
+    gap: var(--space-s);
+    min-width: 0;
+  }
+  .shell__note :global(.shell__nix) {
+    display: none;
+  }
+  @media (min-width: 960px) {
+    .shell__note :global(.shell__nix) {
+      display: block;
+      margin-block-start: var(--space-m);
+    }
+  }
+  @media (min-width: 960px) {
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+  }
+</style>

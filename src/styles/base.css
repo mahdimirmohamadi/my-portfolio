@@ -55,7 +55,7 @@
     color: var(--text);
     font-family: var(--ff-body);
     line-height: var(--lh-body);
-    scrollbar-color: var(--rule) var(--bg);
+    scrollbar-color: var(--shell-skirt) var(--bg);
     /* anchors land just under the sticky navbar (60px) */
     scroll-padding-block-start: 72px;
   }
@@ -126,9 +126,9 @@
   }
 
   :not(pre) > code {
-    background: var(--surface-2);
-    border: 1px solid var(--edge-soft);
-    border-radius: 6px;
+    background: var(--shell-deep);
+    border: 1px solid var(--shell-line);
+    border-radius: 5px;
     padding: 0.08em 0.4em;
     font-size: 0.86em;
     unicode-bidi: isolate;
@@ -138,10 +138,12 @@
   kbd {
     display: inline-block;
     padding: 0.05em 0.45em;
-    border: 1.5px solid var(--edge);
-    border-bottom-width: 3px;
+    border: 1px solid var(--shell-skirt);
     border-radius: 6px;
-    background: var(--surface);
+    background: var(--shell-lift);
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 2px 0 var(--shell-skirt);
     font-size: 0.82em;
   }
 
@@ -197,17 +199,19 @@
     line-height: 1.45;
     color: var(--text-soft);
     padding-inline-start: var(--space-m);
-    border-inline-start: 1px solid var(--rule-strong);
+    border-inline-start: 1px solid var(--shell-skirt);
   }
 
   .prose img {
-    border: var(--bw) solid var(--edge);
+    border: 1px solid var(--shell-skirt);
     border-radius: var(--radius);
   }
+  /* code is read on glass */
   .prose pre {
     padding: var(--space-s) var(--space-m);
-    border: 1px solid var(--rule);
+    border: 1px solid var(--shell-skirt);
     border-radius: var(--radius);
+    box-shadow: inset 0 0 0 1px var(--glass-line);
     overflow-x: auto;
     direction: ltr;
     text-align: left;
@@ -225,7 +229,7 @@
     text-align: start;
   }
   .prose th {
-    background: var(--surface-2);
+    background: var(--shell-deep);
     font-family: var(--ff-mono);
     font-weight: 600;
   }

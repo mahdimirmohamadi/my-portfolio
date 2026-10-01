@@ -1,10 +1,10 @@
-# Ma: mahdimirmo.ir
+# mahdimirmo.ir
 
-Mahdi MirMohamadi's portfolio as one quiet alcove: his photo hangs like a scroll that unrolls when you arrive, and Nix (the mascot, also the logo and favicon) powers on beside it, greets you in a speech bubble and reacts to whatever you hover: he picks up the phone, holds the CV, points at the photo, dozes off if you idle, and panics if you shake the mouse. Below it: experience as a timeline, projects as real screenshots, an animated loop of how AI changed his workflow, skills with logos, a live terminal, the blog and "Get in touch" with the phone number and email set large. A resume picker (EN or FA) opens from any "Download my resume". English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
+Mahdi MirMohamadi's portfolio. The first thing you see is his story as a git tree that grows from the root: `git init: born. hello world!` at the root, a branch for studying Mechatronics that merges back when he graduated, a branch off it for Armani English, a branch for InnoLearn, all growing up into a large portrait of him, with Nix (the mascot, also the logo and favicon) standing in the corner beside it. Every commit message links to that part of his experience, and hovering one lights its branch. Beside the tree: who Mahdi is, the phone number, the email, the resume. Below: experience as a timeline with lime LEDs, the shipped sites inside small dark screens, an animated loop of how AI changed his workflow, a keycap toolbox, skills as keycaps, a live terminal, the blog, and then the whole width goes to glass for "Get in touch", with the phone number and the email lit in phosphor. A resume picker (EN or FA) opens from any "Download my resume". English lives at `/` and Persian (RTL) at `/fa/`. Built with Astro and vanilla CSS, and fully static.
 
 The design system is written down in [DESIGN.md](DESIGN.md); product intent in [PRODUCT.md](PRODUCT.md).
 
-> The earlier Linux-desktop edition is kept on the `theme/workstation` branch. The first (manga) edition was removed; it survives only in git history.
+> Earlier editions: the Linux-desktop one is kept on the `theme/workstation` branch; the sage alcove ("Ma"), the beige "machine" and the first (manga) edition survive only in git history.
 
 ## Commands
 
@@ -45,7 +45,7 @@ src/
   layouts/BaseLayout.astro head, fonts, theme pre-paint, router, navbar, dock, resume picker
   components/
     chrome/                Navbar, Dock (phones), Footer, ResumeDialog
-    home/                  Hero, Work (timeline), Projects, AiNote (workflow loop), Skills, Shell/Terminal, BlogTeaser, Contact
+    home/                  Hero (the git graph), Work (timeline), Projects, AiNote (workflow loop), AiToolbox, Skills, Shell/Terminal, BlogTeaser, Contact (the glass close), MoreNerdy
     art/Nix.astro          the mascot (28 poses; see DESIGN.md)
     ui/                    Icon, Logo, Arrow, SectionHead, Window
   scripts/
@@ -56,7 +56,7 @@ scripts/                   build-time: nix.mjs + nix-sheets.mjs (cut the poses),
 
 ## Design rules
 
-See [DESIGN.md](DESIGN.md). In short: sage plaster, pine-grey ink, a bronze shelf, one lime accent for what is alive (buds, the primary action of a block, the current nav item). No shadows, gradients, eyebrows or card grids. Tool marks show their brand colour on hover. Motion is transform/opacity, and `prefers-reduced-motion` or `html[data-lite]` shows the final state. Logical properties everywhere, with `--dir` mirroring transforms in RTL.
+See [DESIGN.md](DESIGN.md). In short: sage plaster by day and a navy sky by night, molded plastic caps (a rim and a skirt) and dark glass screens (a hairline bezel), lime only where something is lit (the graph's buds, phosphor on glass, LEDs, the one primary action). No blur shadows, no colour gradients, no eyebrows, no card grids. Tool marks show their brand colour on hover. Motion is transform/opacity/stroke, one authored moment (the graph drawing itself), and `prefers-reduced-motion` or `html[data-lite]` shows the final state. Logical properties everywhere, with `--dir` mirroring transforms in RTL.
 
 ## Reserved: ~/lab (lofi radio + pomodoro)
 

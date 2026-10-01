@@ -1,13 +1,16 @@
 ---
 /**
- * The live terminal. Server-renders a static boot transcript (so it's never empty and
- * works without JS); scripts/terminal.ts takes over and makes it interactive.
+ * The live terminal, on the hero's monitor. Server-renders the boot (a neofetch of Mahdi, his
+ * photo where the distro logo goes) so the screen is never empty and works without JS;
+ * scripts/terminal.ts takes over and makes it interactive. The command keys sit under the
+ * screen, on the plastic, so the Hero places them.
  */
+import { Image } from 'astro:assets';
 import type { Lang } from '../../i18n/ui';
 import { useT, lp } from '../../i18n/utils';
-import Window from '../ui/Window.astro';
 import { person, fetch as facts, stack, aiTools, aiBuilt } from '../../data/profile';
 import { getProjects, getPosts, slugOf } from '../../lib/content';
+import original from '../../assets/photo/mahdi-original.png';
 
 interface Props {
   lang: Lang;
@@ -31,51 +34,97 @@ const data = {
   skills: stack.map((g) => [g.label.en.toLowerCase(), g.items.join(', ')]),
   ai: { tools: aiTools, built: aiBuilt.map((b) => `${b.title.en} (${b.where})`) },
 };
-const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo hire-me', 'clear'];
+const chips = ['help', 'projects', 'ai', 'skills', 'contact', 'sudo hire-me'];
 ---
 
-<Window title="zsh · mahdi@tehran" meta="80×24" class="term" id="terminal" data-term>
+<div class="term screen" id="terminal" data-term>
+  <div class="term__bar" aria-hidden="true">
+    <span>zsh · mahdi@tehran</span>
+    <span>80×24</span>
+  </div>
   <div class="term__screen" data-term-screen>
     <div class="term__log" role="log" aria-live="polite" data-term-log>
-      <p><span class="ps1">$</span> neofetch --short</p>
-      <p class="t-out"><b class="t-lime">mahdi</b>@<b class="t-lime">workstation</b></p>
-      <p class="t-out">ai-native software engineer · linux</p>
-      <p class="t-out t-dim">type <b class="t-amber">help</b> or tap a command below</p>
+      <p><span class="ps1">$</span> neofetch</p>
+      <div class="fetch">
+        <Image class="fetch__me" src={original} width={128} height={128} widths={[128, 256]} sizes="128px" format="webp" quality={80} alt={t('whoami.photo.real.alt')} loading="eager" fetchpriority="high" />
+        <dl class="fetch__facts">
+          <div class="fetch__host"><b class="t-lime">mahdi</b>@<b class="t-lime">workstation</b></div>
+          {
+            facts.map((f) => (
+              <div>
+                <dt>{f.k}</dt>
+                <dd dir={lang === 'fa' ? 'rtl' : 'ltr'}>{f.v[lang]}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <p class="t-dim">type <b class="t-amber">help</b>, or press a key under the screen</p>
     </div>
     <form class="term__prompt" data-term-form autocomplete="off">
       <label class="ps1" for="term-input">$</label>
-      <input id="term-input" class="term__input" data-term-input type="text" spellcheck="false" autocapitalize="off" enterkeyhint="send" aria-label={t('hero.term.label')} />
+      <span class="caret term__caret" aria-hidden="true"></span>
+      <input id="term-input" class="term__input" data-term-input type="text" spellcheck="false" autocapitalize="off" enterkeyhint="send" placeholder=" " aria-label={t('hero.term.label')} />
     </form>
   </div>
-  <div class="term-chips">
-    <span class="sr-only">{t('hero.term.hint')}</span>
-    {chips.map((c) => <button type="button" class="chip" data-term-run={c}>{c}</button>)}
-  </div>
+  <template data-term-neofetch>
+    <div class="fetch">
+      <Image class="fetch__me" src={original} width={128} height={128} format="webp" quality={80} alt="" loading="lazy" />
+      <dl class="fetch__facts">
+        <div class="fetch__host"><b class="t-lime">mahdi</b>@<b class="t-lime">workstation</b></div>
+        {
+          facts.map((f) => (
+            <div>
+              <dt>{f.k}</dt>
+              <dd dir={lang === 'fa' ? 'rtl' : 'ltr'}>{f.v[lang]}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </template>
   <script type="application/json" data-term-data set:html={JSON.stringify(data)} />
-</Window>
+</div>
+<div class="term-keys" role="group" aria-label={t('hero.term.hint')}>
+  {chips.map((c) => <button type="button" class="key-sm term-keys__key" data-term-run={c}>{c}</button>)}
+</div>
 
 <script>
   import '../../scripts/terminal';
 </script>
 
 <style>
-  :global(.term) {
+  .term {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    overflow: clip;
   }
-  :global(.term .win__body) {
+  /* the glass itself: faint raster lines, the one texture on the site (it is a CRT) */
+  .term::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: repeating-linear-gradient(0deg, transparent 0 3px, oklch(0 0 0 / 0.14) 3px 4px);
+  }
+  .term__bar {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-xs);
+    padding: 0.7rem var(--space-m) 0;
+    font-family: var(--ff-mono);
+    font-size: 0.74rem;
+    color: var(--on-glass-faint);
+    direction: ltr;
+  }
+  .term__screen {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0;
-    background: var(--plaster-lift);
-  }
-  .term__screen {
-    display: flex;
-    flex-direction: column;
-    max-height: 280px;
-    padding: var(--space-s) var(--space-m);
+    min-height: 0;
+    padding: var(--space-s) var(--space-m) var(--space-m);
     font-family: var(--ff-mono);
     font-size: 0.86rem;
     line-height: 1.65;
@@ -85,35 +134,86 @@ const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo 
   }
   .term__log {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
+    scrollbar-color: var(--glass-line) transparent;
   }
   .term__log :global(p) {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+    color: var(--on-glass);
   }
-  .term__log :global(.t-out) {
-    color: var(--text-soft);
+  .term__log :global(p.t-out) {
+    color: var(--on-glass-soft);
   }
-  .term__log :global(.t-dim) {
-    color: var(--text-faint);
+  .term__log :global(p.t-dim) {
+    color: var(--on-glass-faint);
   }
-  .term__log :global(.t-lime) {
-    color: var(--lime-ink);
+  .term__log :global(p.t-coral) {
+    color: var(--coral-lit);
+  }
+
+  /* neofetch: the photo where the logo goes, the facts beside it */
+  .term__log :global(.fetch) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.4rem 1.1rem;
+    align-items: start;
+    margin-block: 0.35rem 0.6rem;
+  }
+  .term__log :global(.fetch__me) {
+    width: clamp(88px, 22cqi, 128px);
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    object-position: 32% 30%;
+    border-radius: 8px;
+    border: 1px solid var(--glass-bezel);
+  }
+  .term__log :global(.fetch__facts) {
+    margin: 0;
+    min-width: 0;
+  }
+  .term__log :global(.fetch__facts > div) {
+    display: block;
+    color: var(--on-glass-soft);
+    overflow-wrap: anywhere;
+  }
+  .term__log :global(.fetch__facts :is(dt, dd)) {
+    display: inline;
+  }
+  .term__log :global(.fetch__host) {
+    color: var(--on-glass);
+    padding-block-end: 0.15rem;
+    margin-block-end: 0.15rem;
+    border-block-end: 1px dashed var(--glass-line);
+  }
+  .term__log :global(.fetch__facts dt) {
+    color: var(--phosphor-dim);
     font-weight: 600;
   }
-  .term__log :global(.t-amber) {
-    color: var(--amber);
-    font-weight: 600;
+  .term__log :global(.fetch__host .t-lime) {
+    text-shadow: 0 0 10px oklch(0.905 0.2 124 / 0.35);
   }
-  .term__log :global(.t-coral) {
-    color: var(--coral);
-    font-weight: 600;
+  .term__log :global(.fetch__facts dt::after) {
+    content: ': ';
   }
-  .term__log :global(a) {
-    color: var(--lime-ink);
+  .term__log :global(.fetch__facts dd) {
+    margin: 0;
+    color: var(--on-glass);
+    unicode-bidi: isolate;
   }
+  :global(:root[dir='rtl']) .term__log :global(.fetch__facts dd) {
+    font-family: var(--font-fa);
+  }
+  @media (max-width: 420px) {
+    .term__log :global(.fetch) {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .term__prompt {
     display: flex;
     align-items: center;
@@ -126,34 +226,37 @@ const chips = ['help', 'neofetch', 'projects', 'ai', 'skills', 'contact', 'sudo 
     background: transparent;
     border: 0;
     outline: none;
-    color: var(--text);
+    color: var(--on-glass);
     font: inherit;
-    caret-color: var(--lime);
+    caret-color: var(--phosphor);
     /* ≥16px on phones: iOS won't zoom the page when the input is focused */
     font-size: max(16px, 0.86rem);
   }
-  .term-chips {
+  /* a lit caret waits at rest; once you focus the prompt the real one takes over */
+  .term__caret {
+    pointer-events: none;
+  }
+  .term__prompt:focus-within .term__caret,
+  .term__prompt:has(.term__input:not(:placeholder-shown)) .term__caret {
+    display: none;
+  }
+
+  /* the command keys, on the plastic under the screen */
+  .term-keys {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    padding: 0.6rem var(--space-m) 0.75rem;
-    border-block-start: 1px solid var(--rule);
+    gap: 0.45rem;
     direction: ltr;
   }
-  .term-chips .chip {
-    min-height: 36px;
+  .term-keys__key {
     font-family: var(--ff-mono);
-    cursor: pointer;
-    transition:
-      border-color var(--dur-hover) var(--ease-out),
-      color var(--dur-hover) var(--ease-out),
-      scale var(--dur-press) var(--ease-out);
+    font-size: 0.8rem;
+    min-height: 34px;
   }
-  .term-chips .chip:hover {
-    border-color: var(--lime-ink);
-    color: var(--lime-ink);
-  }
-  .term-chips .chip:active {
-    scale: 0.95;
+  @media (hover: hover) and (pointer: fine) {
+    .term-keys__key:hover {
+      color: var(--lime-ink);
+      background: var(--shell);
+    }
   }
 </style>
