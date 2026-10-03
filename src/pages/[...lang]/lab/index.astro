@@ -1,0 +1,256 @@
+---
+// ~/lab: small tools, each a device on the shelf. The pomodoro timer is lit and opens; the lofi
+// radio waits, unlit, with a "soon" sticker.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nix from '../../../components/art/Nix.astro';
+import Arrow from '../../../components/ui/Arrow.astro';
+import { langPaths, langFromParam, useT, lp } from '../../../i18n/utils';
+
+export const getStaticPaths = langPaths;
+const lang = langFromParam(Astro.params.lang);
+const t = useT(lang);
+---
+
+<BaseLayout lang={lang} title={t('lab.title')} description={t('lab.lead')}>
+  <section class="lab wrap" aria-labelledby="lab-title">
+    <header class="lab__head">
+      <div>
+        <h1 id="lab-title" class="lab__title">{t('lab.title')}</h1>
+        <p class="lab__lead">{t('lab.lead')}</p>
+      </div>
+      <Nix mood="music" size={120} class="lab__nix" eager />
+    </header>
+
+    <ul class="shelf" role="list">
+      <li>
+        <a
+          class="device device--on"
+          href={lp(lang, '/lab/pomodoro')}
+          data-lab-hint
+          data-lang={lang}
+          data-none={t('lab.hint.none')}
+          data-running={t('lab.hint.running')}
+          data-paused={t('lab.hint.paused')}
+          data-one={t('pomo.n.one')}
+          data-other={t('pomo.n.other')}
+        >
+          <span class="device__top">
+            <span class="device__led" aria-hidden="true"></span>
+            <span class="device__screen" aria-hidden="true">
+              <span class="device__digits" data-lab-digits>25:00</span>
+            </span>
+          </span>
+          <span class="device__name">{t('lab.pomo.title')}<Arrow /></span>
+          <span class="device__body">{t('lab.pomo.body')}</span>
+          <span class="device__hint caption" data-lab-text>{t('lab.hint.none')}</span>
+        </a>
+      </li>
+      <li>
+        <div class="device device--off" aria-disabled="true">
+          <span class="device__top">
+            <span class="device__led" aria-hidden="true"></span>
+            <span class="device__screen" aria-hidden="true">
+              <span class="device__wave"></span>
+            </span>
+          </span>
+          <span class="device__name">{t('lab.radio.title')} <span class="sticker">{t('lab.soon')}</span></span>
+          <span class="device__body">{t('lab.radio.body')}</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+</BaseLayout>
+
+<script>
+  // the pomodoro device shows what it's doing: the live time, or today's count
+  import { load, subscribe } from '../../../lib/pomodoro/store';
+  import { leftOf, mmss } from '../../../lib/pomodoro/engine';
+  import { startOfDay } from '../../../lib/pomodoro/calendar';
+
+  let tick: ReturnType<typeof setInterval> | undefined;
+
+  function paint() {
+    const el = document.querySelector<HTMLElement>('[data-lab-hint]');
+    if (!el) return;
+    const lang = el.dataset.lang === 'fa' ? 'fa' : 'en';
+    const d = load();
+    const t = d.timer;
+    const digits = el.querySelector('[data-lab-digits]');
+    const text = el.querySelector('[data-lab-text]');
+    if (digits) digits.textContent = mmss(leftOf(t), lang);
+    if (!text) return;
+    if (t.status !== 'idle') {
+      text.textContent = `${t.status === 'running' ? el.dataset.running : el.dataset.paused} · ${mmss(leftOf(t), lang)}`;
+      return;
+    }
+    const from = startOfDay(Date.now());
+    const n = d.sessions.filter((s) => s.status === 'done' && s.end >= from).length;
+    const nf = new Intl.NumberFormat(lang === 'fa' ? 'fa-IR' : 'en');
+    const form = new Intl.PluralRules(lang).select(n) === 'one' ? el.dataset.one : el.dataset.other;
+    text.textContent = n ? (form ?? '').replace('{n}', nf.format(n)) : (el.dataset.none ?? '');
+  }
+
+  function run() {
+    clearInterval(tick);
+    if (!document.querySelector('[data-lab-hint]')) return;
+    paint();
+    tick = setInterval(paint, 1000);
+  }
+
+  subscribe(paint);
+  document.addEventListener('astro:page-load', run);
+</script>
+
+<style>
+  .lab {
+    display: grid;
+    gap: var(--space-l);
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+  .lab__head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-m);
+  }
+  .lab__title {
+    font-family: var(--ff-display);
+    font-size: var(--step-4);
+    line-height: 1;
+  }
+  .lab__lead {
+    margin-block-start: var(--space-s);
+    max-width: 52ch;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+  .lab :global(.lab__nix) {
+    width: clamp(84px, 9vw, 120px);
+  }
+
+  /* the shelf: two devices side by side, not a card grid */
+  .shelf {
+    display: grid;
+    gap: var(--space-m);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 760px) {
+    .shelf {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .device {
+    display: grid;
+    gap: var(--space-xs);
+    height: 100%;
+    padding: var(--space-m);
+    border: 1px solid var(--shell-skirt);
+    border-radius: var(--radius-screen);
+    background: var(--shell-lift);
+    color: var(--ink);
+    text-decoration: none;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 var(--skirt) 0 var(--shell-skirt);
+  }
+  a.device {
+    transition:
+      translate var(--dur-press) var(--ease-out),
+      box-shadow var(--dur-press) var(--ease-out),
+      background-color var(--dur-hover) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    a.device:hover {
+      background: var(--shell);
+    }
+    a.device:hover :global(svg) {
+      translate: calc(4px * var(--dir)) 0;
+    }
+  }
+  a.device:active {
+    translate: 0 2px;
+    box-shadow:
+      inset 0 1px 0 var(--shell-rim),
+      0 1px 0 var(--shell-skirt);
+  }
+  .device__top {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    margin-block-end: var(--space-2xs);
+  }
+  .device__led {
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    background: var(--lime);
+  }
+  .device--off .device__led {
+    background: transparent;
+    border-color: var(--ink-faint);
+  }
+  .device__screen {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-height: 74px;
+    padding-inline: var(--space-s);
+    border-radius: var(--radius);
+    background: var(--glass);
+    box-shadow: inset 0 0 0 1px var(--glass-line);
+  }
+  .device__digits {
+    font-family: var(--ff-mono), var(--font-fa);
+    font-weight: 600;
+    font-size: var(--step-3);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--phosphor);
+    direction: ltr;
+  }
+  /* the radio's screen is dark: a flat line where the signal will be */
+  .device__wave {
+    flex: 1;
+    height: 2px;
+    border-radius: var(--radius-pill);
+    background: var(--glass-bezel);
+  }
+  .device__name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--ff-display);
+    font-size: var(--step-2);
+    line-height: 1.15;
+  }
+  :global(:root[dir='rtl']) .device__name {
+    font-weight: 800;
+  }
+  .device__name :global(svg) {
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  :global(:root[dir='rtl']) .device__name :global(svg.arrow) {
+    scale: -1 1;
+  }
+  .device__body {
+    max-width: 44ch;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+  .device--off .device__name,
+  .device--off .device__body {
+    color: var(--ink-faint);
+  }
+  .device__hint {
+    color: var(--lime-ink);
+    font-weight: 600;
+  }
+  :global(:root[dir='rtl']) .device__hint {
+    font-family: var(--font-fa);
+  }
+</style>

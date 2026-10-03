@@ -58,6 +58,6 @@ scripts/                   build-time: nix.mjs + nix-sheets.mjs (cut the poses),
 
 See [DESIGN.md](DESIGN.md). In short: sage plaster by day and a navy sky by night, molded plastic caps (a rim and a skirt) and dark glass screens (a hairline bezel), lime only where something is lit (the graph's buds, phosphor on glass, LEDs, the one primary action). No blur shadows, no colour gradients, no eyebrows, no card grids. Tool marks show their brand colour on hover. Motion is transform/opacity/stroke, one authored moment (the graph drawing itself), and `prefers-reduced-motion` or `html[data-lite]` shows the final state. Logical properties everywhere, with `--dir` mirroring transforms in RTL.
 
-## Reserved: ~/lab (lofi radio + pomodoro)
+## ~/lab (pomodoro now, lofi radio later)
 
-`/lab` is a placeholder. The dock will mount in `BaseLayout`'s `dock` slot as a React island (`client:idle transition:persist="lab-dock"`), so it keeps playing between pages.
+`/lab` is the hub: a pomodoro timer at `/lab/pomodoro` and a "soon" lofi radio. The agreed spec is [docs/pomodoro.md](docs/pomodoro.md). The timer is solo and kept in the visitor's browser; a finished focus session shows a random anime image from `src/assets/anime/`. Its mini-timer mounts in `BaseLayout`'s persistent `dock` slot as a React island (`client:idle transition:persist="lab-dock"`), so it keeps running between pages.

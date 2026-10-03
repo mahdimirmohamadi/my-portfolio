@@ -1,0 +1,217 @@
+---
+/**
+ * The pomodoro's mini-timer: a small glass cap that follows the visitor around the site while a
+ * session runs or is paused (hidden on the timer's own page). It also loads the clock itself
+ * (src/lib/pomodoro/engine.ts), so phases end and chime on any page. Lives in BaseLayout's
+ * persistent dock slot, so it survives page turns.
+ */
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const page = lp(lang, '/lab/pomodoro');
+---
+
+<div
+  class="mini"
+  data-mini
+  data-pomo-strings
+  data-page={page}
+  data-lang={lang}
+  data-note-focus={t('pomo.note.focus')}
+  data-note-break={t('pomo.note.break')}
+  data-ph-focus={t('pomo.phase.focus')}
+  data-ph-short={t('pomo.phase.short')}
+  data-ph-long={t('pomo.phase.long')}
+  data-paused={t('pomo.paused')}
+  data-pause={t('pomo.pause')}
+  data-resume={t('pomo.resume')}
+  data-cat-study={t('pomo.cat.study')}
+  data-cat-work={t('pomo.cat.work')}
+  data-cat-code={t('pomo.cat.code')}
+  data-cat-reading={t('pomo.cat.reading')}
+  data-cat-none={t('pomo.cat.none')}
+  hidden
+>
+  <a class="mini__open" href={page} aria-label={t('pomo.mini.open')}>
+    <span class="mini__led" aria-hidden="true"></span>
+    <span class="mini__text">
+      <span class="mini__time" data-mini-time>25:00</span>
+      <span class="mini__meta" data-mini-meta></span>
+    </span>
+  </a>
+  <button class="mini__key" type="button" data-mini-toggle>
+    <svg class="mini__pause" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3v10M11 3v10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path></svg>
+    <svg class="mini__play" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3.2v9.6L12.6 8z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"></path></svg>
+  </button>
+</div>
+
+<script>
+  import { initEngine, pause, resume, leftOf, mmss } from '../../lib/pomodoro/engine';
+  import { load, subscribe } from '../../lib/pomodoro/store';
+
+  initEngine();
+
+  let tick: ReturnType<typeof setInterval> | undefined;
+  const el = () => document.querySelector<HTMLElement>('[data-mini]');
+
+  function catName(id: string | null, box: HTMLElement) {
+    const d = load();
+    const c = d.categories.find((c) => c.id === id);
+    if (!c) return box.dataset.catNone ?? '';
+    return c.name || box.dataset[`cat${c.id[0].toUpperCase()}${c.id.slice(1)}`] || c.id;
+  }
+
+  function render() {
+    const box = el();
+    if (!box) return;
+    const d = load();
+    const t = d.timer;
+    const onPage = location.pathname.replace(/\/$/, '') === (box.dataset.page ?? '').replace(/\/$/, '');
+    const show = t.status !== 'idle' && !onPage;
+    box.hidden = !show;
+    clearInterval(tick);
+    if (!show) return;
+    const lang = box.dataset.lang === 'fa' ? 'fa' : 'en';
+    const paint = () => {
+      const time = box.querySelector('[data-mini-time]');
+      if (time) time.textContent = mmss(leftOf(load().timer), lang);
+    };
+    paint();
+    if (t.status === 'running') tick = setInterval(paint, 1000);
+    const phase = box.dataset[t.phase === 'focus' ? 'phFocus' : t.phase === 'short' ? 'phShort' : 'phLong'] ?? '';
+    const meta = box.querySelector('[data-mini-meta]');
+    if (meta) meta.textContent = t.status === 'paused' ? `${phase} · ${box.dataset.paused}` : t.phase === 'focus' ? `${phase} · ${catName(t.category, box)}` : phase;
+    box.dataset.status = t.status;
+    box.dataset.phase = t.phase;
+    const key = box.querySelector<HTMLButtonElement>('[data-mini-toggle]');
+    if (key) key.setAttribute('aria-label', (t.status === 'running' ? box.dataset.pause : box.dataset.resume) ?? '');
+  }
+
+  document.addEventListener('click', (ev) => {
+    const key = (ev.target as Element | null)?.closest('[data-mini-toggle]');
+    if (!key) return;
+    if (load().timer.status === 'running') pause();
+    else resume();
+  });
+  subscribe(render);
+  document.addEventListener('astro:page-load', render);
+  render();
+</script>
+
+<style>
+  /* a small glass cap, bottom inline-end; above the phone dock */
+  .mini {
+    position: fixed;
+    inset-inline-end: 10px;
+    inset-block-end: calc(84px + env(safe-area-inset-bottom));
+    z-index: 49;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px;
+    border: 1px solid var(--glass-deep);
+    border-radius: var(--radius);
+    background: var(--glass);
+    color: var(--on-glass);
+    box-shadow:
+      inset 0 1px 0 var(--glass-bezel),
+      0 var(--skirt) 0 var(--glass-deep);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html:not([data-lite])) .mini {
+      animation: fade-in var(--dur-ui) var(--ease-out);
+    }
+  }
+  .mini[hidden] {
+    display: none;
+  }
+  @media (min-width: 900px) {
+    .mini {
+      inset-inline-end: 18px;
+      inset-block-end: 18px;
+    }
+  }
+  .mini__open {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding-inline: 8px 10px;
+    border-radius: var(--radius-sm);
+    color: inherit;
+    text-decoration: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .mini__open:hover {
+      background: var(--glass-deep);
+    }
+  }
+  .mini__led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--phosphor);
+    border: 1.5px solid var(--glass-deep);
+  }
+  .mini[data-status='paused'] .mini__led {
+    background: transparent;
+    border-color: var(--on-glass-faint);
+  }
+  .mini__text {
+    display: grid;
+    line-height: 1.15;
+  }
+  .mini__time {
+    font-family: var(--ff-mono), var(--font-fa);
+    font-weight: 600;
+    font-size: 1.05rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--phosphor);
+    direction: ltr;
+    text-align: start;
+  }
+  .mini[data-status='paused'] .mini__time {
+    color: var(--on-glass-soft);
+  }
+  .mini__meta {
+    max-width: 16ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    color: var(--on-glass-faint);
+  }
+  .mini__key {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--glass-bezel);
+    border-radius: 7px;
+    background: transparent;
+    color: var(--on-glass);
+    cursor: pointer;
+    box-shadow: 0 2px 0 var(--glass-deep);
+    transition:
+      translate var(--dur-press) var(--ease-out),
+      box-shadow var(--dur-press) var(--ease-out);
+  }
+  .mini__key:active {
+    translate: 0 2px;
+    box-shadow: 0 0 0 var(--glass-deep);
+  }
+  .mini__play {
+    display: none;
+  }
+  .mini[data-status='paused'] .mini__play {
+    display: block;
+  }
+  .mini[data-status='paused'] .mini__pause {
+    display: none;
+  }
+</style>

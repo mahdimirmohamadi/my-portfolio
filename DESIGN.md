@@ -301,7 +301,7 @@ A sage plaster ground with pine-grey ink, dark green-black glass for the screens
 
 ### Tertiary
 - **Coral** (coral, coral-lit): Nix's tail. Errors and "draft" only: terminal error output (`.t-coral`), the 404 code, draft stickers. Coral-lit is its form on glass and at night. Never decorative.
-- **Amber** (amber): the terminal's `help` hint and role words, the lab's caption. On glass and at night it brightens to `oklch(0.8 0.13 72)`. A secondary terminal ink, not a UI accent.
+- **Amber** (amber): the terminal's `help` hint and role words. On glass and at night it brightens to `oklch(0.8 0.13 72)`. A secondary terminal ink, not a UI accent.
 
 ### Neutral
 - **Sage Plaster** (shell): the page ground and the navbar bezel; also a cap's hover state and the fill of a hollow commit.
@@ -395,7 +395,7 @@ Molded, not square. Caps and buttons take 10px corners; small keys (command keys
 ### Buttons
 Caps, molded and pressable; lime is spent only on the action that matters.
 - **Shape:** 10px corners, 1px border, min-height 50px, padding 0.6em 1.35em, Geist 600 at 0.98rem.
-- **Primary on plastic** (`.btn`): a small glass cap with a lit label: glass fill, glass-deep border and 3px skirt, a glass-bezel rim, phosphor text, a trailing arrow or a leading icon. One per block: "My experience" in the hero, "Home" on the 404, "Back" on the lab, the URL on the social card. Hover deepens the glass; the arrow leans 4px forward (mirrored by `--dir`).
+- **Primary on plastic** (`.btn`): a small glass cap with a lit label: glass fill, glass-deep border and 3px skirt, a glass-bezel rim, phosphor text, a trailing arrow or a leading icon. One per block: "My experience" in the hero, "Home" on the 404, "Start" on the pomodoro timer, the URL on the social card. Hover deepens the glass; the arrow leans 4px forward (mirrored by `--dir`).
 - **Ghost** (`.btn--ghost`): a plain cap: shell-lift fill, shell-skirt border and skirt, shell-rim highlight, ink text. Hover goes to shell. The partner action: "My blog", the resume ticket.
 - **Lit** (`.btn--lit`): on glass, the one action that matters is a lime LED cap: lime fill, lime-ink border, a brighter rim and a deeper lime skirt, seed-ink label. "Call me!" in the close. Hover brightens to oklch(0.93 0.2 124).
 - **Glass** (`.btn--glass`): on glass, the partner: transparent, glass-bezel border and rim, glass-deep skirt, bone text. "Email me" in the close, the Persian link on the 404.
@@ -454,7 +454,8 @@ A raster character cut with real alpha from the owner's generated sheets: sheet 
 - paper plane: "Want more nerdy stuff?"; call / mail: the phone and email lines in the close (mirrored by `--dir`)
 - waving: beside "Say hi.", MDX `<Nix>` asides; cv: the resume picker
 - waving (`happy`), small and still: the hero's corner beside the portrait (see The Git Tree)
-- bye (suitcase): the footer; headphones (`music`): the lab; magnifier (`search`): the 404
+- bye (suitcase): the footer; headphones (`music`): the lab hub; magnifier (`search`): the 404
+- the pomodoro timer: the one place Nix changes pose, because the pose *is* the timer's state (desk ready, type in focus, think paused, tea on a short break, sleep on a long one, thumbs beside the reward), a 150ms opacity crossfade, nothing else (see ~/lab)
 Directional poses mirror with `var(--dir)` so they keep facing what they point at. Always decorative (empty alt). By day on plastic he sits directly on the shell. On glass (any `.on-glass` container: the close) his cut line `--nix-cut` is faint bone, and at night it is rule-strong, so his black outline never dissolves into the dark; the cut is four 1px 0-blur drop-shadows, a sticker's edge. His own colours are part of the character, not the page palette, and never leak into UI.
 
 ### Browser frame (projects)
@@ -480,6 +481,11 @@ Where the technical posts live, set like a chat list inside a large cap (shell-l
 
 ### Resume picker
 A native `<dialog>` cap (shell-lift, shell-skirt border, 14px, rim and 3px skirt; backdrop oklch(0.15 0.01 100 / 0.55)) opened by any `[data-resume]`. Nix (124px, mirrored by `--dir` so he holds the CV toward his bubble) stands on its top edge with a speech bubble ("Pick one. I'll fetch it!"), then the question at step-2 and two 64px choice caps (file icon, language at 1.1rem 600, `PDF` mono meta, download icon) that become lit caps on hover (lime fill, seed-ink text, the lit rim and skirt). It rises 14px and fades in (220-320ms ease-out, `@starting-style`), Nix hops in a beat later (480ms from 90ms: scale 0.4 and a -10° turn, ease-out) and the bubble follows at 380ms; it closes in 160ms on Esc, the close button, the backdrop or a choice.
+
+### ~/lab
+`/lab` is a shelf of two devices side by side (plastic caps at 14px corners, not a card grid), each with a 10px LED and a small glass screen: the **pomodoro timer** is lit, the whole device a link, its screen showing the live time in phosphor mono (step-3) and a lime-ink caption with today's count or `running · mm:ss`; the **lofi radio** is unlit (hollow LED, faint text, a flat glass-bezel line on its screen) with a `soon` sticker. Nix (`music`) stands at the header's inline-end.
+
+`/lab/pomodoro` (a React island, client-only; spec in `docs/pomodoro.md`) is minimal on purpose (the owner found the first, everything-visible version complicated): one centred 42rem column whose only container is the timer device. Its glass screen carries the phase and an LED in its bar (lit while running; no round counter, which read as a second, conflicting count beside the goal dots), the time in Geist Mono 600 at `--step-clock` (`clamp(4.2rem, 2.4rem + 8vw, 8.5rem)`, the one display bigger than a title) in phosphor with the bloom while running, bone while idle, soft and blinking while paused, a 3px lit hairline for the elapsed time, and today as a row of 9px dots (phosphor when finished, a phosphor ring for the one in flight, glass-bezel rings for the rest of the goal) with "3 of 8 today". After a finished focus the reward image (any file in `src/assets/anime/`, shuffled, no caption) takes the clock's place, contained on glass-deep. Under the screen: one recess holding the category select and the topic field side by side, then the primary glass cap (Start / Pause / Resume / Start break) with a plain cap beside it only when it applies (Stop in a focus, Skip break in a break), and a faint line about closing the tab. Nix stands on the device's top edge at the inline-end and changes pose with the phase. Everything else waits under two plain caps (46px), **History** and **Settings**, that open one drawer at a time (a plastic panel whose sections are divided by rules, never boxed): History holds this week in one line plus ink bars per category, the year as a heatmap of 12px squares (shell-deep when empty, lime at 32/55/80/100% with a lime-ink edge when lit, today ringed in ink; Monday-first Gregorian in English, Saturday-first Jalali in Persian) and the sessions grouped by day, ten at a time, each row with one Edit key (Delete lives inside the edit form and asks first); Settings holds the lengths (presets as small keys that stay pressed, number recesses, switches as small keys with an LED), the categories (one Edit key per row, same pattern) and the data (the hint, export, import, clear). While a session runs, the **mini-timer** (`MiniTimer.astro`) follows the visitor across the site: a small glass cap at the bottom inline-end (above the phone dock) with the LED, the time in phosphor mono and a pause key.
 
 ### Desk edge
 A full-bleed 14px bar of shell-skirt with a 2px shell-rim along its top and a 1px darker line along its bottom (`oklch(0.62 0.04 84)` by day, `oklch(0.08 0.01 85)` at night). It is the only heavy horizontal in the system: it closes the hero viewport and the page above the footer, and nowhere else. (`.shelf-rule`, 10px with 3px corners, is kept only for old call sites.)

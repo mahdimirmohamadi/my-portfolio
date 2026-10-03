@@ -20,11 +20,11 @@ export default defineConfig({
 
   integrations: [
     mdx(),
-    // wired for the future ~/lab dock (lofi radio + pomodoro); nothing ships React today
+    // the ~/lab pomodoro timer is a React island (only /lab/pomodoro loads it)
     react(),
     sitemap({
       i18n: { defaultLocale: 'en', locales: { en: 'en', fa: 'fa-IR' } },
-      filter: (page) => !page.includes('/lab') && !page.includes('/og-card'),
+      filter: (page) => !page.includes('/og-card'),
     }),
   ],
 
