@@ -1,0 +1,58 @@
+---
+import type { Lang } from '../../i18n/ui';
+import { useT, lp } from '../../i18n/utils';
+import { tracks, layers } from '../../lib/radio/catalog';
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const t = useT(lang);
+const titles = Object.fromEntries(tracks.map(track => [track.id, t(`radio.track.${track.id}` as Parameters<typeof t>[0])]));
+const layerTitles = Object.fromEntries(layers.map(id => [id, t(`radio.layer.${id}`)]));
+---
+<div class="mini-radio" data-mini-radio data-track-titles={JSON.stringify(titles)} data-layer-titles={JSON.stringify(layerTitles)} data-sounds={t('radio.soundsOnly')} data-href={lp(lang, '/lab/lofi-radio')} data-play={t('radio.play')} data-pause={t('radio.pause')} hidden>
+  <a href={lp(lang, '/lab/lofi-radio')} aria-label={t('radio.mini')}><span class="mini-radio__led" aria-hidden="true"></span><span data-radio-track></span></a>
+  <button type="button" data-radio-toggle aria-label={t('radio.pause')}>
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path data-radio-icon d="M8 5v14M16 5v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+  </button>
+  <button type="button" data-radio-close aria-label={t('radio.dismiss')}>
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path></svg>
+  </button>
+</div>
+<script>
+  import { snapshot, subscribe, currentTrack, toggleRadio, pauseRadio } from '../../lib/radio/engine';
+  let dismissed = false;
+  function paint() {
+    const box = document.querySelector<HTMLElement>('[data-mini-radio]');
+    if (!box) return;
+    const s = snapshot();
+    if (s.playing) dismissed = false;
+    const onPage = location.pathname.replace(/\/$/, '') === box.dataset.href;
+    box.hidden = onPage || dismissed || (!s.playing && !s.started);
+    box.dataset.playing = String(s.playing);
+    const text = box.querySelector('[data-radio-track]');
+    const track = currentTrack();
+    const titles = JSON.parse(box.dataset.trackTitles ?? '{}') as Record<string, string>;
+    const layerTitles = JSON.parse(box.dataset.layerTitles ?? '{}') as Record<string, string>;
+    if (text) text.textContent = s.mix.musicEnabled ? (track.genre === 'custom' ? track.title : titles[track.id] ?? track.title) : Object.entries(s.mix.layers).filter(([, value]) => value > 0).map(([id]) => layerTitles[id]).join(' + ') || box.dataset.sounds || '';
+    const toggle = box.querySelector<HTMLButtonElement>('[data-radio-toggle]');
+    if (toggle) toggle.setAttribute('aria-label', (s.playing ? box.dataset.pause : box.dataset.play) ?? '');
+    box.querySelector('[data-radio-icon]')?.setAttribute('d', s.playing ? 'M8 5v14M16 5v14' : 'M8 5v14l11-7z');
+  }
+  subscribe(paint);
+  document.addEventListener('astro:page-load', paint);
+  document.addEventListener('click', e => {
+    const el = e.target instanceof Element ? e.target : null;
+    if (el?.closest('[data-radio-toggle]')) toggleRadio();
+    if (el?.closest('[data-radio-close]')) { pauseRadio(); dismissed = true; paint(); }
+  });
+</script>
+<style>
+  .mini-radio { position: fixed; z-index: 70; inset-inline-start: var(--page-gutter); inset-block-end: 20px; display: flex; align-items: center; padding: var(--space-3xs); gap: var(--space-3xs); max-width: min(360px, calc(100vw - 36px)); color: var(--on-glass); background: var(--glass); border: 1px solid var(--glass-bezel); border-radius: var(--radius); box-shadow: inset 0 1px 0 var(--glass-line), 0 3px 0 var(--glass-deep); }
+  .mini-radio[hidden] { display: none; }
+  .mini-radio a { display: flex; align-items: center; gap: var(--space-xs); min-width: 0; min-height: 44px; padding-inline: var(--space-xs); color: var(--on-glass); text-decoration: none; }
+  .mini-radio [data-radio-track] { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--step--1); }
+  .mini-radio__led { flex: none; width: 8px; height: 8px; border: 1px solid var(--on-glass-soft); border-radius: 50%; }
+  .mini-radio[data-playing='true'] .mini-radio__led { background: var(--lime); }
+  .mini-radio button { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border: 1px solid var(--glass-line); border-radius: var(--radius-sm); cursor: pointer; }
+  .mini-radio button:hover { background: var(--glass-deep); }
+  @media (max-width: 899px) { .mini-radio { inset-block-end: 142px; } }
+</style>

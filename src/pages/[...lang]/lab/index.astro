@@ -1,6 +1,5 @@
 ---
-// ~/lab: small tools, each a device on the shelf. The pomodoro timer is lit and opens; the lofi
-// radio waits, unlit, with a "soon" sticker.
+// ~/lab: small tools, each a working device on the shelf.
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Nix from '../../../components/art/Nix.astro';
 import Arrow from '../../../components/ui/Arrow.astro';
@@ -46,16 +45,17 @@ const t = useT(lang);
         </a>
       </li>
       <li>
-        <div class="device device--off" aria-disabled="true">
+        <a class="device device--on" href={lp(lang, '/lab/lofi-radio')}>
           <span class="device__top">
             <span class="device__led" aria-hidden="true"></span>
             <span class="device__screen" aria-hidden="true">
               <span class="device__wave"></span>
             </span>
           </span>
-          <span class="device__name">{t('lab.radio.title')} <span class="sticker">{t('lab.soon')}</span></span>
+          <span class="device__name">{t('lab.radio.title')}<Arrow /></span>
           <span class="device__body">{t('lab.radio.body')}</span>
-        </div>
+          <span class="device__hint caption">{t('radio.originals')}</span>
+        </a>
       </li>
     </ul>
   </section>
@@ -213,12 +213,12 @@ const t = useT(lang);
     color: var(--phosphor);
     direction: ltr;
   }
-  /* the radio's screen is dark: a flat line where the signal will be */
+  /* the radio's waveform, lit on the shelf */
   .device__wave {
     flex: 1;
-    height: 2px;
+    height: 3px;
     border-radius: var(--radius-pill);
-    background: var(--glass-bezel);
+    background: var(--phosphor);
   }
   .device__name {
     display: inline-flex;

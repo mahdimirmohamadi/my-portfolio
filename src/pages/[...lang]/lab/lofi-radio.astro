@@ -1,0 +1,55 @@
+---
+import { getImage } from 'astro:assets';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Radio from '../../../components/lab/radio/Radio';
+import '../../../components/lab/radio/radio.css';
+import { langPaths, langFromParam, useT, lp } from '../../../i18n/utils';
+import { ui } from '../../../i18n/ui';
+import rain from '../../../assets/radio/rain.png';
+import anime from '../../../assets/radio/anime.png';
+import forest from '../../../assets/radio/forest.png';
+import cabin from '../../../assets/radio/cabin.png';
+import night_city from '../../../assets/radio/night-city.png';
+import cloud_room from '../../../assets/radio/cloud-room.png';
+import sakura_river from '../../../assets/radio/sakura-river.png';
+import moon_train from '../../../assets/radio/moon-train.png';
+import aurora_lake from '../../../assets/radio/aurora-lake.png';
+import lunar_garden from '../../../assets/radio/lunar-garden.png';
+import violet_coast from '../../../assets/radio/violet-coast.png';
+import starfall from '../../../assets/radio/starfall.png';
+import nix from '../../../assets/nix/nix-music.png';
+
+export const getStaticPaths = langPaths;
+const lang = langFromParam(Astro.params.lang);
+const t = useT(lang);
+const strings = Object.fromEntries(Object.entries(ui[lang]).filter(([k]) => k.startsWith('radio.') || k.startsWith('pomo.')));
+const scenes = await Promise.all(Object.entries({ rain, anime, forest, cabin, 'night-city': night_city, 'cloud-room': cloud_room, 'sakura-river': sakura_river, 'moon-train': moon_train, 'aurora-lake': aurora_lake, 'lunar-garden': lunar_garden, 'violet-coast': violet_coast, 'starfall': starfall }).map(async ([id, src]) => {
+  const [large, small, thumb] = await Promise.all([
+    getImage({ src, width: 1440, format: 'webp', quality: 82 }),
+    getImage({ src, width: 720, format: 'webp', quality: 80 }),
+    getImage({ src, width: 240, format: 'webp', quality: 76 }),
+  ]);
+  const group = ['anime', 'night-city', 'cloud-room', 'sakura-river', 'moon-train'].includes(id) ? 'anime' : ['aurora-lake', 'lunar-garden', 'violet-coast', 'starfall'].includes(id) ? 'aura' : 'cozy';
+  return { id, src: large.src, small: small.src, thumb: thumb.src, group };
+}));
+const mascot = await getImage({ src: nix, width: 280, format: 'webp', quality: 82 });
+---
+
+<BaseLayout lang={lang} title={t('radio.title')} description={t('radio.lead')}>
+  <section class="radio-page wrap" aria-labelledby="radio-title">
+    <header class="radio-page__head">
+      <div>
+        <h1 id="radio-title">{t('radio.title')}</h1>
+        <p>{t('radio.lead')}</p>
+      </div>
+      <a class="radio-back" href={lp(lang, '/lab')}>{t('radio.back')} <span aria-hidden="true">↗</span></a>
+    </header>
+    <Radio client:only="react" lang={lang} strings={strings} scenes={scenes} nix={mascot.src}>
+      <div slot="fallback" class="radio-fallback">
+        <img src={scenes[0].small} width="720" height="480" alt={t('radio.scene.rain.alt')} />
+        <p role="status">{t('radio.loading')}</p>
+        <noscript><p>{lang === 'fa' ? 'برای پخش صدا، جاوااسکریپت مرورگر رو فعال کن.' : 'Enable JavaScript in your browser to play the radio.'}</p></noscript>
+      </div>
+    </Radio>
+  </section>
+</BaseLayout>

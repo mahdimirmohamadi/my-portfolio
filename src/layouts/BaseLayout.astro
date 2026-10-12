@@ -7,6 +7,7 @@ import ResumeDialog from '../components/chrome/ResumeDialog.astro';
 import Dock from '../components/chrome/Dock.astro';
 import Footer from '../components/chrome/Footer.astro';
 import MiniTimer from '../components/lab/MiniTimer.astro';
+import MiniRadio from '../components/lab/MiniRadio.astro';
 import type { Lang } from '../i18n/ui';
 import { useT, dirOf, switchLangPath } from '../i18n/utils';
 import ogDefault from '../assets/og/og-default.png';
@@ -109,9 +110,9 @@ const ogImage = new URL(ogDefault.src, Astro.site);
     <Footer lang={lang} />
     <Dock lang={lang} />
     <ResumeDialog lang={lang} />
-    <!-- the ~/lab dock: the pomodoro's mini-timer (and its clock) survives page turns; the
-         lofi radio joins it later. One per language, so its strings follow the page. -->
+    <!-- Lab playback and the focus clock continue across local page turns. -->
     <div class="dock-slot" transition:persist={`lab-dock-${lang}`}><MiniTimer lang={lang} /></div>
+    <MiniRadio lang={lang} />
   </body>
 </html>
 

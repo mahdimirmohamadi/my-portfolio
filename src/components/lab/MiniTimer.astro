@@ -53,6 +53,7 @@ const page = lp(lang, '/lab/pomodoro');
 <script>
   import { initEngine, pause, resume, leftOf, mmss } from '../../lib/pomodoro/engine';
   import { load, subscribe } from '../../lib/pomodoro/store';
+  import { snapshot as radioSnapshot, subscribe as subscribeRadio } from '../../lib/radio/engine';
 
   initEngine();
 
@@ -71,7 +72,8 @@ const page = lp(lang, '/lab/pomodoro');
     if (!box) return;
     const d = load();
     const t = d.timer;
-    const onPage = location.pathname.replace(/\/$/, '') === (box.dataset.page ?? '').replace(/\/$/, '');
+    const path = location.pathname.replace(/\/$/, '');
+    const onPage = path === (box.dataset.page ?? '').replace(/\/$/, '') || (path.endsWith('/lab/lofi-radio') && radioSnapshot().mix.showTimer);
     const show = t.status !== 'idle' && !onPage;
     box.hidden = !show;
     clearInterval(tick);
@@ -99,6 +101,13 @@ const page = lp(lang, '/lab/pomodoro');
     else resume();
   });
   subscribe(render);
+  let showRadioTimer = radioSnapshot().mix.showTimer;
+  subscribeRadio(() => {
+    const show = radioSnapshot().mix.showTimer;
+    if (show === showRadioTimer) return;
+    showRadioTimer = show;
+    render();
+  });
   document.addEventListener('astro:page-load', render);
   render();
 </script>
